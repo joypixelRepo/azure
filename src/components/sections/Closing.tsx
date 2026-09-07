@@ -34,7 +34,7 @@ export function Closing() {
 
       <div className="relative flex h-full flex-col items-center justify-center px-[var(--page-gutter)] text-center">
         <Reveal direction="fade">
-          <p className="eyebrow text-sand/80">{brand.short} {brand.model}</p>
+          <p className="eyebrow text-gold/80">{brand.short} {brand.model}</p>
         </Reveal>
         <Reveal delay={100}>
           <h2 className="display-lg mt-8 max-w-[16ch] text-ivory">

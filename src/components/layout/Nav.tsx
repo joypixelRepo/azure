@@ -61,7 +61,7 @@ export function Nav() {
         <div
           ref={progressRef}
           aria-hidden
-          className="absolute inset-x-0 bottom-0 h-px origin-left bg-gradient-to-r from-sand/0 via-sand to-sand/0"
+          className="absolute inset-x-0 bottom-0 h-px origin-left bg-gradient-to-r from-gold/0 via-gold to-gold/0"
           style={{ transform: "scaleX(0)" }}
         />
         <div className="flex h-[var(--nav-h)] items-center justify-between px-[var(--page-gutter)]">
@@ -72,7 +72,7 @@ export function Nav() {
             aria-label={`${brand.name} · inicio`}
           >
             <span className="text-[0.95rem] font-medium tracking-[0.34em]">{brand.short}</span>
-            <span className="text-[0.95rem] font-light tracking-[0.28em] text-sand">
+            <span className="text-[0.95rem] font-light tracking-[0.28em] text-gold">
               {brand.model}
             </span>
           </button>
@@ -144,7 +144,7 @@ export function Nav() {
               }}
             >
               <span className="eyebrow num w-6 text-mist/60">{String(i + 1).padStart(2, "0")}</span>
-              <span className="display-md text-ivory transition-colors duration-500 group-hover:text-sand">
+              <span className="display-md text-ivory transition-colors duration-500 group-hover:text-gold">
                 {item.label}
               </span>
             </button>

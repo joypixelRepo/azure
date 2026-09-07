@@ -46,7 +46,7 @@ export function Booking() {
       <div className="grid gap-16 px-[var(--page-gutter)] lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:gap-24">
         <div className="lg:sticky lg:top-[calc(var(--nav-h)+4rem)] lg:h-fit">
           <Reveal direction="fade">
-            <p className="eyebrow text-sand/80">{booking.eyebrow}</p>
+            <p className="eyebrow text-gold/80">{booking.eyebrow}</p>
           </Reveal>
           <Reveal delay={80}>
             <h2 className="display-lg mt-6 whitespace-pre-line text-ivory">{booking.title}</h2>
@@ -55,8 +55,8 @@ export function Booking() {
             <p className="body-lg mt-8 max-w-[42ch]">{booking.body}</p>
           </Reveal>
           <Reveal direction="fade" delay={240}>
-            <p className="mt-10 flex max-w-[38ch] items-start gap-3 border-l border-sand/30 pl-4 text-[0.72rem] font-light leading-relaxed tracking-wide text-mist/80">
-              <span className="eyebrow shrink-0 text-sand/70">Demo</span>
+            <p className="mt-10 flex max-w-[38ch] items-start gap-3 border-l border-gold/30 pl-4 text-[0.72rem] font-light leading-relaxed tracking-wide text-mist/80">
+              <span className="eyebrow shrink-0 text-gold/70">Demo</span>
               {booking.disclaimer}
             </p>
           </Reveal>
@@ -125,7 +125,7 @@ export function Booking() {
                         id="itinerary"
                         value={itinerary}
                         onChange={(e) => setItinerary(e.target.value)}
-                        className="h-11 w-full appearance-none rounded-full border border-white/12 bg-white/[0.04] px-5 pr-10 text-[0.82rem] font-light text-ivory outline-none backdrop-blur-xl transition-colors duration-500 hover:border-white/25 focus-visible:border-sand/60"
+                        className="h-11 w-full appearance-none rounded-full border border-white/12 bg-white/[0.04] px-5 pr-10 text-[0.82rem] font-light text-ivory outline-none backdrop-blur-xl transition-colors duration-500 hover:border-white/25 focus-visible:border-gold/60"
                       >
                         {itineraries.map((route) => (
                           <option key={route.name} value={route.name} className="bg-ink text-ivory">
@@ -173,13 +173,13 @@ export function Booking() {
               role="status"
               aria-live="polite"
             >
-              <span className="relative flex h-12 w-12 items-center justify-center rounded-full border border-sand/40">
+              <span className="relative flex h-12 w-12 items-center justify-center rounded-full border border-gold/40">
                 <svg width="16" height="12" viewBox="0 0 16 12" fill="none" aria-hidden>
                   <path
                     d="M1 6.2 5.6 11 15 1"
                     stroke="currentColor"
                     strokeWidth="1.2"
-                    className="text-sand"
+                    className="text-gold"
                     style={{
                       strokeDasharray: 22,
                       strokeDashoffset: sent ? 0 : 22,
@@ -217,7 +217,7 @@ function Field({ label, value, hint }: { label: string; value: string; hint?: st
       <p className="mt-2 truncate text-[0.95rem] font-light text-ivory first-letter:uppercase">
         {value}
       </p>
-      {hint ? <p className="num mt-1 text-[0.7rem] tracking-[0.18em] text-sand">{hint}</p> : null}
+      {hint ? <p className="num mt-1 text-[0.7rem] tracking-[0.18em] text-gold">{hint}</p> : null}
     </div>
   );
 }

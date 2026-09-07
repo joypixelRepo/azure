@@ -182,7 +182,7 @@ export function Design() {
         {/* Panel de apertura: negro, con el mar en movimiento abajo */}
         <article className="relative flex h-[100svh] w-screen shrink-0 flex-col items-center justify-center overflow-hidden bg-abyss px-[var(--page-gutter)] text-center">
           <div className="relative z-10 max-w-[36rem]">
-            <p className="eyebrow text-sand/80">Diseño</p>
+            <p className="eyebrow text-gold/80">Diseño</p>
             <h2 className="display-lg mt-6 text-ivory">
               Una arquitectura
               <br />
@@ -226,10 +226,10 @@ export function Design() {
               <div className="absolute inset-0 flex items-center justify-center px-[var(--page-gutter)]">
                 <div data-panel-copy className="w-full max-w-[34rem] text-center">
                   <div className="mb-6 flex items-center justify-center gap-4">
-                    <span className="num text-[0.7rem] tracking-[0.28em] text-sand [text-shadow:0_2px_16px_rgba(5,7,10,0.95)]">
+                    <span className="num text-[0.7rem] tracking-[0.28em] text-gold [text-shadow:0_2px_16px_rgba(5,7,10,0.95)]">
                       {panel.index}
                     </span>
-                    <span className="h-px w-10 bg-sand/50" />
+                    <span className="h-px w-10 bg-gold/50" />
                     <span className="eyebrow text-fog/90 [text-shadow:0_2px_16px_rgba(5,7,10,0.95)]">
                       {panel.eyebrow}
                     </span>

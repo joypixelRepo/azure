@@ -16,7 +16,7 @@ export function Footer() {
             className="flex items-baseline gap-2 text-ivory"
           >
             <span className="text-lg font-medium tracking-[0.34em]">{brand.short}</span>
-            <span className="text-lg font-light tracking-[0.28em] text-sand">{brand.model}</span>
+            <span className="text-lg font-light tracking-[0.28em] text-gold">{brand.model}</span>
           </button>
           <p className="body-sm mt-6 max-w-[38ch]">{brand.claim}</p>
 
@@ -37,7 +37,7 @@ export function Footer() {
         <div className="grid grid-cols-2 gap-10 sm:grid-cols-3">
           {footerLinks.map((column) => (
             <div key={column.title}>
-              <p className="eyebrow text-sand/70">{column.title}</p>
+              <p className="eyebrow text-gold/70">{column.title}</p>
               <ul className="mt-5 space-y-3">
                 {column.links.map((link) => (
                   <li key={link}>

@@ -42,12 +42,14 @@ export function Cabins() {
       {/* Apertura: disposición general de las cuatro cubiertas */}
       <Reveal direction="fade">
         <figure className="px-[var(--page-gutter)]">
-          <Photo
-            name="planos"
-            alt="Disposición general de AZURE 42: sun deck, puente, cubierta principal y cubierta inferior"
-            sizes="90vw"
-            className="w-full border border-white/10"
-          />
+          <div className="lux-frame">
+            <Photo
+              name="planos"
+              alt="Disposición general de AZURE 42: sun deck, puente, cubierta principal y cubierta inferior"
+              sizes="90vw"
+              className="block w-full"
+            />
+          </div>
           <figcaption className="eyebrow mt-4 text-mist/60">
             Disposición general · cuatro cubiertas
           </figcaption>
@@ -58,7 +60,10 @@ export function Cabins() {
         <div className="flex flex-wrap items-end justify-between gap-8">
           <div>
             <Reveal direction="fade">
-              <p className="eyebrow text-sand/80">{cabins.eyebrow}</p>
+              <p className="eyebrow flex items-center gap-3 text-gold">
+                <span className="inline-block h-px w-8 bg-gradient-to-r from-gold to-gold/0" />
+                {cabins.eyebrow}
+              </p>
             </Reveal>
             <Reveal delay={80}>
               <h2 className="display-lg mt-6 whitespace-pre-line text-ivory">{cabins.title}</h2>
@@ -73,7 +78,7 @@ export function Cabins() {
           {/* La fotografía permanece a la vista mientras se recorre la lista */}
           <div className="hidden lg:block">
             <div className="sticky top-0 flex h-[100svh] items-center">
-              <div className="relative aspect-[4/3] w-full overflow-hidden bg-hull">
+              <div className="lux-frame relative aspect-[4/3] w-full">
                 {CABIN_IMAGES.map((name, i) => (
                   <div
                     key={name}
@@ -105,7 +110,7 @@ export function Cabins() {
                 <div className="pointer-events-none absolute bottom-6 left-6 right-6 flex items-center gap-4">
                   <span className="eyebrow text-ivory/90">{cabins.list[active].name}</span>
                   <span className="h-px flex-1 bg-white/25" />
-                  <span className="num text-[0.7rem] tracking-[0.24em] text-sand">
+                  <span className="num text-[0.7rem] tracking-[0.24em] text-gold">
                     {cabins.list[active].area}
                   </span>
                 </div>
@@ -128,20 +133,20 @@ export function Cabins() {
                     onMouseEnter={() => setActive(i)}
                     onFocus={() => setActive(i)}
                     onClick={() => setActive(i)}
-                    className="group w-full border-b border-white/10 py-8 text-left outline-none transition-colors duration-700 hover:bg-white/[0.02] focus-visible:bg-white/[0.04] md:py-10"
+                    className="group w-full border-b border-white/10 py-8 text-left outline-none transition-colors duration-700 hover:bg-gold/[0.04] focus-visible:bg-gold/[0.06] md:py-10"
                   >
                     <div className="flex items-baseline justify-between gap-6">
                       <h3 className="text-xl font-light tracking-tight text-ivory md:text-2xl">
                         {cabin.name}
                       </h3>
-                      <span className="num shrink-0 text-[0.72rem] tracking-[0.22em] text-sand">
+                      <span className="num shrink-0 text-[0.72rem] tracking-[0.22em] text-gold">
                         {cabin.area}
                       </span>
                     </div>
                     <p className="body-sm mt-3 max-w-[46ch]">{cabin.detail}</p>
 
                     {/* En pantallas pequeñas la fotografía acompaña a la ficha */}
-                    <div className="mt-6 aspect-[3/2] w-full overflow-hidden bg-hull lg:hidden">
+                    <div className="lux-frame mt-6 aspect-[3/2] w-full lg:hidden">
                       <Photo
                         name={CABIN_IMAGES[i]}
                         alt=""
@@ -151,7 +156,7 @@ export function Cabins() {
                     </div>
 
                     <span
-                      className="mt-6 block h-px origin-left bg-sand/70 transition-transform duration-[900ms] ease-[cubic-bezier(0.16,1,0.3,1)]"
+                      className="mt-6 block h-px origin-left bg-gold/70 transition-transform duration-[900ms] ease-[cubic-bezier(0.16,1,0.3,1)]"
                       style={{ transform: `scaleX(${active === i ? 1 : 0})` }}
                     />
                   </button>

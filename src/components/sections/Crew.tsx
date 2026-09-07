@@ -10,7 +10,7 @@ export function Crew() {
         {/* La fotografía acompaña a toda la sección */}
         <Reveal direction="fade">
           <div className="lg:sticky lg:top-0 lg:flex lg:h-[100svh] lg:items-center">
-            <div className="relative aspect-[4/5] w-full overflow-hidden bg-hull lg:aspect-[4/3]">
+            <div className="lux-frame relative aspect-[4/5] w-full lg:aspect-[4/3]">
               <img
                 src={img.src}
                 srcSet={img.srcSet}
@@ -27,7 +27,10 @@ export function Crew() {
 
         <div className="lg:py-[12svh]">
           <Reveal direction="fade">
-            <p className="eyebrow text-sand/80">{crew.eyebrow}</p>
+            <p className="eyebrow flex items-center gap-3 text-gold">
+              <span className="inline-block h-px w-8 bg-gradient-to-r from-gold to-gold/0" />
+              {crew.eyebrow}
+            </p>
           </Reveal>
           <Reveal delay={80}>
             <h2 className="display-lg mt-6 whitespace-pre-line text-ivory">{crew.title}</h2>

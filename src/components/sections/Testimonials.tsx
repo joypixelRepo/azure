@@ -18,7 +18,7 @@ export function Testimonials() {
       <div className="grain pointer-events-none absolute inset-0" />
       <div className="relative px-[var(--page-gutter)]">
         <div className="relative mx-auto max-w-4xl text-center">
-          <span className="eyebrow text-sand/70">A bordo</span>
+          <span className="eyebrow text-gold/70">A bordo</span>
 
           <div className="relative mt-10 min-h-[13rem] sm:min-h-[11rem]">
             {testimonials.map((item, i) => (
@@ -53,7 +53,7 @@ export function Testimonials() {
                 className="h-[2px] w-10 overflow-hidden bg-white/15 outline-none transition-colors focus-visible:bg-white/40"
               >
                 <span
-                  className="block h-full origin-left bg-sand transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]"
+                  className="block h-full origin-left bg-gold transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]"
                   style={{ transform: `scaleX(${index === i ? 1 : 0})` }}
                 />
               </button>

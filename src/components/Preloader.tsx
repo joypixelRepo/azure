@@ -109,7 +109,7 @@ export function Preloader({
 
       <div className="relative flex items-center justify-between">
         <span className="text-[0.8rem] font-medium tracking-[0.34em] text-ivory">
-          {brand.short} <span className="font-light text-sand">{brand.model}</span>
+          {brand.short} <span className="font-light text-gold">{brand.model}</span>
         </span>
         <span className="eyebrow num text-mist/70">{String(pct).padStart(3, "0")}</span>
       </div>
@@ -121,13 +121,13 @@ export function Preloader({
         <div className="mt-14 w-full max-w-md">
           <div className="h-px w-full overflow-hidden bg-white/12">
             <div
-              className="h-full origin-left bg-gradient-to-r from-sand/50 via-ivory to-sand/50"
+              className="h-full origin-left bg-gradient-to-r from-gold/50 via-ivory to-gold/50"
               style={{ transform: `scaleX(${display})`, willChange: "transform" }}
             />
           </div>
           <div className="mt-5 flex items-center justify-between">
             <span className="eyebrow text-mist/60">{stage}</span>
-            <span className="eyebrow num text-sand/80">{pct}%</span>
+            <span className="eyebrow num text-gold/80">{pct}%</span>
           </div>
         </div>
       </div>

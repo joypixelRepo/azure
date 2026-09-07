@@ -14,12 +14,14 @@ export function Craft() {
             {craft.materials.map((material, i) => (
               <Reveal key={material.name} delay={Math.min(i * 70, 350)}>
                 <div className="group">
-                  <span
-                    className="block h-14 w-full transition-transform duration-[1200ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.03]"
-                    style={{
-                      background: `linear-gradient(150deg, ${material.swatch}, color-mix(in oklab, ${material.swatch} 62%, #05070a))`,
-                    }}
-                  />
+                  <span className="lux-frame block h-14 w-full">
+                    <span
+                      className="block h-full w-full transition-transform duration-[1200ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.04]"
+                      style={{
+                        background: `linear-gradient(150deg, ${material.swatch}, color-mix(in oklab, ${material.swatch} 62%, #05070a))`,
+                      }}
+                    />
+                  </span>
                   <p className="mt-4 text-sm font-light tracking-tight text-ivory">
                     {material.name}
                   </p>
@@ -34,7 +36,7 @@ export function Craft() {
           <ParallaxImage
             name="materiales"
             alt="Detalle de los materiales: roble, bronce, lino y piedra"
-            className="h-[60svh] w-full lg:h-[78svh]"
+            className="lux-frame h-[60svh] w-full lg:h-[78svh]"
             amount={14}
             sizes="(min-width: 1024px) 44vw, 92vw"
           />

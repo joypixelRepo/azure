@@ -133,12 +133,12 @@ export function DateRangePicker({
                         disabled
                           ? "cursor-not-allowed text-mist/25"
                           : "text-fog hover:text-ivory focus-visible:text-ivory",
-                        middle ? "bg-white/[0.07] text-ivory" : "",
+                        middle ? "bg-gold/[0.12] text-ivory" : "",
                         isFrom || isTo ? "text-abyss" : "",
                       ].join(" ")}
                     >
                       {(isFrom || isTo) && (
-                        <span className="absolute inset-x-1 inset-y-0 -z-0 rounded-full bg-ivory" />
+                        <span className="absolute inset-x-1 inset-y-0 -z-0 rounded-full bg-gradient-to-b from-champagne to-gold shadow-[0_6px_18px_-8px_var(--color-gold)]" />
                       )}
                       <span className="relative z-10">{day.getDate()}</span>
                     </button>

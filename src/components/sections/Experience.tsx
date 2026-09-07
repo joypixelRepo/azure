@@ -44,7 +44,10 @@ export function Experience() {
         <div className="flex flex-wrap items-end justify-between gap-8">
           <div>
             <Reveal direction="fade">
-              <p className="eyebrow text-sand/80">La experiencia</p>
+              <p className="eyebrow flex items-center gap-3 text-gold">
+                <span className="inline-block h-px w-8 bg-gradient-to-r from-gold to-gold/0" />
+                La experiencia
+              </p>
             </Reveal>
             <Reveal delay={80}>
               <h2 className="display-lg mt-6 text-ivory">
@@ -66,7 +69,7 @@ export function Experience() {
           {/* Columna izquierda: fotografía fija a media pantalla */}
           <div className="hidden lg:block">
             <div className="sticky top-0 flex h-[100svh] items-center">
-              <div className="relative aspect-[3/4] max-h-[calc(100svh-8rem)] w-full overflow-hidden bg-hull">
+              <div className="lux-frame relative aspect-[3/4] max-h-[calc(100svh-8rem)] w-full">
                 {PREVIEWS.map((name, i) => {
                   const img = photo(name);
                   return (
@@ -89,7 +92,7 @@ export function Experience() {
                 })}
                 <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-ink/45 to-transparent" />
                 <div className="pointer-events-none absolute bottom-6 left-6 right-6 flex items-center gap-4">
-                  <span className="num text-[0.7rem] tracking-[0.28em] text-sand">
+                  <span className="num text-[0.7rem] tracking-[0.28em] text-gold">
                     {experiences[active].n}
                   </span>
                   <span className="h-px flex-1 bg-white/25" />
@@ -114,9 +117,9 @@ export function Experience() {
                     onMouseEnter={() => setActive(i)}
                     onFocus={() => setActive(i)}
                     tabIndex={0}
-                    className="group grid grid-cols-[3rem_1fr] items-start gap-4 border-b border-white/10 py-8 outline-none transition-colors duration-700 focus-visible:bg-white/[0.03] md:grid-cols-[5rem_1fr] md:gap-8 md:py-10"
+                    className="group grid grid-cols-[3rem_1fr] items-start gap-4 border-b border-white/10 py-8 outline-none transition-colors duration-700 focus-visible:bg-gold/[0.05] md:grid-cols-[5rem_1fr] md:gap-8 md:py-10"
                   >
-                    <span className="num pt-2 text-[0.7rem] tracking-[0.28em] text-mist transition-colors duration-500 group-hover:text-sand">
+                    <span className="num pt-2 text-[0.7rem] tracking-[0.28em] text-mist transition-colors duration-500 group-hover:text-gold">
                       {item.n}
                     </span>
                     <div>
@@ -127,7 +130,7 @@ export function Experience() {
 
                       {/* Sin columna fija en pantallas pequeñas: cada
                           experiencia lleva su propia fotografía. */}
-                      <div className="mt-6 aspect-[4/5] w-full overflow-hidden bg-hull lg:hidden">
+                      <div className="lux-frame mt-6 aspect-[4/5] w-full lg:hidden">
                         <img
                           src={photo(PREVIEWS[i]).src}
                           srcSet={photo(PREVIEWS[i]).srcSet}
@@ -163,11 +166,11 @@ export function Experience() {
             {itineraries.map((route, i) => (
               <li key={route.name}>
                 <Reveal delay={Math.min(i * 50, 200)}>
-                  <div className="group grid grid-cols-2 items-baseline gap-x-6 gap-y-2 border-b border-white/10 py-7 transition-colors duration-700 hover:bg-white/[0.02] md:grid-cols-[1.4fr_0.6fr_2fr_1fr] md:py-8">
+                  <div className="group grid grid-cols-2 items-baseline gap-x-6 gap-y-2 border-b border-white/10 py-7 transition-colors duration-700 hover:bg-gold/[0.04] md:grid-cols-[1.4fr_0.6fr_2fr_1fr] md:py-8">
                     <span className="text-base font-light tracking-tight text-ivory md:text-lg">
                       {route.name}
                     </span>
-                    <span className="num text-right text-[0.7rem] tracking-[0.2em] text-sand md:text-left">
+                    <span className="num text-right text-[0.7rem] tracking-[0.2em] text-gold md:text-left">
                       {route.days}
                     </span>
                     <span className="body-sm col-span-2 md:col-span-1">{route.legs}</span>

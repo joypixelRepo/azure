@@ -29,7 +29,7 @@ export function OnBoard() {
             className={i % 2 === 1 ? "md:mt-24" : ""}
           >
             <figure className="group">
-              <div className="relative aspect-[4/3] overflow-hidden bg-hull">
+              <div className="lux-frame relative aspect-[4/3]">
                 <Photo
                   name={space.image}
                   alt={space.title}
@@ -39,7 +39,7 @@ export function OnBoard() {
                 <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-abyss/45 to-transparent opacity-0 transition-opacity duration-700 group-hover:opacity-100" />
               </div>
               <figcaption className="mt-6 flex items-start gap-6">
-                <span className="num pt-1 text-[0.7rem] tracking-[0.28em] text-sand">
+                <span className="num pt-1 text-[0.7rem] tracking-[0.28em] text-gold">
                   {String(i + 1).padStart(2, "0")}
                 </span>
                 <div>

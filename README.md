@@ -167,6 +167,20 @@ public/
 
 ---
 
+## Identidad visual
+
+Paleta neutra sobre fondo abisal con **oro** como único acento: `--color-gold`
+(`#d3b169`) para filetes, numeraciones, antetítulos y estados activos,
+`--color-champagne` (`#ecd7a4`) para los reflejos más claros —botones de cristal,
+destellos— y `--color-bronze` para la sombra del metal. No hay un segundo color
+de acento a propósito: el lujo aquí lo sostienen el espacio en blanco, la
+tipografía y un solo metal.
+
+La fotografía suelta lleva la clase `.lux-frame`: filo dorado, resplandor cálido
+y un destello diagonal que cruza la imagen una sola vez al pasar el ratón. Todo
+con `opacity` y `transform`, sin repintar layout, y desactivado en dispositivos
+sin hover.
+
 ## Contenido e imágenes
 
 Todos los textos viven en **`src/lib/content.ts`**.

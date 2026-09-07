@@ -375,7 +375,7 @@ export function ScrollSequence({
           <div className="relative h-40 w-px bg-white/15">
             <div
               ref={railRef}
-              className="absolute inset-x-0 top-0 h-full origin-top bg-sand"
+              className="absolute inset-x-0 top-0 h-full origin-top bg-gold"
               style={{ transform: "scaleY(0)" }}
             />
             {chapterMarks.map((c) => (
@@ -396,7 +396,7 @@ function BeatBody({ beat }: { beat: StoryBeat }) {
   return (
     <div className="w-full max-w-[30rem] md:max-w-[22rem] lg:max-w-[24rem]">
       <div>
-        <p className="eyebrow mb-4 text-sand/90">{beat.eyebrow}</p>
+        <p className="eyebrow mb-4 text-gold/90">{beat.eyebrow}</p>
         <h2 className="display-md whitespace-pre-line text-ivory drop-shadow-[0_2px_30px_rgba(0,0,0,0.75)]">
           {beat.title}
         </h2>

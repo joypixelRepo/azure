@@ -9,7 +9,10 @@ export function Specs() {
         <div className="flex flex-wrap items-end justify-between gap-8">
           <Reveal>
             <div>
-              <p className="eyebrow text-sand/80">Especificaciones</p>
+              <p className="eyebrow flex items-center gap-3 text-gold">
+                <span className="inline-block h-px w-8 bg-gradient-to-r from-gold to-gold/0" />
+                Especificaciones
+              </p>
               <h2 className="display-lg mt-6 max-w-[14ch] text-ivory">Los números, sin adornos.</h2>
             </div>
           </Reveal>
@@ -24,13 +27,13 @@ export function Specs() {
         <dl className="mt-20 grid grid-cols-1 gap-px border-t border-white/10 sm:grid-cols-2 lg:grid-cols-3">
           {specs.map((spec, i) => (
             <Reveal key={spec.label} delay={Math.min(i * 55, 330)}>
-              <div className="group flex h-full flex-col justify-between border-b border-white/10 py-10 pr-6 transition-colors duration-700 hover:bg-white/[0.02] sm:min-h-[13rem]">
+              <div className="group flex h-full flex-col justify-between border-b border-white/10 py-10 pr-6 transition-colors duration-700 hover:bg-gold/[0.04] sm:min-h-[13rem]">
                 <dt className="eyebrow text-mist/70">{spec.label}</dt>
                 <dd className="mt-8 flex items-baseline gap-2">
                   <span className="display-lg text-[clamp(2.6rem,5vw,4.4rem)] leading-none text-ivory">
                     <CountUp value={spec.value} />
                   </span>
-                  <span className="text-[0.72rem] uppercase tracking-[0.2em] text-sand">
+                  <span className="text-[0.72rem] uppercase tracking-[0.2em] text-gold">
                     {spec.unit}
                   </span>
                 </dd>
