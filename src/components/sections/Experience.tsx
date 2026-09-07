@@ -94,13 +94,14 @@ export function Experience() {
                     />
                   );
                 })}
-                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-deep/45 to-transparent" />
-                <div className="pointer-events-none absolute bottom-6 left-6 right-6 flex items-center gap-4">
-                  <span className="num text-[0.7rem] tracking-[0.28em] text-gold">
+                {/* El rótulo va sobre la fotografía: tema oscuro para que se lea */}
+                <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-deep/85 to-transparent" />
+                <div className="theme-dark pointer-events-none absolute bottom-6 left-6 right-6 flex items-center gap-4">
+                  <span className="num on-media text-[0.7rem] tracking-[0.28em] text-gold">
                     {experiences[active].n}
                   </span>
-                  <span className="h-px flex-1 bg-white/25" />
-                  <span className="eyebrow text-strong">{experiences[active].title}</span>
+                  <span className="h-px flex-1 bg-line" />
+                  <span className="eyebrow on-media text-strong">{experiences[active].title}</span>
                 </div>
               </div>
             </div>

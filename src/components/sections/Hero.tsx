@@ -1,5 +1,5 @@
 import { brand } from "@/lib/content";
-import { GlassButton } from "@/components/ui/GlassButton";
+import { WaterButton } from "@/components/ui/WaterButton";
 
 /** Contenido del hero superpuesto al primer fotograma de la secuencia. */
 export function HeroIntro({ onExplore, onBook }: { onExplore: () => void; onBook: () => void }) {
@@ -21,12 +21,12 @@ export function HeroIntro({ onExplore, onBook }: { onExplore: () => void; onBook
         </p>
 
         <div className="mt-10 flex flex-wrap items-center gap-3">
-          <GlassButton size="lg" variant="solid" onClick={onBook}>
+          <WaterButton size="lg" variant="solid" onClick={onBook}>
             Solicitar mi viaje
-          </GlassButton>
-          <GlassButton size="lg" onClick={onExplore}>
+          </WaterButton>
+          <WaterButton size="lg" onClick={onExplore}>
             Explorar el yate
-          </GlassButton>
+          </WaterButton>
         </div>
       </div>
 

@@ -76,7 +76,7 @@ export function DateRangePicker({
           onClick={() => setCursor(addMonths(cursor, -1))}
           disabled={cursor <= new Date(today.getFullYear(), today.getMonth(), 1)}
           aria-label="Mes anterior"
-          className="glass-button h-9 w-9 disabled:pointer-events-none disabled:opacity-25"
+          className="water-button h-9 w-9 disabled:pointer-events-none disabled:opacity-25"
         >
           <Arrow direction="left" />
         </button>
@@ -85,7 +85,7 @@ export function DateRangePicker({
           type="button"
           onClick={() => setCursor(addMonths(cursor, 1))}
           aria-label="Mes siguiente"
-          className="glass-button h-9 w-9"
+          className="water-button h-9 w-9"
         >
           <Arrow direction="right" />
         </button>

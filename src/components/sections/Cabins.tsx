@@ -43,24 +43,7 @@ export function Cabins() {
       data-theme="light"
       className="theme-light relative bg-surface py-32 md:py-44"
     >
-      {/* Apertura: disposición general de las cuatro cubiertas */}
-      <Reveal direction="fade">
-        <figure className="px-[var(--page-gutter)]">
-          <div className="lux-frame">
-            <Photo
-              name="planos"
-              alt="Disposición general de AZURE 42: sun deck, puente, cubierta principal y cubierta inferior"
-              sizes="90vw"
-              className="block w-full"
-            />
-          </div>
-          <figcaption className="eyebrow mt-4 text-faint">
-            Disposición general · cuatro cubiertas
-          </figcaption>
-        </figure>
-      </Reveal>
-
-      <div className="mt-24 px-[var(--page-gutter)] md:mt-32">
+      <div className="px-[var(--page-gutter)]">
         <div className="flex flex-wrap items-end justify-between gap-8">
           <div>
             <Reveal direction="fade">
@@ -110,11 +93,12 @@ export function Cabins() {
                     )}
                   </div>
                 ))}
-                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-deep/40 to-transparent" />
-                <div className="pointer-events-none absolute bottom-6 left-6 right-6 flex items-center gap-4">
-                  <span className="eyebrow text-strong">{cabins.list[active].name}</span>
-                  <span className="h-px flex-1 bg-white/25" />
-                  <span className="num text-[0.7rem] tracking-[0.24em] text-gold">
+                {/* El rótulo va sobre la fotografía: tema oscuro para que se lea */}
+                <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-deep/85 to-transparent" />
+                <div className="theme-dark pointer-events-none absolute bottom-6 left-6 right-6 flex items-center gap-4">
+                  <span className="eyebrow on-media text-strong">{cabins.list[active].name}</span>
+                  <span className="h-px flex-1 bg-line" />
+                  <span className="num on-media text-[0.7rem] tracking-[0.24em] text-gold">
                     {cabins.list[active].area}
                   </span>
                 </div>

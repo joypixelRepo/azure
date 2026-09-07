@@ -70,8 +70,17 @@
   --glass-sheen: #ffffff;
   --glass-shadow: color-mix(in oklab, #071a24 30%, transparent);
   --solid-bg: linear-gradient(140deg, #252b2d, #10181b);
-  --solid-bg-hover: linear-gradient(140deg, #303a3c, #182124);
   --solid-ink: #faf9f6;
+
+  --water-rest: transparent;
+  --water-rim: color-mix(in oklab, #252b2d 26%, transparent);
+  --water-rim-hover: color-mix(in oklab, #0f3a4c 70%, transparent);
+  --water-ink: #252b2d;
+  --water-ink-hover: #faf9f6;
+  --water-a: #1d6a86;
+  --water-b: #0f3a4c;
+  --water-c: #071a24;
+  --water-shadow: color-mix(in oklab, #0f3a4c 55%, transparent);
 }
 
 .theme-mist {
@@ -89,8 +98,17 @@
   --glass-sheen: #ffffff;
   --glass-shadow: color-mix(in oklab, #071a24 30%, transparent);
   --solid-bg: linear-gradient(140deg, #1d2325, #0c1214);
-  --solid-bg-hover: linear-gradient(140deg, #29322f, #141c1e);
   --solid-ink: #faf9f6;
+
+  --water-rest: transparent;
+  --water-rim: color-mix(in oklab, #1d2325 26%, transparent);
+  --water-rim-hover: color-mix(in oklab, #0f3a4c 70%, transparent);
+  --water-ink: #1d2325;
+  --water-ink-hover: #faf9f6;
+  --water-a: #1d6a86;
+  --water-b: #0f3a4c;
+  --water-c: #071a24;
+  --water-shadow: color-mix(in oklab, #0f3a4c 55%, transparent);
 }
 
 .theme-dark {
@@ -108,8 +126,17 @@
   --glass-sheen: color-mix(in oklab, #faf9f6 30%, transparent);
   --glass-shadow: rgb(0 0 0 / 0.8);
   --solid-bg: linear-gradient(140deg, #faf9f6, #e7e2d6);
-  --solid-bg-hover: linear-gradient(140deg, #ffffff, #f2ecdd);
   --solid-ink: #071a24;
+
+  --water-rest: color-mix(in oklab, #faf9f6 9%, transparent);
+  --water-rim: color-mix(in oklab, #faf9f6 30%, transparent);
+  --water-rim-hover: color-mix(in oklab, #c6a66b 70%, transparent);
+  --water-ink: #faf9f6;
+  --water-ink-hover: #faf9f6;
+  --water-a: #2c8aa8;
+  --water-b: #14556e;
+  --water-c: #0a2a3a;
+  --water-shadow: rgb(0 0 0 / 0.7);
 }
 
 @layer base {
@@ -117,6 +144,15 @@
     --page-gutter: clamp(1.25rem, 5vw, 6rem);
     --nav-h: 4.5rem;
     color-scheme: light;
+
+    /* ------------------------------------------------------------------------
+       VELO SOBRE EL METRAJE — ajústalo aquí
+       Cuánto se oscurece la fotografía o el vídeo que va a pantalla completa.
+       0 = imagen limpia · 1 = negro. Subir mejora la lectura del texto; bajar
+       deja ver más la imagen.
+       ------------------------------------------------------------------------ */
+    --veil-panel: 0.34; /* diapositivas de la sección Diseño */
+    --veil-closing: 0.3; /* cierre con vídeo, «El horizonte no es un destino» */
   }
 
   * {
@@ -236,9 +272,8 @@
      -------------------------------------------------------------------------- */
 
   /**
-   * Cristal. Sobre fondo claro no puede ser una lámina blanca translúcida:
-   * `--glass-tint` y `--glass-ink` los fija el tema de la sección, de modo que
-   * el mismo componente funciona en marfil y en azul profundo.
+   * Superficie de cristal. Sólo la usa la tarjeta de reserva: su tinte, su
+   * tinta y su sombra los fija el tema de la sección.
    */
   .glass {
     position: relative;
@@ -257,8 +292,18 @@
       0 18px 48px -24px var(--glass-shadow);
   }
 
-  .glass-button {
-    --glass-lift: 0px;
+  /* --------------------------------------------------------------------------
+     Botones de agua
+     -------------------------------------------------------------------------- */
+
+  /**
+   * En reposo son un trazo limpio. Al pasar el ratón, el agua entra desde el
+   * punto exacto del cursor —`--mx`/`--my` los escribe el propio componente— y
+   * anega el botón, con dos manchas de luz que se desplazan encima como las
+   * cáusticas del fondo de una piscina.
+   */
+  .water-button {
+    --lift: 0px;
     position: relative;
     isolation: isolate;
     overflow: hidden;
@@ -267,102 +312,125 @@
     justify-content: center;
     gap: 0.7em;
     border-radius: 999px;
-    border: 1px solid color-mix(in oklab, var(--glass-ink) 30%, transparent);
-    background: linear-gradient(
-      140deg,
-      color-mix(in oklab, var(--glass-tint) 78%, transparent),
-      color-mix(in oklab, var(--glass-tint) 40%, transparent) 48%,
-      color-mix(in oklab, var(--glass-tint) 62%, transparent)
-    );
-    backdrop-filter: blur(20px) saturate(160%);
-    -webkit-backdrop-filter: blur(20px) saturate(160%);
-    box-shadow:
-      inset 0 1px 0 0 color-mix(in oklab, var(--glass-sheen) 70%, transparent),
-      0 10px 30px -16px var(--glass-shadow);
-    color: var(--glass-ink);
-    transform: translate3d(0, var(--glass-lift), 0);
+    border: 1px solid var(--water-rim);
+    background: var(--water-rest);
+    color: var(--water-ink);
+    transform: translate3d(0, var(--lift), 0);
     transition:
       transform 0.55s var(--ease-glass),
-      box-shadow 0.55s var(--ease-glass),
+      color 0.5s var(--ease-glass),
       border-color 0.55s var(--ease-glass),
-      color 0.55s var(--ease-glass),
-      background 0.55s var(--ease-glass);
+      box-shadow 0.55s var(--ease-glass);
   }
 
-  /* Reflejo superior muy tenue */
-  .glass-button::before {
+  /* La lámina de agua, que nace bajo el cursor */
+  .water-button::before {
     content: "";
     position: absolute;
     inset: 0;
+    z-index: -2;
     border-radius: inherit;
     background: radial-gradient(
-      120% 100% at 50% -30%,
-      color-mix(in oklab, var(--color-champagne) 34%, transparent),
-      transparent 62%
+      130% 130% at var(--mx, 50%) var(--my, 50%),
+      var(--water-a),
+      var(--water-b) 48%,
+      var(--water-c)
     );
-    opacity: 0.4;
-    transition: opacity 0.55s var(--ease-glass);
-    pointer-events: none;
-    z-index: -1;
+    transform: scale(0.15);
+    opacity: 0;
+    transition:
+      transform 0.85s var(--ease-luxe),
+      opacity 0.45s var(--ease-luxe);
   }
 
-  /* Luz que sigue al cursor */
-  .glass-button::after {
+  /* Cáusticas: dos manchas de luz que se cruzan y se desplazan */
+  .water-button::after {
     content: "";
     position: absolute;
-    inset: -40%;
-    border-radius: inherit;
-    background: radial-gradient(
-      26% 46% at var(--mx, 50%) var(--my, 50%),
-      color-mix(in oklab, var(--color-gold) 32%, transparent),
-      transparent 70%
-    );
-    opacity: 0;
-    transition: opacity 0.6s var(--ease-glass);
-    pointer-events: none;
+    inset: -80%;
     z-index: -1;
+    opacity: 0;
+    background:
+      radial-gradient(
+        42% 120% at 22% 18%,
+        color-mix(in oklab, white 26%, transparent),
+        transparent 62%
+      ),
+      radial-gradient(
+        38% 110% at 78% 84%,
+        color-mix(in oklab, white 20%, transparent),
+        transparent 62%
+      );
+    mix-blend-mode: soft-light;
+    transition: opacity 0.7s var(--ease-luxe);
   }
 
   @media (hover: hover) {
-    .glass-button:hover {
-      --glass-lift: -2px;
-      border-color: color-mix(in oklab, var(--color-gold) 65%, transparent);
+    .water-button:hover {
+      --lift: -2px;
+      color: var(--water-ink-hover);
+      border-color: var(--water-rim-hover);
       box-shadow:
-        inset 0 1px 0 0 color-mix(in oklab, var(--glass-sheen) 85%, transparent),
-        0 20px 44px -20px var(--glass-shadow),
-        0 10px 34px -18px color-mix(in oklab, var(--color-gold) 45%, transparent);
+        0 18px 40px -20px var(--water-shadow),
+        0 6px 18px -10px var(--water-shadow);
     }
-    .glass-button:hover::before { opacity: 0.85; }
-    .glass-button:hover::after { opacity: 1; }
+    .water-button:hover::before {
+      transform: scale(1.7);
+      opacity: 1;
+    }
+    .water-button:hover::after {
+      opacity: 1;
+      animation: waterDrift 7s ease-in-out infinite alternate;
+    }
   }
 
-  .glass-button:active {
-    --glass-lift: 0px;
+  .water-button:active {
+    --lift: 0px;
     transition-duration: 0.12s;
   }
 
-  .glass-button:focus-visible {
+  .water-button:focus-visible {
     outline: 1px solid color-mix(in oklab, var(--color-gold) 80%, transparent);
     outline-offset: 3px;
   }
 
-  /* Botón sólido: oro sobre claro, marfil sobre oscuro */
-  .glass-button[data-variant="solid"] {
+  /* Variante sólida: ya viene llena, y el agua la vuelve azul al pasar */
+  .water-button[data-variant="solid"] {
     background: var(--solid-bg);
     color: var(--solid-ink);
     border-color: transparent;
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
   }
   @media (hover: hover) {
-    .glass-button[data-variant="solid"]:hover {
-      background: var(--solid-bg-hover);
-      box-shadow:
-        0 20px 44px -20px var(--glass-shadow),
-        0 14px 40px -18px color-mix(in oklab, var(--color-gold) 60%, transparent);
+    .water-button[data-variant="solid"]:hover {
+      color: var(--water-ink-hover);
+      border-color: transparent;
     }
   }
-  .glass-button[data-variant="solid"]::before { opacity: 0.18; }
+
+  /* --------------------------------------------------------------------------
+     Texto sobre metraje
+     -------------------------------------------------------------------------- */
+
+  /** Velo uniforme sobre imagen o vídeo. La opacidad vive en `:root`. */
+  .media-veil {
+    background-color: rgb(7 26 36 / var(--veil-panel));
+  }
+  .media-veil-closing {
+    background-color: rgb(7 26 36 / var(--veil-closing));
+  }
+
+  /**
+   * Sombra en tres capas para el texto que va encima de una imagen: una muy
+   * ceñida que define el borde de la letra, otra media que la despega del
+   * fondo y una amplia que apaga la zona. Se lee sobre cualquier fotograma sin
+   * necesidad de oscurecer la imagen entera.
+   */
+  .on-media {
+    text-shadow:
+      0 1px 2px rgb(7 26 36 / 0.55),
+      0 2px 14px rgb(7 26 36 / 0.9),
+      0 8px 48px rgb(7 26 36 / 0.75);
+  }
 
   /* --------------------------------------------------------------------------
      Marco de oro para la fotografía suelta
@@ -609,5 +677,14 @@
   100% {
     opacity: 0;
     transform: translate3d(110%, 0, 0);
+  }
+}
+
+@keyframes waterDrift {
+  from {
+    transform: translate3d(-6%, -4%, 0) scale(1);
+  }
+  to {
+    transform: translate3d(6%, 4%, 0) scale(1.12);
   }
 }

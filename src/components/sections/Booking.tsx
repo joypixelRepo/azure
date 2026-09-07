@@ -2,7 +2,7 @@
 
 import { useMemo, useRef, useState, type FormEvent } from "react";
 import { booking, itineraries } from "@/lib/content";
-import { GlassButton } from "@/components/ui/GlassButton";
+import { WaterButton } from "@/components/ui/WaterButton";
 import { Reveal } from "@/components/ui/Reveal";
 import { DateRangePicker, longDate, type DateRange } from "@/components/booking/DateRangePicker";
 import { useSmoothScroll } from "@/components/providers/SmoothScroll";
@@ -100,7 +100,7 @@ export function Booking() {
                       <button
                         type="button"
                         onClick={() => setGuests((g) => Math.max(1, g - 1))}
-                        className="glass-button h-10 w-10 text-lg"
+                        className="water-button h-10 w-10 text-lg"
                         aria-label="Menos invitados"
                       >
                         −
@@ -111,7 +111,7 @@ export function Booking() {
                       <button
                         type="button"
                         onClick={() => setGuests((g) => Math.min(MAX_GUESTS, g + 1))}
-                        className="glass-button h-10 w-10 text-lg"
+                        className="water-button h-10 w-10 text-lg"
                         aria-label="Más invitados"
                       >
                         +
@@ -147,7 +147,7 @@ export function Booking() {
                 </div>
 
                 <div className="mt-10 flex flex-wrap items-center gap-4 border-t border-line pt-8">
-                  <GlassButton
+                  <WaterButton
                     type="submit"
                     size="lg"
                     variant="solid"
@@ -155,7 +155,7 @@ export function Booking() {
                     className={ready ? "" : "pointer-events-none opacity-35"}
                   >
                     Solicitar mi viaje
-                  </GlassButton>
+                  </WaterButton>
                   <p className="body-sm max-w-[24ch] text-[0.72rem]">
                     {ready
                       ? `${nights} noches · ${guests} invitados · ${itinerary}`
@@ -203,7 +203,7 @@ export function Booking() {
               </dl>
 
               <div className="mt-4 flex flex-wrap items-center gap-4">
-                <GlassButton onClick={reset}>Nueva solicitud</GlassButton>
+                <WaterButton onClick={reset}>Nueva solicitud</WaterButton>
                 <span className="eyebrow text-faint">Experiencia de demostración</span>
               </div>
             </div>

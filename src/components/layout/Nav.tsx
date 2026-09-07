@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { brand, nav } from "@/lib/content";
-import { GlassButton } from "@/components/ui/GlassButton";
+import { WaterButton } from "@/components/ui/WaterButton";
 import { useSmoothScroll } from "@/components/providers/SmoothScroll";
 
 /** Altura real de la barra, que viene de una variable CSS. */
@@ -115,19 +115,19 @@ export function Nav() {
           </nav>
 
           <div className="flex items-center gap-3">
-            <GlassButton
+            <WaterButton
               size="sm"
               className="hidden sm:inline-flex"
               onClick={() => go("#reserva")}
             >
               Reservar
-            </GlassButton>
+            </WaterButton>
             <button
               type="button"
               onClick={() => setOpen((v) => !v)}
               aria-label={open ? "Cerrar menú" : "Abrir menú"}
               aria-expanded={open}
-              className="glass-button h-10 w-10 shrink-0 lg:hidden"
+              className="water-button h-10 w-10 shrink-0 lg:hidden"
             >
               <span className="relative block h-3 w-4">
                 <span
@@ -182,9 +182,9 @@ export function Nav() {
             transitionDelay: `${open ? 120 + nav.length * 55 : 0}ms`,
           }}
         >
-          <GlassButton size="lg" onClick={() => go("#reserva")} className="w-full">
+          <WaterButton size="lg" onClick={() => go("#reserva")} className="w-full">
             Solicitar mi viaje
-          </GlassButton>
+          </WaterButton>
         </div>
       </div>
     </>

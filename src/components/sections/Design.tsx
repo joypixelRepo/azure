@@ -301,24 +301,21 @@ export function Design() {
                 aria-hidden
                 className="absolute inset-0 h-full w-full scale-110 object-cover will-change-transform"
               />
-              {/* Velo uniforme: oscurece por igual, sin manchas visibles */}
-              <div className="absolute inset-0 bg-deep/66" />
-              <div className="absolute inset-0 bg-gradient-to-t from-deep/75 via-transparent to-deep/50" />
+              {/* Velo uniforme. Su opacidad se ajusta en globals.css,
+                  variable --veil-panel. */}
+              <div className="media-veil absolute inset-0" />
+              <div className="absolute inset-0 bg-gradient-to-t from-deep/45 via-transparent to-deep/30" />
               <div className="absolute inset-0 flex items-center justify-center px-[var(--page-gutter)]">
                 <div data-panel-copy className="w-full max-w-[34rem] text-center">
                   <div className="mb-6 flex items-center justify-center gap-4">
-                    <span className="num text-[0.7rem] tracking-[0.28em] text-gold [text-shadow:0_2px_16px_rgba(5,7,10,0.95)]">
+                    <span className="num on-media text-[0.7rem] tracking-[0.28em] text-gold">
                       {panel.index}
                     </span>
-                    <span className="h-px w-10 bg-gold/50" />
-                    <span className="eyebrow text-soft [text-shadow:0_2px_16px_rgba(5,7,10,0.95)]">
-                      {panel.eyebrow}
-                    </span>
+                    <span className="h-px w-10 bg-gold/60" />
+                    <span className="eyebrow on-media text-strong">{panel.eyebrow}</span>
                   </div>
-                  <h3 className="display-md text-strong [text-shadow:0_2px_28px_rgba(5,7,10,0.95)]">
-                    {panel.title}
-                  </h3>
-                  <p className="body-lg mx-auto mt-5 max-w-[46ch] text-strong [text-shadow:0_2px_20px_rgba(5,7,10,0.95)]">
+                  <h3 className="display-md on-media text-strong">{panel.title}</h3>
+                  <p className="body-lg on-media mx-auto mt-5 max-w-[46ch] text-strong">
                     {panel.body}
                   </p>
                 </div>

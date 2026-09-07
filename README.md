@@ -207,6 +207,17 @@ declara, no donde se usa.
 La barra de navegación se adapta sola: en cada fotograma comprueba qué sección
 queda bajo ella y cambia de tema con el resto.
 
+Sobre el metraje a pantalla completa el texto no se apoya en oscurecer la
+imagen, sino en `.on-media`: una sombra de texto en tres capas —ceñida, media y
+amplia— que lo despega de cualquier fotograma. Cuánto se vela la imagen se
+ajusta en dos variables de `globals.css`, `--veil-panel` para las diapositivas
+de Diseño y `--veil-closing` para el cierre con vídeo.
+
+Los botones son de agua, no de cristal: en reposo son un trazo limpio y, al
+pasar el ratón, el agua entra por el punto exacto del cursor y anega el botón,
+con dos manchas de luz que se desplazan encima como las cáusticas del fondo de
+una piscina. Los tonos del agua los fija el tema de la sección.
+
 La fotografía suelta lleva la clase `.lux-frame`: filo de marfil o grafito según
 el fondo, resplandor dorado y un destello diagonal que cruza la imagen una sola
 vez al pasar el ratón. Todo con `opacity` y `transform`, sin repintar layout, y

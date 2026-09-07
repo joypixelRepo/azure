@@ -11,7 +11,7 @@ const sizes: Record<Size, string> = {
   lg: "h-14 px-9 text-[0.78rem] tracking-[0.22em]",
 };
 
-type GlassButtonProps<T extends ElementType> = {
+type WaterButtonProps<T extends ElementType> = {
   as?: T;
   variant?: Variant;
   size?: Size;
@@ -19,15 +19,19 @@ type GlassButtonProps<T extends ElementType> = {
   className?: string;
 } & Omit<ComponentPropsWithoutRef<T>, "as" | "children" | "className">;
 
-/** Botón de cristal: translúcido, con reflejo superior y luz que sigue al cursor. */
-export function GlassButton<T extends ElementType = "button">({
+/**
+ * Botón de agua. En reposo es un trazo limpio; al pasar el ratón el agua entra
+ * por el punto exacto del cursor y anega el botón. La posición del puntero
+ * viaja al CSS en `--mx` y `--my`.
+ */
+export function WaterButton<T extends ElementType = "button">({
   as,
   variant = "glass",
   size = "md",
   children,
   className = "",
   ...rest
-}: GlassButtonProps<T>) {
+}: WaterButtonProps<T>) {
   const Component = (as ?? "button") as ElementType;
 
   const onPointerMove = useCallback((event: React.PointerEvent<HTMLElement>) => {
@@ -42,7 +46,7 @@ export function GlassButton<T extends ElementType = "button">({
       {...rest}
       data-variant={variant}
       onPointerMove={onPointerMove}
-      className={`glass-button font-medium uppercase ${sizes[size]} ${className}`}
+      className={`water-button font-medium uppercase ${sizes[size]} ${className}`}
     >
       {children}
     </Component>
