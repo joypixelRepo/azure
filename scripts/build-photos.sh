@@ -22,13 +22,16 @@ OUT="$ROOT/public/photos"
 command -v cwebp >/dev/null || { echo "✗ cwebp no encontrado (brew install webp)"; exit 1; }
 
 # Orden de aparición en la web (índice por fecha de modificación) → nombre.
+# Las líneas comentadas marcan los huecos que todavía no tienen fotografía:
+# al añadir esos originales hay que descomentar el nombre en su posición.
 NAMES=(
   casco            # 01 · Diseño 01 — arquitectura naval
   vidrio           # 02 · Diseño 02 — superestructura
   cubiertas        # 03 · Diseño 03 — cubiertas
   beach-club       # 04 · Diseño 04 — popa
   sombra           # 05 · Diseño 05 — luz
-  salon            # 06 · Vida a bordo — salón principal
+  vida-a-bordo     # 06 · Vida a bordo — apertura a pantalla completa
+  #                  ·· PENDIENTE: salon (Salón principal)
   comedor          # 07 · Vida a bordo — comedor
   bodega           # 08 · Vida a bordo — bar y bodega
   sky-lounge       # 09 · Vida a bordo — sky lounge
@@ -39,16 +42,18 @@ NAMES=(
   exp-eventos      # 14 · Experiencia 05
   exp-islas        # 15 · Experiencia 06
   exp-travesias    # 16 · Experiencia 07
-  planos           # 17 · Especificaciones
+  planos           # 17 · Camarotes — apertura, disposición general
   suite-armador    # 18 · Camarotes 01
   suite-vip        # 19 · Camarotes 02
-  suite-doble      # 20 · Camarotes 03 y 04
-  suite-twin       # 21 · Camarotes 05
+  suite-babor      # 20 · Camarotes 03 — doble babor
+  #                  ·· PENDIENTE: suite-estribor (Doble estribor)
+  suite-twin       # 21 · Camarotes 05 — twin
   materiales       # 22 · Artesanía
   tripulacion      # 23 · Tripulación
-  navegando        # 24 · Cierre
-  navegando-alt    # 25 · duplicado especular del anterior
+  navegando-espejo # 24 · descartada: es la nº 25 volteada horizontalmente
+  navegando        # 25 · Cierre
 )
+
 
 mkdir -p "$OUT"
 rm -f "$OUT"/*.webp

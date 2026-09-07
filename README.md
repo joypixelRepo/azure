@@ -117,7 +117,9 @@ import manifest from "../../public/sequences/mi-slug/manifest.json";
 - El contador y el scrub usan **suavizado exponencial independiente de la tasa
   de refresco**: se comportan igual a 120 fps que a 30 fps y se ponen al día en
   un solo fotograma tras una pausa en segundo plano.
-- Cabeceras `Cache-Control: immutable` para `/sequences` y `/stills`.
+- Cabeceras `Cache-Control: immutable` para `/sequences`, `/stills` y `/photos`.
+- La web se sirve con `noindex, nofollow` (meta, `X-Robots-Tag` y `robots.txt`):
+  es una demostración y no debe aparecer en buscadores.
 
 ---
 
@@ -167,8 +169,15 @@ propio script y genera WebP en varios anchos:
 | Vertical    | 1080 px de alto  | 724                     |
 
 Calidad WebP 86 en el tamaño principal (≈180 KB por imagen de 1920 px), 82–84 en
-las variantes. Para cambiar una fotografía: sustituye el original en
-`.source-images/` respetando el orden y vuelve a ejecutar el script.
+las variantes.
+
+**Huecos pendientes.** Dos posiciones no tienen todavía fotografía y se dibujan
+con un marcador sobrio en lugar de romper la maqueta: `salon` (Vida a bordo ·
+Salón principal) y `suite-estribor` (Camarotes · Doble estribor). Para
+completarlas: añade el original en `.source-images/` con una fecha de
+modificación que lo coloque en su posición, descomenta su nombre en
+`scripts/build-photos.sh`, quítalo de `pendingPhotos` en `src/lib/content.ts` y
+vuelve a ejecutar el script.
 
 El mapa de nombres está en `scripts/build-photos.sh` y en `PHOTOS` dentro de
 `src/lib/content.ts`, que también decide la orientación de cada `srcset`.
@@ -176,8 +185,8 @@ El mapa de nombres está en `scripts/build-photos.sh` y en `PHOTOS` dentro de
 ### Fotogramas del vídeo
 
 `public/stills/` guarda fotogramas sueltos del vídeo (`build-stills.sh`). Se
-usan para el hero, la alternativa sin movimiento y las dos aperturas a pantalla
-completa de «Vida a bordo» y «Camarotes», que no tienen fotografía propia.
+usan para el hero y para la alternativa sin movimiento; todas las secciones
+editoriales van con fotografía propia.
 
 ## Reserva
 

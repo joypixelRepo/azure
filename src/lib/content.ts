@@ -59,6 +59,7 @@ const PHOTOS: Record<string, PhotoShape> = {
   "beach-club": "landscape",
   sombra: "landscape",
   // Vida a bordo
+  "vida-a-bordo": "landscape",
   salon: "landscape",
   comedor: "landscape",
   bodega: "landscape",
@@ -71,20 +72,28 @@ const PHOTOS: Record<string, PhotoShape> = {
   "exp-eventos": "portrait",
   "exp-islas": "portrait",
   "exp-travesias": "portrait",
-  // Especificaciones
-  planos: "landscape",
   // Camarotes
+  planos: "landscape",
   "suite-armador": "landscape",
   "suite-vip": "landscape",
-  "suite-doble": "landscape",
+  "suite-babor": "landscape",
+  "suite-estribor": "landscape",
   "suite-twin": "landscape",
   // Artesanía y tripulación
   materiales: "square",
   tripulacion: "square",
   // Cierre
   navegando: "landscape",
-  "navegando-alt": "landscape",
+  "navegando-espejo": "landscape",
 };
+
+/**
+ * Huecos que todavía no tienen fotografía. Al añadir el original a
+ * `.source-images/` y regenerar, basta con quitar el nombre de esta lista.
+ */
+export const pendingPhotos = new Set(["salon", "suite-estribor"]);
+
+export const isPending = (name: string) => pendingPhotos.has(name);
 
 export const photo = (name: string): ImageSource => {
   const shape = PHOTOS[name] ?? "landscape";
@@ -123,11 +132,10 @@ export const criticalMedia: { image: ImageSource; sizes: string }[] = [
     sizes: "100vw",
   })),
   // Vida a bordo
-  { image: still("salon"), sizes: "100vw" },
-  ...["salon", "comedor", "bodega", "sky-lounge"].map((n) => ({
-    image: photo(n),
-    sizes: "(min-width: 768px) 46vw, 92vw",
-  })),
+  { image: photo("vida-a-bordo"), sizes: "100vw" },
+  ...["salon", "comedor", "bodega", "sky-lounge"]
+    .filter((n) => !isPending(n))
+    .map((n) => ({ image: photo(n), sizes: "(min-width: 768px) 46vw, 92vw" })),
   // Experiencia
   ...[
     "exp-mediterraneo",
@@ -137,16 +145,14 @@ export const criticalMedia: { image: ImageSource; sizes: string }[] = [
     "exp-eventos",
     "exp-islas",
     "exp-travesias",
-  ].map((n) => ({ image: photo(n), sizes: "(min-width: 1024px) 30vw, 92vw" })),
+  ].map((n) => ({ image: photo(n), sizes: "(min-width: 1024px) 46vw, 92vw" })),
   // Camarotes
-  { image: still("stair"), sizes: "90vw" },
-  ...["suite-armador", "suite-vip", "suite-doble", "suite-twin"].map((n) => ({
-    image: photo(n),
-    sizes: "(min-width: 1024px) 44vw, 92vw",
-  })),
-  // Artesanía, especificaciones, tripulación y cierre
+  { image: photo("planos"), sizes: "90vw" },
+  ...["suite-armador", "suite-vip", "suite-babor", "suite-estribor", "suite-twin"]
+    .filter((n) => !isPending(n))
+    .map((n) => ({ image: photo(n), sizes: "(min-width: 1024px) 46vw, 92vw" })),
+  // Artesanía, tripulación y cierre
   { image: photo("materiales"), sizes: "(min-width: 1024px) 44vw, 92vw" },
-  { image: photo("planos"), sizes: "(min-width: 1024px) 52vw, 92vw" },
   { image: photo("tripulacion"), sizes: "(min-width: 1024px) 42vw, 92vw" },
   { image: photo("navegando"), sizes: "100vw" },
 ];
@@ -327,6 +333,8 @@ export const onboard = {
   eyebrow: "Vida a bordo",
   title: "El interior no imita una casa.\nHace algo más difícil: la mejora.",
   body: "La planta principal se organiza como una secuencia continua —salón, comedor, terraza de popa— sin puertas que interrumpan la mirada. Los materiales son pocos y muy buenos: roble, lino, piedra caliza, bronce cepillado.",
+  /** Apertura a pantalla completa de la sección. */
+  hero: "vida-a-bordo",
   spaces: [
     {
       image: "salon",

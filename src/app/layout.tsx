@@ -28,7 +28,20 @@ export const metadata: Metadata = {
     type: "website",
     locale: "es_ES",
   },
-  robots: { index: false, follow: false },
+  // Proyecto de demostración: fuera de los buscadores.
+  robots: {
+    index: false,
+    follow: false,
+    nocache: true,
+    googleBot: {
+      index: false,
+      follow: false,
+      noimageindex: true,
+      "max-snippet": -1,
+      "max-image-preview": "none",
+      "max-video-preview": -1,
+    },
+  },
 };
 
 export const viewport: Viewport = {
@@ -42,6 +55,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="es" className={`${inter.variable} ${cormorant.variable} antialiased`}>
       <head>
+        <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex" />
+        <meta name="googlebot" content="noindex, nofollow, noimageindex" />
         <link rel="preload" as="image" href="/stills/hero-1600.webp" />
       </head>
       <body data-loading="true">{children}</body>

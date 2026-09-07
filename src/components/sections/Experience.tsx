@@ -21,9 +21,8 @@ export function Experience() {
   return (
     <section id="experiencia" className="relative bg-ink py-32 md:py-44">
       <div className="px-[var(--page-gutter)]">
-        <div className="grid gap-16 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] lg:gap-24">
-          {/* Columna fija con previsualización */}
-          <div className="lg:sticky lg:top-[calc(var(--nav-h)+4rem)] lg:h-fit">
+        <div className="flex flex-wrap items-end justify-between gap-8">
+          <div>
             <Reveal direction="fade">
               <p className="eyebrow text-sand/80">La experiencia</p>
             </Reveal>
@@ -34,29 +33,49 @@ export function Experience() {
                 de usar el mar.
               </h2>
             </Reveal>
+          </div>
+          <Reveal direction="fade" delay={140}>
+            <p className="body-sm max-w-[34ch]">
+              El yate no impone un programa. Cada travesía se arma con lo que hace falta y se deja
+              fuera todo lo demás.
+            </p>
+          </Reveal>
+        </div>
 
-            <div className="relative mt-12 hidden aspect-[4/5] w-full max-w-sm overflow-hidden bg-hull lg:block">
-              {PREVIEWS.map((name, i) => {
-                const img = photo(name);
-                return (
-                  <img
-                    key={name}
-                    src={img.src}
-                    srcSet={img.srcSet}
-                    sizes="(min-width: 1024px) 30vw, 92vw"
-                    alt=""
-                    aria-hidden
-                    loading="lazy"
-                    decoding="async"
-                    className="absolute inset-0 h-full w-full object-cover transition-[opacity,transform] duration-[1200ms] ease-[cubic-bezier(0.16,1,0.3,1)]"
-                    style={{
-                      opacity: active === i ? 1 : 0,
-                      transform: active === i ? "scale(1)" : "scale(1.06)",
-                    }}
-                  />
-                );
-              })}
-              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-ink/50 to-transparent" />
+        <div className="mt-16 grid gap-12 md:mt-20 lg:grid-cols-2 lg:gap-16">
+          {/* Columna izquierda: fotografía fija a media pantalla */}
+          <div className="hidden lg:block">
+            <div className="sticky top-0 flex h-[100svh] items-center">
+              <div className="relative aspect-[3/4] max-h-[calc(100svh-8rem)] w-full overflow-hidden bg-hull">
+                {PREVIEWS.map((name, i) => {
+                  const img = photo(name);
+                  return (
+                    <img
+                      key={name}
+                      src={img.src}
+                      srcSet={img.srcSet}
+                      sizes="46vw"
+                      alt=""
+                      aria-hidden
+                      loading="lazy"
+                      decoding="async"
+                      className="absolute inset-0 h-full w-full object-cover transition-[opacity,transform] duration-[1200ms] ease-[cubic-bezier(0.16,1,0.3,1)]"
+                      style={{
+                        opacity: active === i ? 1 : 0,
+                        transform: active === i ? "scale(1)" : "scale(1.05)",
+                      }}
+                    />
+                  );
+                })}
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-ink/45 to-transparent" />
+                <div className="pointer-events-none absolute bottom-6 left-6 right-6 flex items-center gap-4">
+                  <span className="num text-[0.7rem] tracking-[0.28em] text-sand">
+                    {experiences[active].n}
+                  </span>
+                  <span className="h-px flex-1 bg-white/25" />
+                  <span className="eyebrow text-ivory/90">{experiences[active].title}</span>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -80,9 +99,9 @@ export function Experience() {
                       </h3>
                       <p className="body-lg mt-3 max-w-[52ch]">{item.body}</p>
 
-                      {/* En pantallas pequeñas no hay columna fija: cada
+                      {/* Sin columna fija en pantallas pequeñas: cada
                           experiencia lleva su propia fotografía. */}
-                      <div className="mt-6 aspect-[4/3] w-full overflow-hidden bg-hull lg:hidden">
+                      <div className="mt-6 aspect-[4/5] w-full overflow-hidden bg-hull lg:hidden">
                         <img
                           src={photo(PREVIEWS[i]).src}
                           srcSet={photo(PREVIEWS[i]).srcSet}

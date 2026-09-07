@@ -1,4 +1,4 @@
-import { photo, specs, specsFootnotes } from "@/lib/content";
+import { specs, specsFootnotes } from "@/lib/content";
 import { Reveal } from "@/components/ui/Reveal";
 import { CountUp } from "@/components/ui/CountUp";
 
@@ -21,24 +21,7 @@ export function Specs() {
           </Reveal>
         </div>
 
-        <Reveal direction="fade" delay={120}>
-          <figure className="mt-16 md:mt-20">
-            <img
-              src={photo("planos").src}
-              srcSet={photo("planos").srcSet}
-              sizes="(min-width: 1024px) 88vw, 92vw"
-              alt="Planos generales de AZURE 42: sun deck, puente, cubierta principal y cubierta inferior"
-              loading="lazy"
-              decoding="async"
-              className="w-full border border-white/10"
-            />
-            <figcaption className="eyebrow mt-4 text-mist/60">
-              Disposición general · cuatro cubiertas
-            </figcaption>
-          </figure>
-        </Reveal>
-
-        <dl className="mt-16 grid grid-cols-1 gap-px border-t border-white/10 sm:grid-cols-2 lg:grid-cols-3">
+        <dl className="mt-20 grid grid-cols-1 gap-px border-t border-white/10 sm:grid-cols-2 lg:grid-cols-3">
           {specs.map((spec, i) => (
             <Reveal key={spec.label} delay={Math.min(i * 55, 330)}>
               <div className="group flex h-full flex-col justify-between border-b border-white/10 py-10 pr-6 transition-colors duration-700 hover:bg-white/[0.02] sm:min-h-[13rem]">
