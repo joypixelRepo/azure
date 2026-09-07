@@ -333,8 +333,13 @@ export const onboard = {
   eyebrow: "Vida a bordo",
   title: "El interior no imita una casa.\nHace algo más difícil: la mejora.",
   body: "La planta principal se organiza como una secuencia continua —salón, comedor, terraza de popa— sin puertas que interrumpan la mirada. Los materiales son pocos y muy buenos: roble, lino, piedra caliza, bronce cepillado.",
-  /** Apertura a pantalla completa de la sección. */
-  hero: "vida-a-bordo",
+  /** Apertura a pantalla completa de la sección, con su texto sobreimpreso. */
+  hero: {
+    image: "vida-a-bordo",
+    eyebrow: "La hora azul",
+    title: "A las ocho, el salón\nse pone del color del oro.",
+    body: "El sol entra horizontal por los ventanales de estribor y recorre el roble hasta el fondo. No hay nada que hacer: sólo quedarse sentado y dejar que pase.",
+  },
   spaces: [
     {
       image: "salon",

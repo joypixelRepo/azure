@@ -15,15 +15,42 @@ export function OnBoard() {
         <SectionHeading eyebrow={onboard.eyebrow} title={onboard.title} body={onboard.body} />
       </div>
 
-      {/* Apertura a pantalla completa */}
-      <Reveal direction="fade" className="mt-20 md:mt-28">
-        <ParallaxImage
-          name={onboard.hero}
-          alt="Planta principal de AZURE 42"
-          className="h-[62svh] w-full md:h-[86svh]"
-          amount={16}
-        />
-      </Reveal>
+      {/* Apertura a pantalla completa, con el texto sobreimpreso */}
+      <div className="relative mt-20 md:mt-28">
+        <Reveal direction="fade">
+          <ParallaxImage
+            name={onboard.hero.image}
+            alt="Planta principal de AZURE 42 al atardecer"
+            className="h-[62svh] w-full md:h-[86svh]"
+            amount={16}
+          />
+        </Reveal>
+
+        {/* Velos: el texto va a la izquierda, donde la madera ya es oscura */}
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-deep/85 via-deep/25 to-transparent" />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-deep/75 to-transparent" />
+
+        <div className="theme-dark absolute inset-0 flex items-end px-[var(--page-gutter)] pb-12 md:pb-16">
+          <div className="max-w-[34rem]">
+            <Reveal direction="fade">
+              <p className="eyebrow flex items-center gap-3 text-gold">
+                <span className="inline-block h-px w-8 bg-gradient-to-r from-gold to-gold/0" />
+                {onboard.hero.eyebrow}
+              </p>
+            </Reveal>
+            <Reveal direction="right" delay={120}>
+              <h3 className="display-md mt-5 whitespace-pre-line text-strong [text-shadow:0_2px_28px_rgba(7,26,36,0.85)]">
+                {onboard.hero.title}
+              </h3>
+            </Reveal>
+            <Reveal direction="right" delay={240}>
+              <p className="body-lg mt-5 max-w-[46ch] [text-shadow:0_2px_20px_rgba(7,26,36,0.9)]">
+                {onboard.hero.body}
+              </p>
+            </Reveal>
+          </div>
+        </div>
+      </div>
 
       <div className="mt-24 grid gap-x-10 gap-y-20 px-[var(--page-gutter)] md:mt-32 md:grid-cols-2">
         {onboard.spaces.map((space, i) => (
