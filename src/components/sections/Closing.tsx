@@ -19,7 +19,9 @@ export function Closing() {
           amount={18}
         />
       </div>
-      <div className="absolute inset-0 bg-gradient-to-t from-abyss via-abyss/45 to-abyss/65" />
+      {/* La fotografía nace del negro de la sección anterior */}
+      <div className="absolute inset-x-0 top-0 h-[45%] bg-gradient-to-b from-abyss via-abyss/70 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-t from-abyss via-abyss/40 to-transparent" />
       <div
         aria-hidden
         className="absolute inset-0"

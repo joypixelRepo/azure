@@ -92,8 +92,12 @@ ScrollTrigger, que pelea con el scroll suave.
 
 Su primera diapositiva es negra con mar en movimiento (`SeaWaves`): nueve bandas
 de olas en canvas 2D, cada una suma de cuatro senoidales con una envolvente
-lenta que rompe la repetición. Se dibuja a 30 fps, con paso de 8 px, densidad de
-píxel limitada a 1,5× y parada completa cuando la sección no está en pantalla.
+lenta que rompe la repetición. El puntero levanta el oleaje a su alrededor y
+suelta ondas circulares que se expanden y se apagan. Se dibuja a 60 fps en
+escritorio y 30 en táctil, con paso de 7 px, densidad de píxel limitada a 1,75×
+y parada completa cuando la sección no está en pantalla o la pestaña pasa a
+segundo plano. Al entrar en esa diapositiva bajando, el scroll se retiene un
+segundo para que dé tiempo a verla.
 
 ### 4 · Reutilización
 

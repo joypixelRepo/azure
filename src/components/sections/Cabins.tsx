@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { cabins, isPending, photo } from "@/lib/content";
 import { Reveal } from "@/components/ui/Reveal";
 import { Photo } from "@/components/ui/Photo";
@@ -16,6 +16,26 @@ const CABIN_IMAGES = [
 
 export function Cabins() {
   const [active, setActive] = useState(0);
+  const itemsRef = useRef<(HTMLLIElement | null)[]>([]);
+
+  /* La fotografía cambia con el scroll —se activa el camarote que cruza la
+     franja central— además de con el ratón. */
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0];
+        if (!visible) return;
+        const index = Number((visible.target as HTMLElement).dataset.index);
+        if (!Number.isNaN(index)) setActive(index);
+      },
+      { rootMargin: "-45% 0px -45% 0px", threshold: 0 },
+    );
+
+    itemsRef.current.forEach((el) => el && observer.observe(el));
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <section id="camarotes" className="relative bg-abyss py-32 md:py-44">
@@ -95,7 +115,13 @@ export function Cabins() {
 
           <ul className="border-t border-white/10">
             {cabins.list.map((cabin, i) => (
-              <li key={cabin.name}>
+              <li
+                key={cabin.name}
+                data-index={i}
+                ref={(el) => {
+                  itemsRef.current[i] = el;
+                }}
+              >
                 <Reveal delay={Math.min(i * 70, 280)}>
                   <button
                     type="button"

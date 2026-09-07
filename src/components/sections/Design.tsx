@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { gsap, type ScrollTrigger as ScrollTriggerType } from "@/lib/gsap";
+import { ScrollTrigger, gsap, type ScrollTrigger as ScrollTriggerType } from "@/lib/gsap";
 import { designPanels, photo } from "@/lib/content";
 import { prefersReducedMotion } from "@/lib/device";
 import { SeaWaves } from "@/components/ui/SeaWaves";
@@ -17,7 +17,18 @@ export function Design() {
   const sectionRef = useRef<HTMLElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<ScrollTriggerType | null>(null);
-  const { scrollTo } = useSmoothScroll();
+  const holdingRef = useRef(false);
+  const { scrollTo, stop, start } = useSmoothScroll();
+
+  // Referencias vivas: el contexto de scroll se resuelve tras montar y no
+  // queremos reconstruir las animaciones por eso.
+  const stopRef = useRef(stop);
+  const startRef = useRef(start);
+
+  useEffect(() => {
+    stopRef.current = stop;
+    startRef.current = start;
+  }, [stop, start]);
 
   useEffect(() => {
     if (prefersReducedMotion()) return;
@@ -46,6 +57,22 @@ export function Design() {
       });
 
       triggerRef.current = tween.scrollTrigger ?? null;
+
+      /* Al llegar a la primera diapositiva bajando, el scroll se detiene un
+         segundo: da tiempo a que el mar se lea antes de seguir. */
+      ScrollTrigger.create({
+        trigger: section,
+        start: "top top",
+        onEnter: () => {
+          if (holdingRef.current) return;
+          holdingRef.current = true;
+          stopRef.current();
+          window.setTimeout(() => {
+            startRef.current();
+            holdingRef.current = false;
+          }, 1100);
+        },
+      });
 
       track.querySelectorAll<HTMLElement>("[data-panel-image]").forEach((image) => {
         gsap.fromTo(
@@ -110,7 +137,7 @@ export function Design() {
 
     const settle = () => {
       const trigger = triggerRef.current;
-      if (!trigger || snapping) return;
+      if (!trigger || snapping || holdingRef.current) return;
 
       const { start, end } = trigger;
       const span = end - start;
@@ -136,7 +163,7 @@ export function Design() {
       const y = window.scrollY;
       if (y !== lastY) direction = y > lastY ? 1 : -1;
       lastY = y;
-      if (snapping) return;
+      if (snapping || holdingRef.current) return;
       window.clearTimeout(settleTimer);
       settleTimer = window.setTimeout(settle, 150);
     };
@@ -154,7 +181,7 @@ export function Design() {
       <div ref={trackRef} className="flex h-[100svh] w-max flex-nowrap will-change-transform">
         {/* Panel de apertura: negro, con el mar en movimiento abajo */}
         <article className="relative flex h-[100svh] w-screen shrink-0 flex-col items-center justify-center overflow-hidden bg-abyss px-[var(--page-gutter)] text-center">
-          <div className="relative z-10 max-w-[36rem] pb-[26vh]">
+          <div className="relative z-10 max-w-[36rem]">
             <p className="eyebrow text-sand/80">Diseño</p>
             <h2 className="display-lg mt-6 text-ivory">
               Una arquitectura
@@ -165,14 +192,15 @@ export function Design() {
               El exterior de AZURE 42 se dibujó como se dibuja un edificio: por planos, por sombras
               y por la manera en que la luz cae sobre ellos a lo largo del día.
             </p>
-            <p className="eyebrow mt-12 flex items-center justify-center gap-3 text-mist/70">
-              Desplaza <span className="inline-block h-px w-10 bg-mist/50" /> lateral
-            </p>
           </div>
 
-          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[46%]">
+          <p className="eyebrow absolute bottom-10 z-10 flex items-center justify-center gap-3 text-mist/70">
+            Desplaza <span className="inline-block h-px w-10 bg-mist/50" /> lateral
+          </p>
+
+          <div className="absolute inset-x-0 bottom-0 h-[34%]">
             <SeaWaves />
-            <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-abyss via-abyss/70 to-transparent" />
+            <div className="pointer-events-none absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-abyss via-abyss/65 to-transparent" />
           </div>
         </article>
 
@@ -192,28 +220,24 @@ export function Design() {
                 aria-hidden
                 className="absolute inset-0 h-full w-full scale-110 object-cover will-change-transform"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-abyss/80 via-abyss/25 to-abyss/50" />
-              <div
-                aria-hidden
-                className="absolute inset-0"
-                style={{
-                  background:
-                    "radial-gradient(62% 52% at 50% 50%, rgba(5,7,10,0.88) 0%, rgba(5,7,10,0.55) 52%, rgba(5,7,10,0) 88%)",
-                }}
-              />
+              {/* Velo uniforme: oscurece por igual, sin manchas visibles */}
+              <div className="absolute inset-0 bg-abyss/66" />
+              <div className="absolute inset-0 bg-gradient-to-t from-abyss/75 via-transparent to-abyss/50" />
               <div className="absolute inset-0 flex items-center justify-center px-[var(--page-gutter)]">
                 <div data-panel-copy className="w-full max-w-[34rem] text-center">
                   <div className="mb-6 flex items-center justify-center gap-4">
-                    <span className="num text-[0.7rem] tracking-[0.28em] text-sand">
+                    <span className="num text-[0.7rem] tracking-[0.28em] text-sand [text-shadow:0_2px_16px_rgba(5,7,10,0.95)]">
                       {panel.index}
                     </span>
-                    <span className="h-px w-10 bg-sand/40" />
-                    <span className="eyebrow text-mist/80">{panel.eyebrow}</span>
+                    <span className="h-px w-10 bg-sand/50" />
+                    <span className="eyebrow text-fog/90 [text-shadow:0_2px_16px_rgba(5,7,10,0.95)]">
+                      {panel.eyebrow}
+                    </span>
                   </div>
-                  <h3 className="display-md text-ivory drop-shadow-[0_2px_30px_rgba(5,7,10,0.8)]">
+                  <h3 className="display-md text-ivory [text-shadow:0_2px_28px_rgba(5,7,10,0.95)]">
                     {panel.title}
                   </h3>
-                  <p className="body-lg mx-auto mt-5 max-w-[46ch] text-fog/90 drop-shadow-[0_2px_24px_rgba(5,7,10,0.9)]">
+                  <p className="body-lg mx-auto mt-5 max-w-[46ch] text-ivory [text-shadow:0_2px_20px_rgba(5,7,10,0.95)]">
                     {panel.body}
                   </p>
                 </div>
