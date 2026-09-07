@@ -28,21 +28,21 @@ export function Specs() {
         <dl className="mt-20 grid grid-cols-1 border-t border-white/10 sm:grid-cols-2 lg:grid-cols-3">
           {specs.map((spec, i) => (
             <Reveal key={spec.label} delay={Math.min(i * 55, 330)}>
-              <div className="group flex h-full items-start gap-5 border-b border-white/10 py-10 pr-6 transition-colors duration-700 hover:bg-gold/[0.04] sm:min-h-[12rem]">
-                <span className="spec-icon mt-1">
-                  <SpecIcon name={spec.icon} className="h-6 w-6" />
-                </span>
-                <div className="flex h-full flex-col justify-between">
-                  <dt className="eyebrow text-mist/70">{spec.label}</dt>
-                  <dd className="mt-6 flex items-baseline gap-2">
+              <div className="group flex h-full flex-col justify-between border-b border-white/10 py-10 pr-6 transition-colors duration-700 hover:bg-gold/[0.04] sm:min-h-[12rem]">
+                <dt className="eyebrow text-mist/70">{spec.label}</dt>
+                <dd className="mt-6 flex items-center gap-4">
+                  <span className="spec-icon">
+                    <SpecIcon name={spec.icon} className="h-6 w-6" />
+                  </span>
+                  <span className="flex items-baseline gap-2">
                     <span className="display-lg text-[clamp(2.4rem,4.4vw,3.9rem)] leading-none text-ivory">
                       <CountUp value={spec.value} />
                     </span>
                     <span className="text-[0.7rem] uppercase tracking-[0.2em] text-gold">
                       {spec.unit}
                     </span>
-                  </dd>
-                </div>
+                  </span>
+                </dd>
               </div>
             </Reveal>
           ))}
