@@ -172,9 +172,9 @@ public/
 Paleta neutra sobre fondo abisal con **oro** como único acento: `--color-gold`
 (`#d3b169`) para filetes, numeraciones, antetítulos y estados activos,
 `--color-champagne` (`#ecd7a4`) para los reflejos más claros —botones de cristal,
-destellos— y `--color-bronze` para la sombra del metal. No hay un segundo color
-de acento a propósito: el lujo aquí lo sostienen el espacio en blanco, la
-tipografía y un solo metal.
+destellos— y `--color-bronze` para la sombra del metal. El único contrapunto es
+`--color-ember` (`#d2543a`), un rojo lacado reservado a la iconografía de la
+ficha técnica.
 
 La fotografía suelta lleva la clase `.lux-frame`: filo dorado, resplandor cálido
 y un destello diagonal que cruza la imagen una sola vez al pasar el ratón. Todo

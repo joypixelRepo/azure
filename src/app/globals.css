@@ -19,6 +19,8 @@
   --color-gold: #d3b169;
   --color-champagne: #ecd7a4;
   --color-bronze: #8f6f33;
+  /* Rojo lacado: el contrapunto cálido del oro, sin salirse del registro. */
+  --color-ember: #d2543a;
   --color-sea: #6c8b93;
 
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, sans-serif;
@@ -332,6 +334,41 @@
     }
     .lux-frame:hover::before {
       animation: luxSheen 1.6s var(--ease-luxe) forwards;
+    }
+  }
+
+  /* --------------------------------------------------------------------------
+     Ficha técnica
+     -------------------------------------------------------------------------- */
+
+  .spec-icon {
+    display: grid;
+    place-items: center;
+    width: 3rem;
+    height: 3rem;
+    flex-shrink: 0;
+    color: var(--color-ember);
+    border: 1px solid color-mix(in oklab, white 11%, transparent);
+    background: linear-gradient(
+      150deg,
+      color-mix(in oklab, var(--color-ember) 9%, transparent),
+      transparent 65%
+    );
+    transition:
+      border-color 0.7s var(--ease-luxe),
+      box-shadow 0.7s var(--ease-luxe),
+      color 0.7s var(--ease-luxe),
+      transform 0.7s var(--ease-luxe);
+  }
+
+  @media (hover: hover) {
+    .group:hover .spec-icon {
+      transform: translateY(-2px);
+      color: color-mix(in oklab, var(--color-ember) 82%, white);
+      border-color: color-mix(in oklab, var(--color-gold) 45%, transparent);
+      box-shadow:
+        inset 0 0 22px -8px color-mix(in oklab, var(--color-ember) 55%, transparent),
+        0 14px 34px -18px color-mix(in oklab, var(--color-gold) 55%, transparent);
     }
   }
 

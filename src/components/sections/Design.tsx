@@ -120,10 +120,13 @@ export function Design() {
   }, []);
 
   /**
-   * Anclaje de diapositivas. ScrollTrigger trae su propio `snap`, pero pelea
-   * con el scroll suave de Lenis, así que se resuelve aquí: cuando el scroll
-   * se detiene dentro de la sección fijada, se va a la diapositiva siguiente o
-   * anterior según la dirección del gesto.
+   * Anclaje de diapositivas, de una en una.
+   *
+   * `restIndex` guarda la diapositiva en la que está posado el usuario. Al
+   * detenerse el scroll —o en cuanto se aleja más de una diapositiva— se va a
+   * `restIndex ± 1` según la dirección del gesto, nunca dos de golpe.
+   * ScrollTrigger trae su propio `snap`, pero pelea con el scroll suave de
+   * Lenis, así que se resuelve aquí.
    */
   useEffect(() => {
     if (prefersReducedMotion()) return;
@@ -134,29 +137,38 @@ export function Design() {
     let settleTimer = 0;
     let releaseTimer = 0;
     let snapping = false;
+    let restIndex = 0;
 
-    const settle = () => {
+    const bounds = () => {
       const trigger = triggerRef.current;
-      if (!trigger || snapping || holdingRef.current) return;
+      if (!trigger) return null;
+      const span = trigger.end - trigger.start;
+      return span > 0 ? { start: trigger.start, span } : null;
+    };
 
-      const { start, end } = trigger;
-      const span = end - start;
-      if (span <= 0) return;
-
-      const y = window.scrollY;
-      if (y <= start + 2 || y >= end - 2) return;
-
-      const exact = ((y - start) / span) * steps;
-      const nearest = Math.round(exact);
-      if (Math.abs(exact - nearest) < 0.03) return; // ya está encajada
-
-      const index = Math.min(steps, Math.max(0, direction > 0 ? Math.ceil(exact) : Math.floor(exact)));
+    const goTo = (index: number, span: number, start: number) => {
+      const clamped = Math.min(steps, Math.max(0, index));
       snapping = true;
-      scrollTo(start + (index / steps) * span, { duration: 0.7 });
+      restIndex = clamped;
+      scrollTo(start + (clamped / steps) * span, { duration: 0.7 });
+      window.clearTimeout(releaseTimer);
       releaseTimer = window.setTimeout(() => {
         snapping = false;
         lastY = window.scrollY;
       }, 900);
+    };
+
+    const settle = () => {
+      const box = bounds();
+      if (!box || snapping || holdingRef.current) return;
+
+      const y = window.scrollY;
+      if (y <= box.start + 2 || y >= box.start + box.span - 2) return;
+
+      const exact = ((y - box.start) / box.span) * steps;
+      if (Math.abs(exact - restIndex) < 0.03) return; // ya está encajada
+
+      goTo(restIndex + (direction > 0 ? 1 : -1), box.span, box.start);
     };
 
     const onScroll = () => {
@@ -164,8 +176,31 @@ export function Design() {
       if (y !== lastY) direction = y > lastY ? 1 : -1;
       lastY = y;
       if (snapping || holdingRef.current) return;
+
+      const box = bounds();
+      if (!box) return;
+
+      // Fuera de la sección fijada, la diapositiva de referencia son los extremos.
+      if (y <= box.start) {
+        restIndex = 0;
+        return;
+      }
+      if (y >= box.start + box.span) {
+        restIndex = steps;
+        return;
+      }
+
+      const exact = ((y - box.start) / box.span) * steps;
+
+      // Si el impulso se lleva al usuario más allá de una diapositiva, se
+      // ancla sin esperar a que el scroll se detenga.
+      if (Math.abs(exact - restIndex) > 1.02) {
+        goTo(restIndex + (direction > 0 ? 1 : -1), box.span, box.start);
+        return;
+      }
+
       window.clearTimeout(settleTimer);
-      settleTimer = window.setTimeout(settle, 150);
+      settleTimer = window.setTimeout(settle, 130);
     };
 
     window.addEventListener("scroll", onScroll, { passive: true });

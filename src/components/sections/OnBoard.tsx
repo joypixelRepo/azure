@@ -36,7 +36,6 @@ export function OnBoard() {
                   sizes="(min-width: 768px) 46vw, 92vw"
                   className="h-full w-full object-cover transition-transform duration-[1400ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
                 />
-                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-abyss/45 to-transparent opacity-0 transition-opacity duration-700 group-hover:opacity-100" />
               </div>
               <figcaption className="mt-6 flex items-start gap-6">
                 <span className="num pt-1 text-[0.7rem] tracking-[0.28em] text-gold">

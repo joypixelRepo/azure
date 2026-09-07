@@ -425,16 +425,27 @@ export const craft = {
 /*  Especificaciones                                                           */
 /* -------------------------------------------------------------------------- */
 
-export const specs = [
-  { label: "Eslora total", value: "42,00", unit: "m" },
-  { label: "Manga máxima", value: "7,80", unit: "m" },
-  { label: "Calado", value: "2,15", unit: "m" },
-  { label: "Velocidad de crucero", value: "12", unit: "nudos" },
-  { label: "Velocidad máxima", value: "16", unit: "nudos" },
-  { label: "Pasajeros", value: "12", unit: "invitados" },
-  { label: "Camarotes", value: "5", unit: "suites" },
-  { label: "Tripulación", value: "9", unit: "personas" },
-  { label: "Autonomía", value: "4.200", unit: "millas náuticas" },
+export type SpecIconName =
+  | "length"
+  | "beam"
+  | "draft"
+  | "cruise"
+  | "top-speed"
+  | "guests"
+  | "cabins"
+  | "crew"
+  | "range";
+
+export const specs: { label: string; value: string; unit: string; icon: SpecIconName }[] = [
+  { label: "Eslora total", value: "42,00", unit: "m", icon: "length" },
+  { label: "Manga máxima", value: "7,80", unit: "m", icon: "beam" },
+  { label: "Calado", value: "2,15", unit: "m", icon: "draft" },
+  { label: "Velocidad de crucero", value: "12", unit: "nudos", icon: "cruise" },
+  { label: "Velocidad máxima", value: "16", unit: "nudos", icon: "top-speed" },
+  { label: "Pasajeros", value: "12", unit: "invitados", icon: "guests" },
+  { label: "Camarotes", value: "5", unit: "suites", icon: "cabins" },
+  { label: "Tripulación", value: "9", unit: "personas", icon: "crew" },
+  { label: "Autonomía", value: "4.200", unit: "millas náuticas", icon: "range" },
 ];
 
 export const specsFootnotes = [
