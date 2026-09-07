@@ -1,0 +1,12 @@
+{
+  "slug": "azure-42",
+  "source": "azure-42-yate.mp4",
+  "sourceFrames": 480,
+  "fps": 24,
+  "aspect": 1.7777778,
+  "tiers": {
+    "desktop": { "path": "/sequences/azure-42/desktop", "frames": 480, "width": 1440 },
+    "tablet":  { "path": "/sequences/azure-42/tablet",  "frames": 480, "width": 1024 },
+    "mobile":  { "path": "/sequences/azure-42/mobile",  "frames": 240, "width": 860 }
+  }
+}

@@ -1,0 +1,369 @@
+@import "tailwindcss";
+
+/* ==========================================================================
+   AZURE 42 — Sistema visual
+   Paleta neutra y sofisticada: abisal, bruma, arena, champagne.
+   ========================================================================== */
+
+@theme {
+  --color-abyss: #05070a;
+  --color-ink: #0a0e13;
+  --color-hull: #12171e;
+  --color-slate: #1c232c;
+  --color-mist: #8d949c;
+  --color-fog: #b9bec4;
+  --color-ivory: #f4f2ee;
+  --color-sand: #cbbfaa;
+  --color-champagne: #b39a72;
+  --color-sea: #6c8b93;
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-display: var(--font-cormorant), ui-serif, Georgia, serif;
+
+  --ease-luxe: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-glass: cubic-bezier(0.33, 1, 0.68, 1);
+
+  --breakpoint-xs: 26rem;
+}
+
+@layer base {
+  :root {
+    --page-gutter: clamp(1.25rem, 5vw, 6rem);
+    --nav-h: 4.5rem;
+    color-scheme: dark;
+  }
+
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Tailwind v4 no aplica cursor: pointer por defecto en controles. */
+  a,
+  button,
+  label[for],
+  summary,
+  select,
+  [role="button"] {
+    cursor: pointer;
+  }
+
+  button:disabled,
+  [aria-disabled="true"] {
+    cursor: not-allowed;
+  }
+
+  html {
+    background-color: var(--color-abyss);
+  }
+
+  body {
+    background-color: var(--color-abyss);
+    color: var(--color-ivory);
+    font-family: var(--font-sans);
+    font-synthesis-weight: none;
+    text-rendering: optimizeLegibility;
+    overflow-x: clip;
+  }
+
+  /* Bloqueo de scroll mientras carga la experiencia */
+  body[data-loading="true"] {
+    overflow: hidden;
+    height: 100vh;
+  }
+
+  ::selection {
+    background: var(--color-champagne);
+    color: var(--color-abyss);
+  }
+}
+
+@layer components {
+  /* --------------------------------------------------------------------------
+     Tipografía editorial
+     -------------------------------------------------------------------------- */
+
+  .font-display {
+    font-family: var(--font-display);
+    font-weight: 300;
+    letter-spacing: -0.015em;
+  }
+
+  .eyebrow {
+    font-size: 0.6875rem;
+    line-height: 1;
+    font-weight: 500;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--color-mist);
+  }
+
+  .display-xl {
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: clamp(3rem, 8.2vw, 9.5rem);
+    line-height: 0.92;
+    letter-spacing: -0.03em;
+  }
+
+  .display-lg {
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: clamp(2.5rem, 6.2vw, 6rem);
+    line-height: 0.98;
+    letter-spacing: -0.025em;
+  }
+
+  .display-md {
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: clamp(1.9rem, 3.6vw, 3.4rem);
+    line-height: 1.06;
+    letter-spacing: -0.02em;
+  }
+
+  .body-lg {
+    font-size: clamp(1rem, 1.15vw, 1.15rem);
+    line-height: 1.65;
+    color: color-mix(in oklab, var(--color-fog) 88%, transparent);
+    font-weight: 300;
+  }
+
+  .body-sm {
+    font-size: 0.875rem;
+    line-height: 1.7;
+    color: var(--color-mist);
+    font-weight: 300;
+  }
+
+  .num {
+    font-variant-numeric: tabular-nums lining-nums;
+    font-feature-settings: "tnum" 1;
+  }
+
+  /* --------------------------------------------------------------------------
+     Cristal — botones y superficies
+     -------------------------------------------------------------------------- */
+
+  .glass {
+    position: relative;
+    isolation: isolate;
+    background: linear-gradient(
+      140deg,
+      color-mix(in oklab, white 13%, transparent),
+      color-mix(in oklab, white 4%, transparent) 46%,
+      color-mix(in oklab, white 8%, transparent)
+    );
+    border: 1px solid color-mix(in oklab, white 14%, transparent);
+    backdrop-filter: blur(18px) saturate(150%);
+    -webkit-backdrop-filter: blur(18px) saturate(150%);
+    box-shadow:
+      inset 0 1px 0 0 color-mix(in oklab, white 22%, transparent),
+      inset 0 -1px 0 0 color-mix(in oklab, white 6%, transparent),
+      0 12px 40px -18px rgb(0 0 0 / 0.75);
+  }
+
+  .glass-button {
+    --glass-lift: 0px;
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.7em;
+    border-radius: 999px;
+    border: 1px solid color-mix(in oklab, white 16%, transparent);
+    background: linear-gradient(
+      140deg,
+      color-mix(in oklab, white 15%, transparent),
+      color-mix(in oklab, white 5%, transparent) 48%,
+      color-mix(in oklab, white 9%, transparent)
+    );
+    backdrop-filter: blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
+    box-shadow:
+      inset 0 1px 0 0 color-mix(in oklab, white 26%, transparent),
+      inset 0 -1px 0 0 color-mix(in oklab, white 6%, transparent),
+      0 10px 30px -16px rgb(0 0 0 / 0.8);
+    color: var(--color-ivory);
+    transform: translate3d(0, var(--glass-lift), 0);
+    transition:
+      transform 0.55s var(--ease-glass),
+      box-shadow 0.55s var(--ease-glass),
+      border-color 0.55s var(--ease-glass),
+      background 0.55s var(--ease-glass);
+  }
+
+  /* Reflejo superior muy tenue */
+  .glass-button::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(
+      120% 100% at 50% -30%,
+      color-mix(in oklab, white 30%, transparent),
+      transparent 62%
+    );
+    opacity: 0.5;
+    transition: opacity 0.55s var(--ease-glass);
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  /* Luz que sigue al cursor */
+  .glass-button::after {
+    content: "";
+    position: absolute;
+    inset: -40%;
+    border-radius: inherit;
+    background: radial-gradient(
+      26% 46% at var(--mx, 50%) var(--my, 50%),
+      color-mix(in oklab, white 26%, transparent),
+      transparent 70%
+    );
+    opacity: 0;
+    transition: opacity 0.6s var(--ease-glass);
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  @media (hover: hover) {
+    .glass-button:hover {
+      --glass-lift: -2px;
+      border-color: color-mix(in oklab, white 26%, transparent);
+      box-shadow:
+        inset 0 1px 0 0 color-mix(in oklab, white 38%, transparent),
+        inset 0 -1px 0 0 color-mix(in oklab, white 8%, transparent),
+        0 20px 44px -20px rgb(0 0 0 / 0.85);
+    }
+    .glass-button:hover::before { opacity: 0.85; }
+    .glass-button:hover::after { opacity: 1; }
+  }
+
+  .glass-button:active {
+    --glass-lift: 0px;
+    transition-duration: 0.12s;
+  }
+
+  .glass-button:focus-visible {
+    outline: 1px solid color-mix(in oklab, var(--color-sand) 70%, transparent);
+    outline-offset: 3px;
+  }
+
+  .glass-button[data-variant="solid"] {
+    background: linear-gradient(140deg, #f6f4f0, #ddd8d0);
+    color: var(--color-abyss);
+    border-color: transparent;
+  }
+  .glass-button[data-variant="solid"]::before { opacity: 0.25; }
+
+  /* --------------------------------------------------------------------------
+     Enlaces con subrayado progresivo
+     -------------------------------------------------------------------------- */
+
+  .link-underline {
+    position: relative;
+    display: inline-block;
+  }
+  .link-underline::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+    height: 1px;
+    width: 100%;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.6s var(--ease-luxe);
+  }
+  @media (hover: hover) {
+    .link-underline:hover::after {
+      transform: scaleX(1);
+      transform-origin: left;
+    }
+  }
+
+  /* --------------------------------------------------------------------------
+     Texturas
+     -------------------------------------------------------------------------- */
+
+  .grain::after {
+    content: "";
+    position: absolute;
+    inset: -100%;
+    pointer-events: none;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    mix-blend-mode: overlay;
+  }
+
+  .hairline {
+    border-color: color-mix(in oklab, white 10%, transparent);
+  }
+
+  /* --------------------------------------------------------------------------
+     Revelados por scroll (sin JS crítico)
+     -------------------------------------------------------------------------- */
+
+  [data-reveal] {
+    opacity: 0;
+    transform: translate3d(0, 26px, 0);
+    transition:
+      opacity 1.15s var(--ease-luxe),
+      transform 1.15s var(--ease-luxe);
+    transition-delay: var(--reveal-delay, 0ms);
+    will-change: transform, opacity;
+  }
+  [data-reveal="left"]  { transform: translate3d(-32px, 0, 0); }
+  [data-reveal="right"] { transform: translate3d(32px, 0, 0); }
+  [data-reveal="fade"]  { transform: none; }
+  [data-reveal].is-in {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* --------------------------------------------------------------------------
+     Scrollbar
+     -------------------------------------------------------------------------- */
+
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: var(--color-abyss); }
+  ::-webkit-scrollbar-thumb {
+    background: color-mix(in oklab, white 12%, transparent);
+    border-radius: 999px;
+  }
+  ::-webkit-scrollbar-thumb:hover { background: color-mix(in oklab, white 20%, transparent); }
+}
+
+/* --------------------------------------------------------------------------
+   Accesibilidad · movimiento reducido
+   -------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+@keyframes scrollHint {
+  0% { transform: translateY(-100%); opacity: 0; }
+  22% { opacity: 1; }
+  78% { opacity: 1; }
+  100% { transform: translateY(360%); opacity: 0; }
+}
+
+@keyframes floatSlow {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(0, -12px, 0); }
+}
