@@ -18,17 +18,19 @@ export function Design() {
   const trackRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<ScrollTriggerType | null>(null);
   const holdingRef = useRef(false);
-  const { scrollTo, stop, start } = useSmoothScroll();
+  const { scrollTo, stop, start, isNavigating } = useSmoothScroll();
 
   // Referencias vivas: el contexto de scroll se resuelve tras montar y no
   // queremos reconstruir las animaciones por eso.
   const stopRef = useRef(stop);
   const startRef = useRef(start);
+  const navRef = useRef(isNavigating);
 
   useEffect(() => {
     stopRef.current = stop;
     startRef.current = start;
-  }, [stop, start]);
+    navRef.current = isNavigating;
+  }, [stop, start, isNavigating]);
 
   useEffect(() => {
     if (prefersReducedMotion()) return;
@@ -64,7 +66,9 @@ export function Design() {
         trigger: section,
         start: "top top",
         onEnter: () => {
-          if (holdingRef.current) return;
+          // La retención es sólo para el scroll manual: un enlace del menú
+          // que pase por aquí no debe quedarse atrapado.
+          if (holdingRef.current || navRef.current()) return;
           holdingRef.current = true;
           stopRef.current();
           window.setTimeout(() => {
@@ -169,7 +173,7 @@ export function Design() {
       const clamped = Math.min(steps, Math.max(0, index));
       snapping = true;
       restIndex = clamped;
-      scrollTo(start + (clamped / steps) * span, { duration: 0.7 });
+      scrollTo(start + (clamped / steps) * span, { duration: 0.7, silent: true });
       window.clearTimeout(releaseTimer);
       releaseTimer = window.setTimeout(() => {
         snapping = false;
@@ -179,7 +183,7 @@ export function Design() {
 
     const settle = () => {
       const box = bounds();
-      if (!box || snapping || holdingRef.current) return;
+      if (!box || snapping || holdingRef.current || navRef.current()) return;
 
       const y = window.scrollY;
       if (y <= box.start + 2 || y >= box.start + box.span - 2) return;
@@ -194,7 +198,8 @@ export function Design() {
       const y = window.scrollY;
       if (y !== lastY) direction = y > lastY ? 1 : -1;
       lastY = y;
-      if (snapping || holdingRef.current) return;
+      // Igual que la retención, el anclaje sólo gobierna el scroll manual.
+      if (snapping || holdingRef.current || navRef.current()) return;
 
       const box = bounds();
       if (!box) return;
@@ -237,8 +242,8 @@ export function Design() {
         <article className="relative flex h-[100svh] w-screen shrink-0 flex-col items-center justify-center overflow-hidden bg-abyss px-[var(--page-gutter)] text-center">
           <div data-panel-image className="absolute inset-0 will-change-transform">
             <VideoBackdrop
-              src="/video/navegando.mp4"
-              poster="/video/navegando-poster.webp"
+              src="/video/fondo-marino.mp4"
+              poster="/video/fondo-marino-poster.webp"
               className="absolute inset-0"
             />
           </div>

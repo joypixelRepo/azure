@@ -90,10 +90,12 @@ tren horizontal, la vista va a la diapositiva siguiente o anterior según la
 dirección del gesto. El anclaje se resuelve sobre Lenis —no con el `snap` de
 ScrollTrigger, que pelea con el scroll suave.
 
-Su primera diapositiva lleva el mar de fondo a sección completa: un vídeo en
-bucle preparado con `scripts/build-video.sh` —recortado, sin audio, en H.264 con
-`faststart`, 1,1 MB— que arranca con un póster pintado para que el fondo nunca
-aparezca vacío y se funde encima al poder reproducirse. Sólo corre mientras la
+Su primera diapositiva lleva un vídeo de fondo a sección completa, preparado con
+`scripts/build-video.sh`: recortado, sin audio, remuestreado a 25 fps y en H.264
+con `faststart`. El script puede además **cerrar el bucle**: funde el final
+sobre el principio, de modo que al repetirse no hay salto. Arranca con un póster
+pintado para que el fondo nunca aparezca vacío y el vídeo se funde encima al
+poder reproducirse. Sólo corre mientras la
 sección está a la vista y la pestaña activa; con `prefers-reduced-motion` no se
 descarga y queda el póster fijo. Al entrar en esa diapositiva bajando, el scroll
 se retiene un segundo para que dé tiempo a verla.

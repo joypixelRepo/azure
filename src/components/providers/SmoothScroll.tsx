@@ -8,24 +8,48 @@ import { prefersReducedMotion } from "@/lib/device";
 interface ScrollToOptions {
   offset?: number;
   duration?: number;
+  /** No marca la navegación como programática (lo usa el anclaje interno). */
+  silent?: boolean;
 }
 
 interface SmoothScrollApi {
   scrollTo: (target: string | number | HTMLElement, options?: ScrollToOptions) => void;
   stop: () => void;
   start: () => void;
+  /**
+   * Hay una navegación programática en curso (un enlace del menú, un botón).
+   * Las secciones que restringen el scroll manual —el anclaje de diapositivas
+   * de Diseño, por ejemplo— deben apartarse mientras dure.
+   */
+  isNavigating: () => boolean;
 }
 
 const SmoothScrollContext = createContext<SmoothScrollApi>({
   scrollTo: () => {},
   stop: () => {},
   start: () => {},
+  isNavigating: () => false,
 });
 
 export const useSmoothScroll = () => useContext(SmoothScrollContext);
 
+/**
+ * Las secciones fijadas con ScrollTrigger viven dentro de un `.pin-spacer`, y
+ * mientras están fijadas su propia posición ya no corresponde al punto en el
+ * que empieza la sección. Para navegar hay que apuntar al espaciador.
+ */
+function resolveTarget(target: string | number | HTMLElement) {
+  if (typeof target !== "string") return target;
+  const el = document.querySelector(target);
+  if (!(el instanceof HTMLElement)) return target;
+  const parent = el.parentElement;
+  return parent?.classList.contains("pin-spacer") ? parent : el;
+}
+
 export function SmoothScroll({ children, enabled }: { children: ReactNode; enabled: boolean }) {
   const lenisRef = useRef<Lenis | null>(null);
+  const navigatingRef = useRef(false);
+  const navTimerRef = useRef(0);
   const [api, setApi] = useState<SmoothScrollApi | null>(null);
 
   useEffect(() => {
@@ -41,6 +65,7 @@ export function SmoothScroll({ children, enabled }: { children: ReactNode; enabl
         },
         stop: () => {},
         start: () => {},
+        isNavigating: () => false,
       };
       // El modo sin movimiento sólo se conoce en cliente.
       // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -64,14 +89,33 @@ export function SmoothScroll({ children, enabled }: { children: ReactNode; enabl
 
      
     setApi({
-      scrollTo: (target, { offset = 0, duration = 1.5 } = {}) =>
-        lenis.scrollTo(target as never, {
+      scrollTo: (target, { offset = 0, duration = 1.5, silent = false } = {}) => {
+        if (!silent) {
+          navigatingRef.current = true;
+          window.clearTimeout(navTimerRef.current);
+          // Red de seguridad por si `onComplete` no llega (destino ya alcanzado,
+          // interrupción del usuario…).
+          navTimerRef.current = window.setTimeout(
+            () => {
+              navigatingRef.current = false;
+            },
+            duration * 1000 + 400,
+          );
+        }
+        lenis.scrollTo(resolveTarget(target) as never, {
           offset,
           duration,
           easing: (t) => 1 - Math.pow(1 - t, 4),
-        }),
+          onComplete: () => {
+            if (silent) return;
+            window.clearTimeout(navTimerRef.current);
+            navigatingRef.current = false;
+          },
+        });
+      },
       stop: () => lenis.stop(),
       start: () => lenis.start(),
+      isNavigating: () => navigatingRef.current,
     });
 
     return () => {
@@ -131,7 +175,9 @@ export function SmoothScroll({ children, enabled }: { children: ReactNode; enabl
 
   return (
     <SmoothScrollContext.Provider
-      value={api ?? { scrollTo: () => {}, stop: () => {}, start: () => {} }}
+      value={
+        api ?? { scrollTo: () => {}, stop: () => {}, start: () => {}, isNavigating: () => false }
+      }
     >
       {children}
     </SmoothScrollContext.Provider>

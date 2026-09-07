@@ -20,6 +20,12 @@ LENGTH="${4:-12}"
 # más resolución; uno muy velado por debajo del texto, menos.
 WIDTH="${5:-1152}"
 CRF="${6:-30}"
+# Fotogramas por segundo de salida. Un fondo no necesita más de 25: bajar de
+# 50 a 25 casi parte el archivo por la mitad sin que se note.
+FPS="${7:-25}"
+# Solape para cerrar el bucle: el final se funde sobre el principio, de modo
+# que al repetirse no hay salto. 0 lo desactiva.
+FADE="${8:-0}"
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 OUT="$ROOT/public/video"
 
@@ -31,10 +37,21 @@ TMP="${TMPDIR:-/tmp}/video-$SLUG-$$"
 mkdir -p "$TMP"
 
 echo "▸ MP4 (H.264)…"
-ffmpeg -y -v error -ss "$START" -t "$LENGTH" -i "$SRC" -an \
-  -vf "scale=$WIDTH:-2" \
-  -c:v libx264 -profile:v high -crf "$CRF" -preset slower -pix_fmt yuv420p \
-  -movflags +faststart "$OUT/$SLUG.mp4"
+if [ "$(echo "$FADE > 0" | bc -l)" = "1" ]; then
+  BODY="$(echo "$LENGTH - $FADE" | bc -l)"
+  ffmpeg -y -v error -ss "$START" -t "$LENGTH" -i "$SRC" -an \
+    -filter_complex "[0:v]scale=$WIDTH:-2,fps=$FPS,split=2[b][t];\
+[b]trim=0:$BODY,setpts=PTS-STARTPTS[bb];\
+[t]trim=$BODY:$LENGTH,setpts=PTS-STARTPTS,format=yuva420p,fade=t=out:st=0:d=$FADE:alpha=1[tt];\
+[bb][tt]overlay=eof_action=pass:shortest=0,format=yuv420p[v]" -map "[v]" \
+    -c:v libx264 -profile:v high -crf "$CRF" -preset slower -pix_fmt yuv420p \
+    -movflags +faststart "$OUT/$SLUG.mp4"
+else
+  ffmpeg -y -v error -ss "$START" -t "$LENGTH" -i "$SRC" -an \
+    -vf "scale=$WIDTH:-2,fps=$FPS" \
+    -c:v libx264 -profile:v high -crf "$CRF" -preset slower -pix_fmt yuv420p \
+    -movflags +faststart "$OUT/$SLUG.mp4"
+fi
 
 # Se probó también VP9/WebM: sobre agua y espuma —contenido casi de ruido—
 # salía más pesado que H.264, así que no compensa servir dos formatos.
