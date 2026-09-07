@@ -369,7 +369,7 @@
     .water-button:hover {
       --lift: -2px;
       color: var(--water-ink-hover);
-      border-color: var(--water-rim-hover);
+      border-color: var(--color-deep);
       box-shadow:
         0 18px 40px -20px var(--water-shadow),
         0 6px 18px -10px var(--water-shadow);
