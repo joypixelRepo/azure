@@ -300,10 +300,15 @@
     inset: 0;
     z-index: 3;
     pointer-events: none;
-    border: 1px solid color-mix(in oklab, white 8%, transparent);
+    border: 1px solid var(--color-ivory);
     transition:
       border-color 0.9s var(--ease-luxe),
       box-shadow 0.9s var(--ease-luxe);
+  }
+
+  /* Variante para las muestras de material: filo apenas insinuado. */
+  .lux-frame--subtle::after {
+    border-color: color-mix(in oklab, white 10%, transparent);
   }
 
   /* Destello diagonal */

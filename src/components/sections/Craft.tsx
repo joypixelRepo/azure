@@ -14,7 +14,7 @@ export function Craft() {
             {craft.materials.map((material, i) => (
               <Reveal key={material.name} delay={Math.min(i * 70, 350)}>
                 <div className="group">
-                  <span className="lux-frame block h-14 w-full">
+                  <span className="lux-frame lux-frame--subtle block h-14 w-full">
                     <span
                       className="block h-full w-full transition-transform duration-[1200ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.04]"
                       style={{
