@@ -16,6 +16,10 @@ SLUG="${2:-estela}"
 # cualquier momento, así que con doce segundos basta y pesa un tercio.
 START="${3:-6}"
 LENGTH="${4:-12}"
+# Ancho de salida y calidad. Un vídeo que se ve a pantalla completa aguanta
+# más resolución; uno muy velado por debajo del texto, menos.
+WIDTH="${5:-1152}"
+CRF="${6:-30}"
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 OUT="$ROOT/public/video"
 
@@ -28,8 +32,8 @@ mkdir -p "$TMP"
 
 echo "▸ MP4 (H.264)…"
 ffmpeg -y -v error -ss "$START" -t "$LENGTH" -i "$SRC" -an \
-  -vf "scale=1152:-2" \
-  -c:v libx264 -profile:v high -crf 30 -preset slower -pix_fmt yuv420p \
+  -vf "scale=$WIDTH:-2" \
+  -c:v libx264 -profile:v high -crf "$CRF" -preset slower -pix_fmt yuv420p \
   -movflags +faststart "$OUT/$SLUG.mp4"
 
 # Se probó también VP9/WebM: sobre agua y espuma —contenido casi de ruido—
@@ -37,7 +41,7 @@ ffmpeg -y -v error -ss "$START" -t "$LENGTH" -i "$SRC" -an \
 
 echo "▸ Póster…"
 ffmpeg -y -v error -ss "$START" -i "$SRC" -frames:v 1 -q:v 1 "$TMP/poster.jpg"
-cwebp -quiet -q 78 -resize 1600 0 -m 5 -sharp_yuv "$TMP/poster.jpg" -o "$OUT/$SLUG-poster.webp"
+cwebp -quiet -q 78 -resize "$WIDTH" 0 -m 5 -sharp_yuv "$TMP/poster.jpg" -o "$OUT/$SLUG-poster.webp"
 
 rm -rf "$TMP"
 ls -lh "$OUT" | awk 'NR>1{printf "  %-24s %s\n", $9, $5}'
