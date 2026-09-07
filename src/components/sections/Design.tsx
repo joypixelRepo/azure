@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import { ScrollTrigger, gsap, type ScrollTrigger as ScrollTriggerType } from "@/lib/gsap";
 import { designPanels, photo } from "@/lib/content";
 import { prefersReducedMotion } from "@/lib/device";
-import { SeaWaves } from "@/components/ui/SeaWaves";
+import { VideoBackdrop } from "@/components/ui/VideoBackdrop";
 import { useSmoothScroll } from "@/components/providers/SmoothScroll";
 
 /**
@@ -74,13 +74,16 @@ export function Design() {
         },
       });
 
+      // El fondo avanza en un sentido y el texto en el contrario: el cruce es
+      // lo que hace visible la profundidad. La escala se mantiene alta para
+      // que el desplazamiento nunca destape el borde de la imagen.
       track.querySelectorAll<HTMLElement>("[data-panel-image]").forEach((image) => {
         gsap.fromTo(
           image,
-          { xPercent: -8, scale: 1.14 },
+          { xPercent: -9, scale: 1.34 },
           {
-            xPercent: 8,
-            scale: 1.02,
+            xPercent: 9,
+            scale: 1.18,
             ease: "none",
             scrollTrigger: {
               trigger: image.parentElement!,
@@ -94,6 +97,22 @@ export function Design() {
       });
 
       track.querySelectorAll<HTMLElement>("[data-panel-copy]").forEach((copy) => {
+        gsap.fromTo(
+          copy,
+          { x: 150 },
+          {
+            x: -150,
+            ease: "none",
+            scrollTrigger: {
+              trigger: copy.parentElement!,
+              containerAnimation: tween,
+              start: "left right",
+              end: "right left",
+              scrub: true,
+            },
+          },
+        );
+
         gsap.fromTo(
           copy,
           { autoAlpha: 0, y: 40 },
@@ -214,29 +233,46 @@ export function Design() {
   return (
     <section ref={sectionRef} id="diseno" className="relative overflow-hidden bg-abyss">
       <div ref={trackRef} className="flex h-[100svh] w-max flex-nowrap will-change-transform">
-        {/* Panel de apertura: negro, con el mar en movimiento abajo */}
+        {/* Panel de apertura: el mar de fondo, a sección completa */}
         <article className="relative flex h-[100svh] w-screen shrink-0 flex-col items-center justify-center overflow-hidden bg-abyss px-[var(--page-gutter)] text-center">
-          <div className="relative z-10 max-w-[36rem]">
-            <p className="eyebrow text-gold/80">Diseño</p>
-            <h2 className="display-lg mt-6 text-ivory">
+          <div data-panel-image className="absolute inset-0 will-change-transform">
+            <VideoBackdrop
+              src="/video/navegando.mp4"
+              poster="/video/navegando-poster.webp"
+              className="absolute inset-0"
+            />
+          </div>
+
+          {/* Velos: el agua entra desde el negro de la sección anterior y se
+              apaga lo justo para que el texto respire encima. */}
+          <div className="pointer-events-none absolute inset-0 bg-abyss/45" />
+          <div className="pointer-events-none absolute inset-x-0 top-0 h-[58%] bg-gradient-to-b from-abyss via-abyss/78 to-transparent" />
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[40%] bg-gradient-to-t from-abyss/85 via-abyss/30 to-transparent" />
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0"
+            style={{
+              background:
+                "radial-gradient(62% 46% at 50% 46%, rgba(5,7,10,0.72) 0%, rgba(5,7,10,0.32) 55%, rgba(5,7,10,0) 88%)",
+            }}
+          />
+
+          <div data-panel-copy className="relative z-10 max-w-[36rem]">
+            <p className="eyebrow text-gold">Diseño</p>
+            <h2 className="display-lg mt-6 text-ivory [text-shadow:0_2px_30px_rgba(5,7,10,0.85)]">
               Una arquitectura
               <br />
               que navega.
             </h2>
-            <p className="body-lg mx-auto mt-8 max-w-[42ch]">
+            <p className="body-lg mx-auto mt-8 max-w-[42ch] text-ivory/90 [text-shadow:0_2px_20px_rgba(5,7,10,0.9)]">
               El exterior de AZURE 42 se dibujó como se dibuja un edificio: por planos, por sombras
               y por la manera en que la luz cae sobre ellos a lo largo del día.
             </p>
           </div>
 
-          <p className="eyebrow absolute bottom-8 left-[var(--page-gutter)] z-10 flex items-center gap-3 text-mist/70 [text-shadow:0_2px_12px_rgba(5,7,10,0.95)]">
-            Desplaza <span className="inline-block h-px w-10 bg-mist/50" /> lateral
+          <p className="eyebrow absolute bottom-8 left-[var(--page-gutter)] z-10 flex items-center gap-3 text-fog/70 [text-shadow:0_2px_12px_rgba(5,7,10,0.95)]">
+            Desplaza <span className="inline-block h-px w-10 bg-fog/50" /> lateral
           </p>
-
-          <div className="absolute inset-x-0 bottom-0 h-[34%]">
-            <SeaWaves />
-            <div className="pointer-events-none absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-abyss via-abyss/65 to-transparent" />
-          </div>
         </article>
 
         {designPanels.map((panel) => {

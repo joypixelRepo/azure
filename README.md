@@ -90,23 +90,17 @@ tren horizontal, la vista va a la diapositiva siguiente o anterior según la
 dirección del gesto. El anclaje se resuelve sobre Lenis —no con el `snap` de
 ScrollTrigger, que pelea con el scroll suave.
 
-Su primera diapositiva es negra con mar en movimiento (`SeaWaves`), en dos
-capas resueltas cada una con la técnica que le conviene:
+Su primera diapositiva lleva el mar de fondo a sección completa: un vídeo en
+bucle preparado con `scripts/build-video.sh` —recortado, sin audio, en H.264 con
+`faststart`, 1,1 MB— que arranca con un póster pintado para que el fondo nunca
+aparezca vacío y se funde encima al poder reproducirse. Sólo corre mientras la
+sección está a la vista y la pestaña activa; con `prefers-reduced-motion` no se
+descarga y queda el póster fijo. Al entrar en esa diapositiva bajando, el scroll
+se retiene un segundo para que dé tiempo a verla.
 
-- **El agua** son formas suaves, así que se pintan con degradados nativos:
-  nítidas a cualquier resolución y prácticamente gratis.
-- **Los destellos** salen de muestrear un campo de ocho trenes de olas
-  proyectado en perspectiva —la distancia crece hacia el horizonte, así que el
-  oleaje se comprime como en una fotografía— y calcular el reflejo especular de
-  su pendiente. Cada uno se dibuja como un trazo vectorial a resolución
-  completa, no como píxeles escalados.
-
-El puntero perturba la pendiente: levanta la superficie a su alrededor y suelta
-anillos que se expanden y se apagan. Los senos salen de una tabla precalculada,
-los trazos se agrupan en doce caminos para no encadenar miles de llamadas de
-dibujo, y el bucle se detiene por completo cuando la sección no está en pantalla
-o la pestaña pasa a segundo plano. Al entrar en esa diapositiva bajando, el
-scroll se retiene un segundo para que dé tiempo a verla.
+En todas las diapositivas el fondo avanza en un sentido y el texto en el
+contrario: ese cruce es lo que hace visible la profundidad. La escala del fondo
+se mantiene alta para que el desplazamiento nunca destape su borde.
 
 ### 4 · Reutilización
 
@@ -155,6 +149,7 @@ scripts/
   build-sequence.sh          Vídeo → secuencia WebP multi-resolución
   build-stills.sh            Vídeo → fotogramas sueltos
   build-photos.sh            Originales → fotografía editorial optimizada
+  build-video.sh             Vídeo suelto → bucle de fondo + póster
 src/
   app/                       layout, page, sistema visual (globals.css)
   lib/
@@ -172,6 +167,7 @@ public/
   sequences/azure-42/        Fotogramas + manifiesto
   stills/                    Fotogramas del vídeo (WebP 1600/900)
   photos/                    Fotografía editorial (WebP 1920/1280/860…)
+  video/                     Vídeo de fondo en bucle + póster
 ```
 
 ---
