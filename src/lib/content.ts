@@ -154,7 +154,7 @@ export const criticalMedia: { image: ImageSource; sizes: string }[] = [
   // Artesanía, tripulación y cierre
   { image: photo("materiales"), sizes: "(min-width: 1024px) 44vw, 92vw" },
   { image: photo("tripulacion"), sizes: "(min-width: 1024px) 42vw, 92vw" },
-  { image: photo("navegando"), sizes: "100vw" },
+  // El cierre va con vídeo: su póster lo carga el propio <video>.
 ];
 
 /* -------------------------------------------------------------------------- */

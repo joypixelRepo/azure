@@ -2,7 +2,7 @@
 
 import { brand } from "@/lib/content";
 import { GlassButton } from "@/components/ui/GlassButton";
-import { ParallaxImage } from "@/components/ui/ParallaxImage";
+import { VideoBackdrop } from "@/components/ui/VideoBackdrop";
 import { Reveal } from "@/components/ui/Reveal";
 import { useSmoothScroll } from "@/components/providers/SmoothScroll";
 
@@ -11,15 +11,13 @@ export function Closing() {
 
   return (
     <section className="relative h-[100svh] w-full overflow-hidden">
-      <div className="absolute inset-0">
-        <ParallaxImage
-          name="navegando"
-          alt="AZURE 42 navegando en el Mediterráneo"
-          className="h-full w-full"
-          amount={18}
-        />
-      </div>
-      {/* La fotografía nace del negro de la sección anterior */}
+      <VideoBackdrop
+        src="/video/cierre.mp4"
+        poster="/video/cierre-poster.webp"
+        alt="AZURE 42 navegando en el Mediterráneo"
+        className="absolute inset-0"
+      />
+      {/* El vídeo nace del negro de la sección anterior */}
       <div className="absolute inset-x-0 top-0 h-[45%] bg-gradient-to-b from-abyss via-abyss/70 to-transparent" />
       <div className="absolute inset-0 bg-gradient-to-t from-abyss via-abyss/40 to-transparent" />
       <div
