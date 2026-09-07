@@ -14,7 +14,10 @@ export function Testimonials() {
   }, []);
 
   return (
-    <section className="relative overflow-hidden bg-abyss py-32 md:py-44">
+    <section
+      data-theme="light"
+      className="theme-light relative overflow-hidden bg-surface py-32 md:py-44"
+    >
       <div className="grain pointer-events-none absolute inset-0" />
       <div className="relative px-[var(--page-gutter)]">
         <div className="relative mx-auto max-w-4xl text-center">
@@ -31,13 +34,13 @@ export function Testimonials() {
                   transform: index === i ? "none" : "translateY(16px)",
                 }}
               >
-                <p className="display-md max-w-[24ch] text-balance text-ivory">
+                <p className="display-md max-w-[24ch] text-balance text-strong">
                   «{item.quote}»
                 </p>
                 <footer className="mt-8 flex items-center gap-3">
-                  <span className="eyebrow text-fog/80">{item.author}</span>
+                  <span className="eyebrow text-soft">{item.author}</span>
                   <span className="h-px w-6 bg-white/25" />
-                  <span className="eyebrow text-mist/60">{item.context}</span>
+                  <span className="eyebrow text-faint">{item.context}</span>
                 </footer>
               </blockquote>
             ))}

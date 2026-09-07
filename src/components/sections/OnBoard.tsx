@@ -6,7 +6,11 @@ import { Photo } from "@/components/ui/Photo";
 
 export function OnBoard() {
   return (
-    <section id="vida-a-bordo" className="relative bg-abyss py-32 md:py-44">
+    <section
+      id="vida-a-bordo"
+      data-theme="light"
+      className="theme-light relative bg-surface py-32 md:py-44"
+    >
       <div className="px-[var(--page-gutter)]">
         <SectionHeading eyebrow={onboard.eyebrow} title={onboard.title} body={onboard.body} />
       </div>
@@ -42,7 +46,7 @@ export function OnBoard() {
                   {String(i + 1).padStart(2, "0")}
                 </span>
                 <div>
-                  <h3 className="text-lg font-light tracking-tight text-ivory">{space.title}</h3>
+                  <h3 className="text-lg font-light tracking-tight text-strong">{space.title}</h3>
                   <p className="body-sm mt-2 max-w-[38ch]">{space.body}</p>
                 </div>
               </figcaption>

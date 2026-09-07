@@ -5,7 +5,11 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 
 export function Craft() {
   return (
-    <section id="artesania" className="relative overflow-hidden bg-ink py-32 md:py-44">
+    <section
+      id="artesania"
+      data-theme="dark"
+      className="theme-dark relative overflow-hidden bg-deep py-32 md:py-44"
+    >
       <div className="grid gap-16 px-[var(--page-gutter)] lg:grid-cols-[minmax(0,1fr)_minmax(0,0.9fr)] lg:items-center lg:gap-24">
         <div>
           <SectionHeading eyebrow={craft.eyebrow} title={craft.title} body={craft.body} />
@@ -22,7 +26,7 @@ export function Craft() {
                       }}
                     />
                   </span>
-                  <p className="mt-4 text-sm font-light tracking-tight text-ivory">
+                  <p className="mt-4 text-sm font-light tracking-tight text-strong">
                     {material.name}
                   </p>
                   <p className="body-sm mt-1 text-[0.78rem] leading-snug">{material.note}</p>

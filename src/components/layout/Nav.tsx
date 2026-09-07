@@ -5,10 +5,19 @@ import { brand, nav } from "@/lib/content";
 import { GlassButton } from "@/components/ui/GlassButton";
 import { useSmoothScroll } from "@/components/providers/SmoothScroll";
 
+/** Altura real de la barra, que viene de una variable CSS. */
+function navHeight() {
+  const value = getComputedStyle(document.documentElement).getPropertyValue("--nav-h");
+  const parsed = parseFloat(value);
+  return Number.isFinite(parsed) ? parsed * 16 : 72;
+}
+
 export function Nav() {
   const { scrollTo } = useSmoothScroll();
   const [condensed, setCondensed] = useState(false);
   const [open, setOpen] = useState(false);
+  /** Tema de la sección que hay bajo la barra: la nav se adapta a ella. */
+  const [dark, setDark] = useState(true);
   const progressRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -23,6 +32,20 @@ export function Nav() {
         if (progressRef.current) {
           progressRef.current.style.transform = `scaleX(${max > 0 ? y / max : 0})`;
         }
+
+        // Qué sección queda justo debajo de la barra. Hay que recorrer la
+        // pila de elementos: el primero siempre es la propia barra.
+        const stack = document.elementsFromPoint(16, Math.round(navHeight() / 2));
+        let theme = "dark";
+        for (const el of stack) {
+          if (el.closest("header")) continue;
+          const themed = el.closest<HTMLElement>("[data-theme]");
+          if (themed?.dataset.theme) {
+            theme = themed.dataset.theme;
+            break;
+          }
+        }
+        setDark(theme !== "light");
       });
     };
     onScroll();
@@ -52,9 +75,10 @@ export function Nav() {
     <>
       <header
         className={[
-          "fixed inset-x-0 top-0 z-50 transition-[background-color,backdrop-filter,border-color] duration-700",
+          "fixed inset-x-0 top-0 z-50 transition-[background-color,backdrop-filter,border-color,color] duration-700",
+          dark ? "theme-dark" : "theme-light",
           condensed
-            ? "border-b border-white/10 bg-abyss/60 backdrop-blur-xl backdrop-saturate-150"
+            ? "border-b border-line bg-surface/72 backdrop-blur-xl backdrop-saturate-150"
             : "border-b border-transparent bg-transparent",
         ].join(" ")}
       >
@@ -68,7 +92,7 @@ export function Nav() {
           <button
             type="button"
             onClick={() => scrollTo(0)}
-            className="group flex items-baseline gap-2 text-ivory"
+            className="group flex items-baseline gap-2 text-strong transition-colors duration-500"
             aria-label={`${brand.name} · inicio`}
           >
             <span className="text-[0.95rem] font-medium tracking-[0.34em]">{brand.short}</span>
@@ -83,7 +107,7 @@ export function Nav() {
                 key={item.href}
                 type="button"
                 onClick={() => go(item.href)}
-                className="link-underline text-[0.72rem] font-medium uppercase tracking-[0.2em] text-fog/75 transition-colors duration-500 hover:text-ivory"
+                className="link-underline text-[0.72rem] font-medium uppercase tracking-[0.2em] text-soft transition-colors duration-500 hover:text-strong"
               >
                 {item.label}
               </button>
@@ -107,11 +131,11 @@ export function Nav() {
             >
               <span className="relative block h-3 w-4">
                 <span
-                  className="absolute left-0 h-px w-full bg-ivory transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
+                  className="absolute left-0 h-px w-full bg-strong transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
                   style={{ top: open ? "50%" : "2px", transform: open ? "rotate(45deg)" : "none" }}
                 />
                 <span
-                  className="absolute left-0 h-px w-full bg-ivory transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
+                  className="absolute left-0 h-px w-full bg-strong transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
                   style={{
                     top: open ? "50%" : "10px",
                     transform: open ? "rotate(-45deg)" : "none",
@@ -126,7 +150,7 @@ export function Nav() {
       {/* Menú a pantalla completa */}
       <div
         className={[
-          "fixed inset-0 z-40 flex flex-col justify-center bg-abyss/95 px-[var(--page-gutter)] backdrop-blur-2xl transition-[opacity,visibility] duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] lg:hidden",
+          "theme-dark fixed inset-0 z-40 flex flex-col justify-center bg-deep/97 px-[var(--page-gutter)] backdrop-blur-2xl transition-[opacity,visibility] duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] lg:hidden",
           open ? "visible opacity-100" : "invisible opacity-0",
         ].join(" ")}
       >
@@ -143,8 +167,8 @@ export function Nav() {
                 transitionDelay: `${open ? 120 + i * 55 : 0}ms`,
               }}
             >
-              <span className="eyebrow num w-6 text-mist/60">{String(i + 1).padStart(2, "0")}</span>
-              <span className="display-md text-ivory transition-colors duration-500 group-hover:text-gold">
+              <span className="eyebrow num w-6 text-faint">{String(i + 1).padStart(2, "0")}</span>
+              <span className="display-md text-strong transition-colors duration-500 group-hover:text-gold">
                 {item.label}
               </span>
             </button>

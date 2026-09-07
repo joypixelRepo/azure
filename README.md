@@ -181,17 +181,36 @@ public/
 
 ## Identidad visual
 
-Paleta neutra sobre fondo abisal con **oro** como único acento: `--color-gold`
-(`#d3b169`) para filetes, numeraciones, antetítulos y estados activos,
-`--color-champagne` (`#ecd7a4`) para los reflejos más claros —botones de cristal,
-destellos— y `--color-bronze` para la sombra del metal. El único contrapunto es
-`--color-ember` (`#d2543a`), un rojo lacado reservado a la iconografía de la
-ficha técnica.
+Paleta clara con anclas oscuras. Las secciones editoriales van en marfil y
+bruma; las que llevan metraje a pantalla completa —secuencia, Diseño, Artesanía,
+cierre y pie— se quedan en azul profundo, porque el vídeo y la fotografía piden
+fondo oscuro. Ese vaivén es el que da el ritmo.
 
-La fotografía suelta lleva la clase `.lux-frame`: filo dorado, resplandor cálido
-y un destello diagonal que cruza la imagen una sola vez al pasar el ratón. Todo
-con `opacity` y `transform`, sin repintar layout, y desactivado en dispositivos
-sin hover.
+| Token          | Valor     | Uso                                  |
+| -------------- | --------- | ------------------------------------ |
+| Deep Ocean     | `#071a24` | fondo de las secciones oscuras       |
+| Midnight Navy  | `#0d2a38` | superficies elevadas sobre el oscuro |
+| Warm Ivory     | `#f4f0e8` | fondo claro principal                |
+| Sea Mist       | `#d9e1de` | fondo claro secundario               |
+| Pearl White    | `#faf9f6` | texto sobre oscuro                   |
+| Graphite       | `#252b2d` | texto sobre claro                    |
+| Champagne Gold | `#c6a66b` | acento; se oscurece a `#9c7c3f` sobre fondos claros |
+
+Cada sección declara su tema con `.theme-light`, `.theme-mist` o `.theme-dark`,
+y seis tokens semánticos —`surface`, `surface-alt`, `strong`, `soft`, `faint`,
+`line`— cambian con ella. Los componentes usan esos tokens y no colores sueltos,
+así que el mismo botón, el mismo filete y la misma ficha funcionan en marfil y
+en azul profundo. Los tokens se redeclaran enteros en cada tema, no como `var()`
+de otro token: una custom property con `var()` dentro se resuelve donde se
+declara, no donde se usa.
+
+La barra de navegación se adapta sola: en cada fotograma comprueba qué sección
+queda bajo ella y cambia de tema con el resto.
+
+La fotografía suelta lleva la clase `.lux-frame`: filo de marfil o grafito según
+el fondo, resplandor dorado y un destello diagonal que cruza la imagen una sola
+vez al pasar el ratón. Todo con `opacity` y `transform`, sin repintar layout, y
+desactivado en dispositivos sin hover.
 
 ## Contenido e imágenes
 

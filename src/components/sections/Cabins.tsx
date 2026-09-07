@@ -38,7 +38,11 @@ export function Cabins() {
   }, []);
 
   return (
-    <section id="camarotes" className="relative bg-abyss py-32 md:py-44">
+    <section
+      id="camarotes"
+      data-theme="light"
+      className="theme-light relative bg-surface py-32 md:py-44"
+    >
       {/* Apertura: disposición general de las cuatro cubiertas */}
       <Reveal direction="fade">
         <figure className="px-[var(--page-gutter)]">
@@ -50,7 +54,7 @@ export function Cabins() {
               className="block w-full"
             />
           </div>
-          <figcaption className="eyebrow mt-4 text-mist/60">
+          <figcaption className="eyebrow mt-4 text-faint">
             Disposición general · cuatro cubiertas
           </figcaption>
         </figure>
@@ -66,7 +70,7 @@ export function Cabins() {
               </p>
             </Reveal>
             <Reveal delay={80}>
-              <h2 className="display-lg mt-6 whitespace-pre-line text-ivory">{cabins.title}</h2>
+              <h2 className="display-lg mt-6 whitespace-pre-line text-strong">{cabins.title}</h2>
             </Reveal>
           </div>
           <Reveal direction="fade" delay={140}>
@@ -90,8 +94,8 @@ export function Cabins() {
                     }}
                   >
                     {isPending(name) ? (
-                      <div className="flex h-full w-full items-center justify-center border border-dashed border-white/15 bg-hull">
-                        <span className="eyebrow text-mist/50">Fotografía pendiente</span>
+                      <div className="flex h-full w-full items-center justify-center border border-dashed border-line bg-surface-alt">
+                        <span className="eyebrow text-faint">Fotografía pendiente</span>
                       </div>
                     ) : (
                       <img
@@ -106,9 +110,9 @@ export function Cabins() {
                     )}
                   </div>
                 ))}
-                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-abyss/40 to-transparent" />
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-deep/40 to-transparent" />
                 <div className="pointer-events-none absolute bottom-6 left-6 right-6 flex items-center gap-4">
-                  <span className="eyebrow text-ivory/90">{cabins.list[active].name}</span>
+                  <span className="eyebrow text-strong">{cabins.list[active].name}</span>
                   <span className="h-px flex-1 bg-white/25" />
                   <span className="num text-[0.7rem] tracking-[0.24em] text-gold">
                     {cabins.list[active].area}
@@ -118,7 +122,7 @@ export function Cabins() {
             </div>
           </div>
 
-          <ul className="border-t border-white/10">
+          <ul className="border-t border-line">
             {cabins.list.map((cabin, i) => (
               <li
                 key={cabin.name}
@@ -133,10 +137,10 @@ export function Cabins() {
                     onMouseEnter={() => setActive(i)}
                     onFocus={() => setActive(i)}
                     onClick={() => setActive(i)}
-                    className="group w-full border-b border-white/10 py-8 text-left outline-none transition-colors duration-700 hover:bg-gold/[0.04] focus-visible:bg-gold/[0.06] md:py-10"
+                    className="group w-full border-b border-line py-8 text-left outline-none transition-colors duration-700 hover:bg-gold/[0.04] focus-visible:bg-gold/[0.06] md:py-10"
                   >
                     <div className="flex items-baseline justify-between gap-6">
-                      <h3 className="text-xl font-light tracking-tight text-ivory md:text-2xl">
+                      <h3 className="text-xl font-light tracking-tight text-strong md:text-2xl">
                         {cabin.name}
                       </h3>
                       <span className="num shrink-0 text-[0.72rem] tracking-[0.22em] text-gold">

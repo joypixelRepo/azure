@@ -25,7 +25,7 @@ export function SectionHeading({
         </p>
       </Reveal>
       <Reveal delay={80}>
-        <h2 className="display-lg mt-6 max-w-[18ch] whitespace-pre-line text-ivory">{title}</h2>
+        <h2 className="display-lg mt-6 max-w-[18ch] whitespace-pre-line text-strong">{title}</h2>
       </Reveal>
       {body ? (
         <Reveal delay={160}>

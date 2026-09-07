@@ -38,7 +38,11 @@ export function Booking() {
   };
 
   return (
-    <section id="reserva" className="relative overflow-hidden bg-ink py-32 md:py-44">
+    <section
+      id="reserva"
+      data-theme="light"
+      className="theme-light relative overflow-hidden bg-surface py-32 md:py-44"
+    >
       <div
         aria-hidden
         className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/15 to-transparent"
@@ -49,13 +53,13 @@ export function Booking() {
             <p className="eyebrow text-gold/80">{booking.eyebrow}</p>
           </Reveal>
           <Reveal delay={80}>
-            <h2 className="display-lg mt-6 whitespace-pre-line text-ivory">{booking.title}</h2>
+            <h2 className="display-lg mt-6 whitespace-pre-line text-strong">{booking.title}</h2>
           </Reveal>
           <Reveal delay={160}>
             <p className="body-lg mt-8 max-w-[42ch]">{booking.body}</p>
           </Reveal>
           <Reveal direction="fade" delay={240}>
-            <p className="mt-10 flex max-w-[38ch] items-start gap-3 border-l border-gold/30 pl-4 text-[0.72rem] font-light leading-relaxed tracking-wide text-mist/80">
+            <p className="mt-10 flex max-w-[38ch] items-start gap-3 border-l border-gold/30 pl-4 text-[0.72rem] font-light leading-relaxed tracking-wide text-faint">
               <span className="eyebrow shrink-0 text-gold/70">Demo</span>
               {booking.disclaimer}
             </p>
@@ -78,7 +82,7 @@ export function Booking() {
               aria-hidden={sent}
             >
               <form onSubmit={submit} noValidate>
-                <div className="mb-8 grid grid-cols-2 gap-px overflow-hidden rounded-lg border border-white/10">
+                <div className="mb-8 grid grid-cols-2 gap-px overflow-hidden rounded-lg border border-line">
                   <Field label="Fecha de inicio" value={range.from ? longDate(range.from) : "—"} />
                   <Field
                     label="Fecha de finalización"
@@ -91,7 +95,7 @@ export function Booking() {
 
                 <div className="mt-10 grid gap-8 sm:grid-cols-2">
                   <div>
-                    <p className="eyebrow mb-4 text-mist/70">Número de invitados</p>
+                    <p className="eyebrow mb-4 text-faint">Número de invitados</p>
                     <div className="flex items-center gap-5">
                       <button
                         type="button"
@@ -101,7 +105,7 @@ export function Booking() {
                       >
                         −
                       </button>
-                      <span className="num w-10 text-center text-2xl font-light text-ivory">
+                      <span className="num w-10 text-center text-2xl font-light text-strong">
                         {guests}
                       </span>
                       <button
@@ -117,7 +121,7 @@ export function Booking() {
                   </div>
 
                   <div>
-                    <label className="eyebrow mb-4 block text-mist/70" htmlFor="itinerary">
+                    <label className="eyebrow mb-4 block text-faint" htmlFor="itinerary">
                       Itinerario de interés
                     </label>
                     <div className="relative">
@@ -125,15 +129,15 @@ export function Booking() {
                         id="itinerary"
                         value={itinerary}
                         onChange={(e) => setItinerary(e.target.value)}
-                        className="h-11 w-full appearance-none rounded-full border border-white/12 bg-white/[0.04] px-5 pr-10 text-[0.82rem] font-light text-ivory outline-none backdrop-blur-xl transition-colors duration-500 hover:border-white/25 focus-visible:border-gold/60"
+                        className="h-11 w-full appearance-none rounded-full border border-line bg-white/[0.04] px-5 pr-10 text-[0.82rem] font-light text-strong outline-none backdrop-blur-xl transition-colors duration-500 hover:border-line focus-visible:border-gold/60"
                       >
                         {itineraries.map((route) => (
-                          <option key={route.name} value={route.name} className="bg-ink text-ivory">
+                          <option key={route.name} value={route.name} className="bg-pearl text-graphite">
                             {route.name} · {route.days}
                           </option>
                         ))}
                       </select>
-                      <span className="pointer-events-none absolute right-5 top-1/2 -translate-y-1/2 text-mist">
+                      <span className="pointer-events-none absolute right-5 top-1/2 -translate-y-1/2 text-faint">
                         <svg width="10" height="6" viewBox="0 0 10 6" fill="none" aria-hidden>
                           <path d="M1 1l4 4 4-4" stroke="currentColor" strokeWidth="1" />
                         </svg>
@@ -142,7 +146,7 @@ export function Booking() {
                   </div>
                 </div>
 
-                <div className="mt-10 flex flex-wrap items-center gap-4 border-t border-white/10 pt-8">
+                <div className="mt-10 flex flex-wrap items-center gap-4 border-t border-line pt-8">
                   <GlassButton
                     type="submit"
                     size="lg"
@@ -189,10 +193,10 @@ export function Booking() {
                 </svg>
               </span>
 
-              <h3 className="display-md max-w-[16ch] text-ivory">{booking.success.title}</h3>
+              <h3 className="display-md max-w-[16ch] text-strong">{booking.success.title}</h3>
               <p className="body-lg max-w-[44ch]">{booking.success.body}</p>
 
-              <dl className="mt-2 grid w-full max-w-md grid-cols-2 gap-x-8 gap-y-4 border-t border-white/10 pt-6 sm:grid-cols-3">
+              <dl className="mt-2 grid w-full max-w-md grid-cols-2 gap-x-8 gap-y-4 border-t border-line pt-6 sm:grid-cols-3">
                 <Summary label="Inicio" value={range.from ? longDate(range.from) : "—"} />
                 <Summary label="Final" value={range.to ? longDate(range.to) : "—"} />
                 <Summary label="Invitados" value={String(guests)} />
@@ -200,7 +204,7 @@ export function Booking() {
 
               <div className="mt-4 flex flex-wrap items-center gap-4">
                 <GlassButton onClick={reset}>Nueva solicitud</GlassButton>
-                <span className="eyebrow text-mist/50">Experiencia de demostración</span>
+                <span className="eyebrow text-faint">Experiencia de demostración</span>
               </div>
             </div>
           </div>
@@ -213,8 +217,8 @@ export function Booking() {
 function Field({ label, value, hint }: { label: string; value: string; hint?: string }) {
   return (
     <div className="bg-white/[0.03] px-5 py-5">
-      <p className="eyebrow text-mist/60">{label}</p>
-      <p className="mt-2 truncate text-[0.95rem] font-light text-ivory first-letter:uppercase">
+      <p className="eyebrow text-faint">{label}</p>
+      <p className="mt-2 truncate text-[0.95rem] font-light text-strong first-letter:uppercase">
         {value}
       </p>
       {hint ? <p className="num mt-1 text-[0.7rem] tracking-[0.18em] text-gold">{hint}</p> : null}
@@ -225,8 +229,8 @@ function Field({ label, value, hint }: { label: string; value: string; hint?: st
 function Summary({ label, value }: { label: string; value: string }) {
   return (
     <div>
-      <dt className="eyebrow text-mist/60">{label}</dt>
-      <dd className="mt-2 text-[0.85rem] font-light text-ivory first-letter:uppercase">{value}</dd>
+      <dt className="eyebrow text-faint">{label}</dt>
+      <dd className="mt-2 text-[0.85rem] font-light text-strong first-letter:uppercase">{value}</dd>
     </div>
   );
 }

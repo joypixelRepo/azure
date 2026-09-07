@@ -236,10 +236,15 @@ export function Design() {
   }, [scrollTo]);
 
   return (
-    <section ref={sectionRef} id="diseno" className="relative overflow-hidden bg-abyss">
+    <section
+      ref={sectionRef}
+      id="diseno"
+      data-theme="dark"
+      className="theme-dark relative overflow-hidden bg-deep"
+    >
       <div ref={trackRef} className="flex h-[100svh] w-max flex-nowrap will-change-transform">
         {/* Panel de apertura: el mar de fondo, a sección completa */}
-        <article className="relative flex h-[100svh] w-screen shrink-0 flex-col items-center justify-center overflow-hidden bg-abyss px-[var(--page-gutter)] text-center">
+        <article className="relative flex h-[100svh] w-screen shrink-0 flex-col items-center justify-center overflow-hidden bg-deep px-[var(--page-gutter)] text-center">
           <div data-panel-image className="absolute inset-0 will-change-transform">
             <VideoBackdrop
               src="/video/fondo-marino.mp4"
@@ -250,9 +255,9 @@ export function Design() {
 
           {/* Velos: el agua entra desde el negro de la sección anterior y se
               apaga lo justo para que el texto respire encima. */}
-          <div className="pointer-events-none absolute inset-0 bg-abyss/45" />
-          <div className="pointer-events-none absolute inset-x-0 top-0 h-[58%] bg-gradient-to-b from-abyss via-abyss/78 to-transparent" />
-          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[40%] bg-gradient-to-t from-abyss/85 via-abyss/30 to-transparent" />
+          <div className="pointer-events-none absolute inset-0 bg-deep/45" />
+          <div className="pointer-events-none absolute inset-x-0 top-0 h-[58%] bg-gradient-to-b from-deep via-deep/78 to-transparent" />
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[40%] bg-gradient-to-t from-deep/85 via-deep/30 to-transparent" />
           <div
             aria-hidden
             className="pointer-events-none absolute inset-0"
@@ -264,19 +269,19 @@ export function Design() {
 
           <div data-panel-copy className="relative z-10 max-w-[36rem]">
             <p className="eyebrow text-gold">Diseño</p>
-            <h2 className="display-lg mt-6 text-ivory [text-shadow:0_2px_30px_rgba(5,7,10,0.85)]">
+            <h2 className="display-lg mt-6 text-strong [text-shadow:0_2px_30px_rgba(5,7,10,0.85)]">
               Una arquitectura
               <br />
               que navega.
             </h2>
-            <p className="body-lg mx-auto mt-8 max-w-[42ch] text-ivory/90 [text-shadow:0_2px_20px_rgba(5,7,10,0.9)]">
+            <p className="body-lg mx-auto mt-8 max-w-[42ch] text-strong [text-shadow:0_2px_20px_rgba(5,7,10,0.9)]">
               El exterior de AZURE 42 se dibujó como se dibuja un edificio: por planos, por sombras
               y por la manera en que la luz cae sobre ellos a lo largo del día.
             </p>
           </div>
 
-          <p className="eyebrow absolute bottom-8 left-[var(--page-gutter)] z-10 flex items-center gap-3 text-fog/70 [text-shadow:0_2px_12px_rgba(5,7,10,0.95)]">
-            Desplaza <span className="inline-block h-px w-10 bg-fog/50" /> lateral
+          <p className="eyebrow absolute bottom-8 left-[var(--page-gutter)] z-10 flex items-center gap-3 text-soft [text-shadow:0_2px_12px_rgba(5,7,10,0.95)]">
+            Desplaza <span className="inline-block h-px w-10 bg-faint/50" /> lateral
           </p>
         </article>
 
@@ -297,8 +302,8 @@ export function Design() {
                 className="absolute inset-0 h-full w-full scale-110 object-cover will-change-transform"
               />
               {/* Velo uniforme: oscurece por igual, sin manchas visibles */}
-              <div className="absolute inset-0 bg-abyss/66" />
-              <div className="absolute inset-0 bg-gradient-to-t from-abyss/75 via-transparent to-abyss/50" />
+              <div className="absolute inset-0 bg-deep/66" />
+              <div className="absolute inset-0 bg-gradient-to-t from-deep/75 via-transparent to-deep/50" />
               <div className="absolute inset-0 flex items-center justify-center px-[var(--page-gutter)]">
                 <div data-panel-copy className="w-full max-w-[34rem] text-center">
                   <div className="mb-6 flex items-center justify-center gap-4">
@@ -306,14 +311,14 @@ export function Design() {
                       {panel.index}
                     </span>
                     <span className="h-px w-10 bg-gold/50" />
-                    <span className="eyebrow text-fog/90 [text-shadow:0_2px_16px_rgba(5,7,10,0.95)]">
+                    <span className="eyebrow text-soft [text-shadow:0_2px_16px_rgba(5,7,10,0.95)]">
                       {panel.eyebrow}
                     </span>
                   </div>
-                  <h3 className="display-md text-ivory [text-shadow:0_2px_28px_rgba(5,7,10,0.95)]">
+                  <h3 className="display-md text-strong [text-shadow:0_2px_28px_rgba(5,7,10,0.95)]">
                     {panel.title}
                   </h3>
-                  <p className="body-lg mx-auto mt-5 max-w-[46ch] text-ivory [text-shadow:0_2px_20px_rgba(5,7,10,0.95)]">
+                  <p className="body-lg mx-auto mt-5 max-w-[46ch] text-strong [text-shadow:0_2px_20px_rgba(5,7,10,0.95)]">
                     {panel.body}
                   </p>
                 </div>

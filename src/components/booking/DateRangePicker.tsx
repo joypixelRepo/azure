@@ -80,7 +80,7 @@ export function DateRangePicker({
         >
           <Arrow direction="left" />
         </button>
-        <p className="eyebrow text-mist/70">Selecciona tus fechas</p>
+        <p className="eyebrow text-faint">Selecciona tus fechas</p>
         <button
           type="button"
           onClick={() => setCursor(addMonths(cursor, 1))}
@@ -100,14 +100,14 @@ export function DateRangePicker({
           const cells = buildMonth(month);
           return (
             <div key={month.toISOString()} className={m > 0 ? "hidden sm:block" : ""}>
-              <p className="mb-4 text-center text-[0.72rem] font-medium uppercase tracking-[0.22em] text-ivory/90 first-letter:uppercase">
+              <p className="mb-4 text-center text-[0.72rem] font-medium uppercase tracking-[0.22em] text-strong first-letter:uppercase">
                 {monthFormatter.format(month)}
               </p>
               <div className="mb-2 grid grid-cols-7">
                 {WEEKDAYS.map((d, i) => (
                   <span
                     key={`${d}-${i}`}
-                    className="py-1 text-center text-[0.62rem] tracking-[0.18em] text-mist/60"
+                    className="py-1 text-center text-[0.62rem] tracking-[0.18em] text-faint"
                   >
                     {d}
                   </span>
@@ -131,10 +131,10 @@ export function DateRangePicker({
                       className={[
                         "relative h-9 text-[0.8rem] font-light tabular-nums outline-none transition-[color,background-color] duration-300",
                         disabled
-                          ? "cursor-not-allowed text-mist/25"
-                          : "text-fog hover:text-ivory focus-visible:text-ivory",
-                        middle ? "bg-gold/[0.12] text-ivory" : "",
-                        isFrom || isTo ? "text-abyss" : "",
+                          ? "cursor-not-allowed text-faint"
+                          : "text-soft hover:text-strong focus-visible:text-strong",
+                        middle ? "bg-gold/[0.12] text-strong" : "",
+                        isFrom || isTo ? "text-deep" : "",
                       ].join(" ")}
                     >
                       {(isFrom || isTo) && (
@@ -150,7 +150,7 @@ export function DateRangePicker({
         })}
       </div>
 
-      <p className="mt-6 text-[0.72rem] font-light tracking-wide text-mist/70">
+      <p className="mt-6 text-[0.72rem] font-light tracking-wide text-faint">
         Estancia mínima recomendada: {minNights} noches. Selecciona la fecha de inicio y después la
         de finalización.
       </p>

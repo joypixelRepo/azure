@@ -88,7 +88,7 @@ export function Preloader({
       role="status"
       aria-live="polite"
       aria-label={`Cargando tu viaje, ${pct} por ciento`}
-      className="fixed inset-0 z-[1000] flex h-[100dvh] w-screen flex-col overflow-hidden bg-abyss px-[var(--page-gutter)] py-8 transition-[opacity,transform] duration-[1200ms] ease-[cubic-bezier(0.16,1,0.3,1)]"
+      className="theme-dark fixed inset-0 z-[1000] flex h-[100dvh] w-screen flex-col overflow-hidden bg-deep px-[var(--page-gutter)] py-8 transition-[opacity,transform] duration-[1200ms] ease-[cubic-bezier(0.16,1,0.3,1)]"
       style={{
         opacity: leaving ? 0 : 1,
         transform: leaving ? "scale(1.03)" : "scale(1)",
@@ -108,31 +108,31 @@ export function Preloader({
       />
 
       <div className="relative flex items-center justify-between">
-        <span className="text-[0.8rem] font-medium tracking-[0.34em] text-ivory">
+        <span className="text-[0.8rem] font-medium tracking-[0.34em] text-strong">
           {brand.short} <span className="font-light text-gold">{brand.model}</span>
         </span>
-        <span className="eyebrow num text-mist/70">{String(pct).padStart(3, "0")}</span>
+        <span className="eyebrow num text-faint">{String(pct).padStart(3, "0")}</span>
       </div>
 
       <div className="relative flex flex-1 flex-col items-center justify-center text-center">
-        <h1 className="display-lg text-ivory">Cargando tu viaje</h1>
-        <p className="body-sm mt-6 max-w-[36ch] text-mist">{brand.tagline}</p>
+        <h1 className="display-lg text-strong">Cargando tu viaje</h1>
+        <p className="body-sm mt-6 max-w-[36ch] text-faint">{brand.tagline}</p>
 
         <div className="mt-14 w-full max-w-md">
           <div className="h-px w-full overflow-hidden bg-white/12">
             <div
-              className="h-full origin-left bg-gradient-to-r from-gold/50 via-ivory to-gold/50"
+              className="h-full origin-left bg-gradient-to-r from-gold/50 via-pearl to-gold/50"
               style={{ transform: `scaleX(${display})`, willChange: "transform" }}
             />
           </div>
           <div className="mt-5 flex items-center justify-between">
-            <span className="eyebrow text-mist/60">{stage}</span>
+            <span className="eyebrow text-faint">{stage}</span>
             <span className="eyebrow num text-gold/80">{pct}%</span>
           </div>
         </div>
       </div>
 
-      <p className="eyebrow relative text-center text-mist/45">
+      <p className="eyebrow relative text-center text-faint">
         <span className="hidden xs:inline">Secuencia cinematográfica · </span>
         480 fotogramas
       </p>

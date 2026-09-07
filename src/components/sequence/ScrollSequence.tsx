@@ -276,14 +276,14 @@ export function ScrollSequence({
   /* ------------------------------------------- alternativa sin movimiento */
   if (reduced) {
     return (
-      <section id={id} className="relative">
+      <section id={id} data-theme="dark" className="theme-dark relative bg-deep">
         <div className="relative h-[100svh] w-full overflow-hidden">
           <img
             src={fallbackStills[0]}
             alt=""
             className="absolute inset-0 h-full w-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-abyss/70 via-abyss/10 to-abyss" />
+          <div className="absolute inset-0 bg-gradient-to-b from-deep/70 via-deep/10 to-deep" />
           <div className="absolute inset-0 flex items-end px-[var(--page-gutter)] pb-24">{intro}</div>
         </div>
         {beats.map((beat, i) => (
@@ -293,7 +293,7 @@ export function ScrollSequence({
               alt=""
               className="absolute inset-0 h-full w-full object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-abyss via-abyss/40 to-abyss/30" />
+            <div className="absolute inset-0 bg-gradient-to-t from-deep via-deep/40 to-deep/30" />
             <div
               className={`absolute inset-0 flex items-center px-[var(--page-gutter)] ${
                 beat.side === "left" ? "justify-start" : "justify-end"
@@ -315,7 +315,11 @@ export function ScrollSequence({
       className="relative"
       style={{ height: `${scrollLength * 100}svh` }}
     >
-      <div ref={stickyRef} className="sticky top-0 h-[100svh] w-full overflow-hidden bg-abyss">
+      <div
+        ref={stickyRef}
+        data-theme="dark"
+        className="theme-dark sticky top-0 h-[100svh] w-full overflow-hidden bg-deep"
+      >
         {/* Fondo ambiental: el mismo fotograma desenfocado rellena las barras */}
         <canvas
           ref={ambientRef}
@@ -331,10 +335,10 @@ export function ScrollSequence({
 
         {/* Veladuras para legibilidad. El yate siempre queda visible en el
             centro; los degradados sólo oscurecen los bordes. */}
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-56 bg-gradient-to-b from-abyss/90 via-abyss/30 to-transparent" />
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[64%] bg-gradient-to-t from-abyss via-abyss/55 to-transparent" />
-        <div className="pointer-events-none absolute inset-y-0 left-0 w-[62%] bg-gradient-to-r from-abyss/90 via-abyss/35 to-transparent md:w-[54%]" />
-        <div className="pointer-events-none absolute inset-y-0 right-0 hidden w-[54%] bg-gradient-to-l from-abyss/88 via-abyss/30 to-transparent md:block" />
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-56 bg-gradient-to-b from-deep/90 via-deep/30 to-transparent" />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[64%] bg-gradient-to-t from-deep via-deep/55 to-transparent" />
+        <div className="pointer-events-none absolute inset-y-0 left-0 w-[62%] bg-gradient-to-r from-deep/90 via-deep/35 to-transparent md:w-[54%]" />
+        <div className="pointer-events-none absolute inset-y-0 right-0 hidden w-[54%] bg-gradient-to-l from-deep/88 via-deep/30 to-transparent md:block" />
         <div className="grain pointer-events-none absolute inset-0" />
 
         {/* Hero */}
@@ -397,11 +401,11 @@ function BeatBody({ beat }: { beat: StoryBeat }) {
     <div className="w-full max-w-[30rem] md:max-w-[22rem] lg:max-w-[24rem]">
       <div>
         <p className="eyebrow mb-4 text-gold/90">{beat.eyebrow}</p>
-        <h2 className="display-md whitespace-pre-line text-ivory drop-shadow-[0_2px_30px_rgba(0,0,0,0.75)]">
+        <h2 className="display-md whitespace-pre-line text-strong drop-shadow-[0_2px_30px_rgba(0,0,0,0.75)]">
           {beat.title}
         </h2>
         {beat.body ? (
-          <p className="body-lg mt-5 max-w-[26rem] text-fog/90 drop-shadow-[0_2px_24px_rgba(0,0,0,0.85)]">
+          <p className="body-lg mt-5 max-w-[26rem] text-soft drop-shadow-[0_2px_24px_rgba(0,0,0,0.85)]">
             {beat.body}
           </p>
         ) : null}

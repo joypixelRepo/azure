@@ -10,7 +10,10 @@ export function Closing() {
   const { scrollTo } = useSmoothScroll();
 
   return (
-    <section className="relative h-[100svh] w-full overflow-hidden">
+    <section
+      data-theme="dark"
+      className="theme-dark relative h-[100svh] w-full overflow-hidden"
+    >
       <VideoBackdrop
         src="/video/cierre.mp4"
         poster="/video/cierre-poster.webp"
@@ -18,8 +21,8 @@ export function Closing() {
         className="absolute inset-0"
       />
       {/* El vídeo nace del negro de la sección anterior */}
-      <div className="absolute inset-x-0 top-0 h-[45%] bg-gradient-to-b from-abyss via-abyss/70 to-transparent" />
-      <div className="absolute inset-0 bg-gradient-to-t from-abyss via-abyss/40 to-transparent" />
+      <div className="absolute inset-x-0 top-0 h-[45%] bg-gradient-to-b from-deep via-deep/70 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-t from-deep via-deep/40 to-transparent" />
       <div
         aria-hidden
         className="absolute inset-0"
@@ -35,7 +38,7 @@ export function Closing() {
           <p className="eyebrow text-gold/80">{brand.short} {brand.model}</p>
         </Reveal>
         <Reveal delay={100}>
-          <h2 className="display-lg mt-8 max-w-[16ch] text-ivory">
+          <h2 className="display-lg mt-8 max-w-[16ch] text-strong">
             El horizonte no es un destino.
           </h2>
         </Reveal>

@@ -23,9 +23,9 @@ export function Photo({
       <div
         role="img"
         aria-label={`${alt || name} · fotografía pendiente`}
-        className={`flex items-center justify-center border border-dashed border-white/15 bg-hull ${className}`}
+        className={`flex items-center justify-center border border-dashed border-line bg-surface-alt ${className}`}
       >
-        <span className="eyebrow text-mist/50">Fotografía pendiente</span>
+        <span className="eyebrow text-faint">Fotografía pendiente</span>
       </div>
     );
   }

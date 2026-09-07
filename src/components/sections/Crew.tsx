@@ -5,7 +5,11 @@ export function Crew() {
   const img = photo("tripulacion");
 
   return (
-    <section id="tripulacion" className="relative bg-ink py-32 md:py-44">
+    <section
+      id="tripulacion"
+      data-theme="light"
+      className="theme-light relative bg-surface py-32 md:py-44"
+    >
       <div className="grid gap-12 px-[var(--page-gutter)] lg:grid-cols-2 lg:gap-16">
         {/* La fotografía acompaña a toda la sección */}
         <Reveal direction="fade">
@@ -20,7 +24,7 @@ export function Crew() {
                 decoding="async"
                 className="h-full w-full object-cover"
               />
-              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-ink/40 to-transparent" />
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-deep/40 to-transparent" />
             </div>
           </div>
         </Reveal>
@@ -33,18 +37,18 @@ export function Crew() {
             </p>
           </Reveal>
           <Reveal delay={80}>
-            <h2 className="display-lg mt-6 whitespace-pre-line text-ivory">{crew.title}</h2>
+            <h2 className="display-lg mt-6 whitespace-pre-line text-strong">{crew.title}</h2>
           </Reveal>
           <Reveal delay={160}>
             <p className="body-lg mt-8 max-w-[46ch]">{crew.body}</p>
           </Reveal>
 
-          <ul className="mt-14 border-t border-white/10">
+          <ul className="mt-14 border-t border-line">
             {crew.roles.map((role, i) => (
               <li key={role.role}>
                 <Reveal delay={Math.min(i * 55, 300)}>
-                  <div className="flex flex-wrap items-baseline justify-between gap-x-8 gap-y-1 border-b border-white/10 py-5">
-                    <span className="text-base font-light tracking-tight text-ivory">
+                  <div className="flex flex-wrap items-baseline justify-between gap-x-8 gap-y-1 border-b border-line py-5">
+                    <span className="text-base font-light tracking-tight text-strong">
                       {role.role}
                     </span>
                     <span className="body-sm">{role.detail}</span>

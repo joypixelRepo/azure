@@ -7,13 +7,16 @@ export function Footer() {
   const { scrollTo } = useSmoothScroll();
 
   return (
-    <footer className="relative border-t border-white/10 bg-abyss px-[var(--page-gutter)] pb-10 pt-24">
+    <footer
+      data-theme="dark"
+      className="theme-dark relative border-t border-line bg-deep px-[var(--page-gutter)] pb-10 pt-24"
+    >
       <div className="grid gap-14 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1.4fr)]">
         <div>
           <button
             type="button"
             onClick={() => scrollTo(0)}
-            className="flex items-baseline gap-2 text-ivory"
+            className="flex items-baseline gap-2 text-strong"
           >
             <span className="text-lg font-medium tracking-[0.34em]">{brand.short}</span>
             <span className="text-lg font-light tracking-[0.28em] text-gold">{brand.model}</span>
@@ -26,7 +29,7 @@ export function Footer() {
                 key={item.href}
                 type="button"
                 onClick={() => scrollTo(item.href)}
-                className="link-underline text-[0.72rem] uppercase tracking-[0.2em] text-mist transition-colors duration-500 hover:text-ivory lg:hidden"
+                className="link-underline text-[0.72rem] uppercase tracking-[0.2em] text-faint transition-colors duration-500 hover:text-strong lg:hidden"
               >
                 {item.label}
               </button>
@@ -41,7 +44,7 @@ export function Footer() {
               <ul className="mt-5 space-y-3">
                 {column.links.map((link) => (
                   <li key={link}>
-                    <span className="link-underline cursor-pointer text-[0.82rem] font-light text-fog/75 transition-colors duration-500 hover:text-ivory">
+                    <span className="link-underline cursor-pointer text-[0.82rem] font-light text-soft transition-colors duration-500 hover:text-strong">
                       {link}
                     </span>
                   </li>
@@ -52,11 +55,11 @@ export function Footer() {
         </div>
       </div>
 
-      <div className="mt-20 flex flex-col gap-4 border-t border-white/10 pt-8 sm:flex-row sm:items-center sm:justify-between">
-        <p className="text-[0.7rem] font-light tracking-[0.12em] text-mist/60">
+      <div className="mt-20 flex flex-col gap-4 border-t border-line pt-8 sm:flex-row sm:items-center sm:justify-between">
+        <p className="text-[0.7rem] font-light tracking-[0.12em] text-faint">
           © {brand.year} {brand.name}. Proyecto de demostración — sin reservas reales.
         </p>
-        <p className="text-[0.7rem] font-light tracking-[0.12em] text-mist/60">
+        <p className="text-[0.7rem] font-light tracking-[0.12em] text-faint">
           Mediterráneo · Temporada {brand.year}
         </p>
       </div>
