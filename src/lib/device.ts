@@ -54,12 +54,13 @@ export function detectDevice(): DeviceProfile {
 
   // Presupuesto de descodificación aproximado en píxeles ⇒ fotogramas.
   // Un fotograma descodificado ocupa ancho × alto × 4 bytes.
-  const frameBytes = tier === "desktop" ? 1440 * 810 * 4 : tier === "tablet" ? 1080 * 608 * 4 : 900 * 506 * 4;
-  const budgetBytes = (tier === "mobile" ? 96 : memory >= 8 ? 280 : 170) * 1024 * 1024;
+  const frameBytes =
+    tier === "desktop" ? 1920 * 1080 * 4 : tier === "tablet" ? 1440 * 810 * 4 : 1080 * 608 * 4;
+  const budgetBytes = (tier === "mobile" ? 110 : memory >= 8 ? 520 : 300) * 1024 * 1024;
 
   return {
     tier,
-    decodedBudget: Math.max(24, Math.min(160, Math.floor(budgetBytes / frameBytes))),
+    decodedBudget: Math.max(28, Math.min(160, Math.floor(budgetBytes / frameBytes))),
     lookAhead: tier === "mobile" ? 10 : 22,
     concurrency: slowLink ? 4 : tier === "mobile" ? 6 : 10,
     dpr: tier === "mobile" ? Math.min(dpr, 2) : Math.min(dpr, 1.75),

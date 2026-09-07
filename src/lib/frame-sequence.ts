@@ -33,7 +33,10 @@ export interface SequenceManifest {
 
 export type FrameSource = ImageBitmap | HTMLImageElement;
 
-const KEYFRAME_STRIDE = 32;
+// Con fotogramas de 1920 px cada bitmap descodificado pesa unos 8 MB, así que
+// la rejilla de claves permanentes se espacia más para dejar sitio a la
+// ventana que sigue al scroll.
+const KEYFRAME_STRIDE = 48;
 
 function frameUrl(path: string, index: number) {
   return `${path}/frame_${String(index + 1).padStart(4, "0")}.webp`;

@@ -9,9 +9,9 @@
 #   ./scripts/build-sequence.sh .source-video/azure-42-yate.mp4 azure-42
 #
 # Genera:
-#   public/sequences/<slug>/desktop/frame_0001.webp ... (1440w)
-#   public/sequences/<slug>/tablet/  ...              (1024w)
-#   public/sequences/<slug>/mobile/  ...              ( 860w, 1 de cada 2)
+#   public/sequences/<slug>/desktop/frame_0001.webp ... (1920w)
+#   public/sequences/<slug>/tablet/  ...              (1440w)
+#   public/sequences/<slug>/mobile/  ...              (1080w, 1 de cada 2)
 #   public/sequences/<slug>/manifest.json
 # ---------------------------------------------------------------------------
 set -euo pipefail
@@ -30,7 +30,7 @@ echo "▸ Fuente        : $VIDEO"
 echo "▸ Destino       : $OUT"
 echo "▸ Paralelismo   : $JOBS"
 
-mkdir -p "$TMP/src" "$OUT/desktop" "$OUT/tablet" "$OUT/mobile" "$OUT/stills"
+mkdir -p "$TMP/src" "$OUT/desktop" "$OUT/tablet" "$OUT/mobile"
 
 echo "▸ [1/5] Extrayendo frames maestros…"
 ffmpeg -y -v error -i "$VIDEO" -vsync 0 -q:v 2 "$TMP/src/%04d.jpg"
@@ -56,9 +56,9 @@ encode_tier () {           # nombre  ancho  calidad  step
   echo "$out" > "$TMP/$tier.count"
 }
 
-echo "▸ [2/5] Tier desktop"; encode_tier desktop 1440 60 1
-echo "▸ [3/5] Tier tablet";  encode_tier tablet  1024 58 1
-echo "▸ [4/5] Tier mobile";  encode_tier mobile   860 58 2
+echo "▸ [2/5] Tier desktop"; encode_tier desktop 1920 78 1
+echo "▸ [3/5] Tier tablet";  encode_tier tablet  1440 68 1
+echo "▸ [4/5] Tier mobile";  encode_tier mobile  1080 66 2
 
 echo "▸ [5/5] Manifest"
 D=$(cat "$TMP/desktop.count"); T=$(cat "$TMP/tablet.count"); M=$(cat "$TMP/mobile.count")
@@ -70,9 +70,9 @@ cat > "$OUT/manifest.json" <<JSON
   "fps": 24,
   "aspect": 1.7777778,
   "tiers": {
-    "desktop": { "path": "/sequences/$SLUG/desktop", "frames": $D, "width": 1440 },
-    "tablet":  { "path": "/sequences/$SLUG/tablet",  "frames": $T, "width": 1024 },
-    "mobile":  { "path": "/sequences/$SLUG/mobile",  "frames": $M, "width": 860 }
+    "desktop": { "path": "/sequences/$SLUG/desktop", "frames": $D, "width": 1920 },
+    "tablet":  { "path": "/sequences/$SLUG/tablet",  "frames": $T, "width": 1440 },
+    "mobile":  { "path": "/sequences/$SLUG/mobile",  "frames": $M, "width": 1080 }
   }
 }
 JSON

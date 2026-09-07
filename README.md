@@ -47,11 +47,16 @@ Requiere `ffmpeg` y `cwebp` (`brew install ffmpeg webp`).
 
 El script produce tres resoluciones y un manifiesto:
 
-| Tier      | Ancho  | Fotogramas | Peso  | Cuándo se usa                                  |
-| --------- | ------ | ---------- | ----- | ---------------------------------------------- |
-| `desktop` | 1440px | 480        | 18 MB | ≥ 1440px de ancho y ≥ 8 GB de memoria          |
-| `tablet`  | 1024px | 480        | 11 MB | portátiles, tablets, punteros táctiles         |
-| `mobile`  | 860px  | 240 (1/2)  | 4,5 MB| < 768px, ≤ 4 GB, `saveData` o red lenta        |
+| Tier      | Ancho  | Calidad | Fotogramas | Peso  | Cuándo se usa                            |
+| --------- | ------ | ------- | ---------- | ----- | ---------------------------------------- |
+| `desktop` | 1920px | q78     | 480        | 38 MB | ≥ 1440px de ancho y ≥ 8 GB de memoria    |
+| `tablet`  | 1440px | q68     | 480        | 21 MB | portátiles pequeños, tablets, táctiles   |
+| `mobile`  | 1080px | q66     | 240 (1/2)  | 7 MB  | < 768px, ≤ 4 GB, `saveData` o red lenta  |
+
+El tier de escritorio es deliberadamente pesado: la secuencia se ve a pantalla
+completa y en pantallas retina cualquier reescalado se nota. Si en algún
+despliegue interesa aligerarlo, basta con bajar el ancho o la calidad en
+`scripts/build-sequence.sh` y volver a generarla.
 
 `public/sequences/azure-42/manifest.json` se genera solo y es lo único que
 consume la aplicación (`src/lib/sequences.ts`).
