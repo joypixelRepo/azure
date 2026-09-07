@@ -243,6 +243,11 @@ export class FrameSequence {
 export interface DrawOptions {
   /** Zoom máximo respecto al encuadre completo. Evita recortes agresivos. */
   maxZoom?: number;
+  /**
+   * Altura mínima del fotograma como fracción del lienzo. En vertical fuerza
+   * una banda cinematográfica grande aunque haya que recortar a los lados.
+   */
+  minHeightRatio?: number;
   /** Punto focal vertical (0 arriba, 1 abajo). */
   focusY?: number;
   focusX?: number;
@@ -258,7 +263,7 @@ export function drawFrame(
   source: FrameSource,
   width: number,
   height: number,
-  { maxZoom = 1.6, focusX = 0.5, focusY = 0.5 }: DrawOptions = {},
+  { maxZoom = 1.6, minHeightRatio = 0, focusX = 0.5, focusY = 0.5 }: DrawOptions = {},
 ) {
   const sw = "width" in source ? source.width : 0;
   const sh = "height" in source ? source.height : 0;
@@ -266,7 +271,10 @@ export function drawFrame(
 
   const contain = Math.min(width / sw, height / sh);
   const cover = Math.max(width / sw, height / sh);
-  const scale = Math.min(cover, contain * maxZoom);
+  let scale = Math.min(cover, contain * maxZoom);
+  if (minHeightRatio > 0) {
+    scale = Math.min(cover, Math.max(scale, (height * minHeightRatio) / sh));
+  }
 
   const dw = sw * scale;
   const dh = sh * scale;

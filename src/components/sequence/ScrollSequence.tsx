@@ -33,6 +33,8 @@ export interface ScrollSequenceProps {
   /** Zoom máximo permitido antes de dejar barras cinematográficas. */
   maxZoomLandscape?: number;
   maxZoomPortrait?: number;
+  /** En vertical, altura mínima del fotograma como fracción de la pantalla. */
+  portraitFill?: number;
   /** Imágenes estáticas para la alternativa sin movimiento. */
   fallbackStills?: string[];
   chapters?: { label: string; at: number }[];
@@ -58,7 +60,8 @@ export function ScrollSequence({
   intro,
   introEnd = 0.05,
   maxZoomLandscape = 1.9,
-  maxZoomPortrait = 1.3,
+  maxZoomPortrait = 2.6,
+  portraitFill = 0.66,
   fallbackStills = [],
   chapters = [],
   loadingWeight = 0.74,
@@ -205,7 +208,8 @@ export function ScrollSequence({
         if (source) {
           const portrait = width / height < 1;
           const maxZoom = portrait ? maxZoomPortrait : maxZoomLandscape;
-          const focusY = portrait ? 0.42 : 0.5;
+          const minHeightRatio = portrait ? portraitFill : 0;
+          const focusY = portrait ? 0.44 : 0.5;
 
           if (actx && ambient) {
             actx.drawImage(source, 0, 0, ambient.width, ambient.height);
@@ -213,7 +217,7 @@ export function ScrollSequence({
           // Se limpia (no se rellena) para que el fondo ambiental desenfocado
           // siga visible en las bandas cinematográficas.
           ctx.clearRect(0, 0, width, height);
-          drawFrame(ctx, source, width, height, { maxZoom, focusY });
+          drawFrame(ctx, source, width, height, { maxZoom, minHeightRatio, focusY });
           lastFrame.current = frame;
           dirty.current = false;
         }
@@ -257,7 +261,7 @@ export function ScrollSequence({
       observer.disconnect();
       trigger.kill();
     };
-  }, [reduced, profile, beats, introEnd, maxZoomLandscape, maxZoomPortrait]);
+  }, [reduced, profile, beats, introEnd, maxZoomLandscape, maxZoomPortrait, portraitFill]);
 
   /* Al terminar la descarga, refrescamos medidas por si cambió el layout. */
   useEffect(() => {
@@ -328,16 +332,9 @@ export function ScrollSequence({
         {/* Veladuras para legibilidad. El yate siempre queda visible en el
             centro; los degradados sólo oscurecen los bordes. */}
         <div className="pointer-events-none absolute inset-x-0 top-0 h-56 bg-gradient-to-b from-abyss/90 via-abyss/30 to-transparent" />
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[60%] bg-gradient-to-t from-abyss/95 via-abyss/45 to-transparent" />
-        <div className="pointer-events-none absolute inset-y-0 left-0 w-[62%] bg-gradient-to-r from-abyss/85 via-abyss/25 to-transparent md:w-[52%]" />
-        <div className="pointer-events-none absolute inset-y-0 right-0 hidden w-[52%] bg-gradient-to-l from-abyss/80 via-abyss/20 to-transparent md:block" />
-        <div
-          className="pointer-events-none absolute inset-0"
-          style={{
-            background:
-              "radial-gradient(120% 90% at 50% 45%, transparent 38%, rgba(5,7,10,0.55) 100%)",
-          }}
-        />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[64%] bg-gradient-to-t from-abyss via-abyss/55 to-transparent" />
+        <div className="pointer-events-none absolute inset-y-0 left-0 w-[62%] bg-gradient-to-r from-abyss/90 via-abyss/35 to-transparent md:w-[54%]" />
+        <div className="pointer-events-none absolute inset-y-0 right-0 hidden w-[54%] bg-gradient-to-l from-abyss/88 via-abyss/30 to-transparent md:block" />
         <div className="grain pointer-events-none absolute inset-0" />
 
         {/* Hero */}
@@ -397,18 +394,8 @@ export function ScrollSequence({
 
 function BeatBody({ beat }: { beat: StoryBeat }) {
   return (
-    <div className="relative w-full max-w-[30rem] md:max-w-[22rem] lg:max-w-[24rem]">
-      {/* Halo suave: garantiza legibilidad sobre planos claros sin dibujar
-          una caja visible sobre el yate. */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -inset-x-8 -inset-y-10 md:-inset-x-14 md:-inset-y-14"
-        style={{
-          background:
-            "radial-gradient(closest-side, rgba(5,7,10,0.78), rgba(5,7,10,0.5) 58%, rgba(5,7,10,0) 100%)",
-        }}
-      />
-      <div className="relative">
+    <div className="w-full max-w-[30rem] md:max-w-[22rem] lg:max-w-[24rem]">
+      <div>
         <p className="eyebrow mb-4 text-sand/90">{beat.eyebrow}</p>
         <h2 className="display-md whitespace-pre-line text-ivory drop-shadow-[0_2px_30px_rgba(0,0,0,0.75)]">
           {beat.title}

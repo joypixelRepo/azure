@@ -5,8 +5,13 @@ import { createContext, useContext, useEffect, useRef, useState, type ReactNode 
 import { gsap, ScrollTrigger } from "@/lib/gsap";
 import { prefersReducedMotion } from "@/lib/device";
 
+interface ScrollToOptions {
+  offset?: number;
+  duration?: number;
+}
+
 interface SmoothScrollApi {
-  scrollTo: (target: string | number | HTMLElement, offset?: number) => void;
+  scrollTo: (target: string | number | HTMLElement, options?: ScrollToOptions) => void;
   stop: () => void;
   start: () => void;
 }
@@ -28,7 +33,7 @@ export function SmoothScroll({ children, enabled }: { children: ReactNode; enabl
 
     if (reduced) {
       const fallback: SmoothScrollApi = {
-        scrollTo: (target, offset = 0) => {
+        scrollTo: (target, { offset = 0 } = {}) => {
           const el = typeof target === "string" ? document.querySelector(target) : target;
           if (typeof target === "number") window.scrollTo({ top: target + offset });
           else if (el instanceof HTMLElement)
@@ -59,8 +64,12 @@ export function SmoothScroll({ children, enabled }: { children: ReactNode; enabl
 
      
     setApi({
-      scrollTo: (target, offset = 0) =>
-        lenis.scrollTo(target as never, { offset, duration: 1.5, easing: (t) => 1 - Math.pow(1 - t, 4) }),
+      scrollTo: (target, { offset = 0, duration = 1.5 } = {}) =>
+        lenis.scrollTo(target as never, {
+          offset,
+          duration,
+          easing: (t) => 1 - Math.pow(1 - t, 4),
+        }),
       stop: () => lenis.stop(),
       start: () => lenis.start(),
     });

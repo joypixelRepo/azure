@@ -88,10 +88,10 @@ const PHOTOS: Record<string, PhotoShape> = {
 };
 
 /**
- * Huecos que todavía no tienen fotografía. Al añadir el original a
- * `.source-images/` y regenerar, basta con quitar el nombre de esta lista.
+ * Huecos sin fotografía todavía. Al añadir el original a `.source-images/` y
+ * regenerar, basta con quitar el nombre de esta lista.
  */
-export const pendingPhotos = new Set(["salon", "suite-estribor"]);
+export const pendingPhotos = new Set<string>();
 
 export const isPending = (name: string) => pendingPhotos.has(name);
 

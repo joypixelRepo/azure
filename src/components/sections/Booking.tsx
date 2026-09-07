@@ -28,7 +28,7 @@ export function Booking() {
     event.preventDefault();
     if (!ready) return;
     setSent(true);
-    if (cardRef.current) scrollTo(cardRef.current, -120);
+    if (cardRef.current) scrollTo(cardRef.current, { offset: -120 });
   };
 
   const reset = () => {

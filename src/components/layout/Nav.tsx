@@ -42,7 +42,10 @@ export function Nav() {
 
   const go = (href: string) => {
     setOpen(false);
-    window.setTimeout(() => scrollTo(href, -Math.round(window.innerHeight * 0.02)), open ? 380 : 0);
+    window.setTimeout(
+      () => scrollTo(href, { offset: -Math.round(window.innerHeight * 0.02) }),
+      open ? 380 : 0,
+    );
   };
 
   return (

@@ -41,7 +41,7 @@ export function Footer() {
               <ul className="mt-5 space-y-3">
                 {column.links.map((link) => (
                   <li key={link}>
-                    <span className="link-underline cursor-default text-[0.82rem] font-light text-fog/75 transition-colors duration-500 hover:text-ivory">
+                    <span className="link-underline cursor-pointer text-[0.82rem] font-light text-fog/75 transition-colors duration-500 hover:text-ivory">
                       {link}
                     </span>
                   </li>

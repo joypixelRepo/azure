@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { experiences, itineraries, photo } from "@/lib/content";
 import { Reveal } from "@/components/ui/Reveal";
 
@@ -17,6 +17,26 @@ const PREVIEWS = [
 
 export function Experience() {
   const [active, setActive] = useState(0);
+  const itemsRef = useRef<(HTMLLIElement | null)[]>([]);
+
+  /* La fotografía cambia también con el scroll: se activa la experiencia que
+     cruza la franja central de la pantalla, no sólo la que tiene el ratón. */
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0];
+        if (!visible) return;
+        const index = Number((visible.target as HTMLElement).dataset.index);
+        if (!Number.isNaN(index)) setActive(index);
+      },
+      { rootMargin: "-45% 0px -45% 0px", threshold: 0 },
+    );
+
+    itemsRef.current.forEach((el) => el && observer.observe(el));
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <section id="experiencia" className="relative bg-ink py-32 md:py-44">
@@ -82,7 +102,13 @@ export function Experience() {
           {/* Lista */}
           <ul className="border-t border-white/10">
             {experiences.map((item, i) => (
-              <li key={item.n}>
+              <li
+                key={item.n}
+                data-index={i}
+                ref={(el) => {
+                  itemsRef.current[i] = el;
+                }}
+              >
                 <Reveal delay={Math.min(i * 60, 240)}>
                   <div
                     onMouseEnter={() => setActive(i)}

@@ -76,13 +76,24 @@ consume la aplicación (`src/lib/sequences.ts`).
 - Si el fotograma exacto aún no está listo se pinta el más cercano disponible:
   el scrub nunca se queda en negro.
 
-### 3 · Encuadre
+### 3 · Encuadre y anclaje
 
 `drawFrame()` cubre el lienzo pero **limita el zoom** (1,9× en apaisado, 1,3× en
 vertical) para que la composición del yate no se recorte de forma destructiva.
-Cuando no puede cubrir —un móvil en vertical— deja bandas cinematográficas y
-las rellena con el mismo fotograma desenfocado en un lienzo auxiliar de 96×96
-px, así que la pantalla nunca queda vacía y el coste es despreciable.
+En vertical se fuerza además una altura mínima (`portraitFill`, 66 % de la
+pantalla) para que en el móvil la secuencia se vea grande; el resto de la
+pantalla se rellena con el mismo fotograma desenfocado en un lienzo auxiliar de
+96×96 px, así que nunca queda vacía y el coste es despreciable.
+
+La sección «Diseño» ancla sus diapositivas: al detenerse el scroll dentro del
+tren horizontal, la vista va a la diapositiva siguiente o anterior según la
+dirección del gesto. El anclaje se resuelve sobre Lenis —no con el `snap` de
+ScrollTrigger, que pelea con el scroll suave.
+
+Su primera diapositiva es negra con mar en movimiento (`SeaWaves`): nueve bandas
+de olas en canvas 2D, cada una suma de cuatro senoidales con una envolvente
+lenta que rompe la repetición. Se dibuja a 30 fps, con paso de 8 px, densidad de
+píxel limitada a 1,5× y parada completa cuando la sección no está en pantalla.
 
 ### 4 · Reutilización
 

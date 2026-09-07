@@ -1,22 +1,31 @@
-import { crew } from "@/lib/content";
+import { crew, photo } from "@/lib/content";
 import { Reveal } from "@/components/ui/Reveal";
-import { ParallaxImage } from "@/components/ui/ParallaxImage";
 
 export function Crew() {
+  const img = photo("tripulacion");
+
   return (
     <section id="tripulacion" className="relative bg-ink py-32 md:py-44">
-      <div className="grid gap-16 px-[var(--page-gutter)] lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1fr)] lg:gap-24">
+      <div className="grid gap-12 px-[var(--page-gutter)] lg:grid-cols-2 lg:gap-16">
+        {/* La fotografía acompaña a toda la sección */}
         <Reveal direction="fade">
-          <ParallaxImage
-            name="tripulacion"
-            alt="Tripulación permanente de AZURE 42"
-            className="h-[52svh] w-full lg:h-[74svh]"
-            amount={14}
-            sizes="(min-width: 1024px) 42vw, 92vw"
-          />
+          <div className="lg:sticky lg:top-0 lg:flex lg:h-[100svh] lg:items-center">
+            <div className="relative aspect-[4/5] w-full overflow-hidden bg-hull lg:aspect-[4/3]">
+              <img
+                src={img.src}
+                srcSet={img.srcSet}
+                sizes="(min-width: 1024px) 46vw, 92vw"
+                alt="Tripulación permanente de AZURE 42"
+                loading="lazy"
+                decoding="async"
+                className="h-full w-full object-cover"
+              />
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-ink/40 to-transparent" />
+            </div>
+          </div>
         </Reveal>
 
-        <div>
+        <div className="lg:py-[12svh]">
           <Reveal direction="fade">
             <p className="eyebrow text-sand/80">{crew.eyebrow}</p>
           </Reveal>

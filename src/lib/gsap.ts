@@ -9,3 +9,4 @@ if (typeof window !== "undefined") {
 }
 
 export { gsap, ScrollTrigger };
+export type { ScrollTrigger as ScrollTriggerType } from "gsap/ScrollTrigger";
