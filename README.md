@@ -90,14 +90,19 @@ tren horizontal, la vista va a la diapositiva siguiente o anterior según la
 dirección del gesto. El anclaje se resuelve sobre Lenis —no con el `snap` de
 ScrollTrigger, que pelea con el scroll suave.
 
-Su primera diapositiva es negra con mar en movimiento (`SeaWaves`): nueve bandas
-de olas en canvas 2D, cada una suma de cuatro senoidales con una envolvente
-lenta que rompe la repetición. El puntero levanta el oleaje a su alrededor y
-suelta ondas circulares que se expanden y se apagan. Se dibuja a 60 fps en
-escritorio y 30 en táctil, con paso de 7 px, densidad de píxel limitada a 1,75×
-y parada completa cuando la sección no está en pantalla o la pestaña pasa a
-segundo plano. Al entrar en esa diapositiva bajando, el scroll se retiene un
-segundo para que dé tiempo a verla.
+Su primera diapositiva es negra con mar en movimiento (`SeaWaves`). No son
+bandas dibujadas: cada píxel de un búfer se proyecta en perspectiva —la
+distancia crece hacia el horizonte, así que el oleaje se comprime como en una
+fotografía—, sobre esa posición se evalúa un campo de ocho trenes de olas y de
+su pendiente sale el reflejo especular, que es lo que produce el reguero de luz
+y los destellos. El puntero perturba la pendiente: levanta la superficie a su
+alrededor y suelta anillos que se expanden y se apagan.
+
+El coste está acotado: el campo se resuelve como mucho a 560 px de ancho y se
+escala al lienzo, los senos salen de una tabla precalculada, se dibuja a 45 fps
+en escritorio y 30 en táctil, y el bucle se detiene por completo cuando la
+sección no está en pantalla o la pestaña pasa a segundo plano. Al entrar en esa
+diapositiva bajando, el scroll se retiene un segundo para que dé tiempo a verla.
 
 ### 4 · Reutilización
 

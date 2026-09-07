@@ -366,7 +366,32 @@
       transform 0.7s var(--ease-luxe);
   }
 
+  /**
+   * Al pasar el ratón, la etiqueta y el dato se desplazan al centro de la
+   * celda. `left` y `translateX` sí animan, así que el movimiento sale fluido
+   * sea cual sea el ancho del contenido.
+   */
+  .spec-line {
+    position: relative;
+    left: 0;
+    width: max-content;
+    max-width: 100%;
+    transform: translate3d(0, 0, 0);
+    transition:
+      left 0.85s var(--ease-luxe),
+      transform 0.85s var(--ease-luxe);
+  }
+
   @media (hover: hover) {
+    .group:hover .spec-line {
+      left: 50%;
+      transform: translate3d(-50%, 0, 0);
+    }
+
+    .group:hover .spec-line--value {
+      transform: translate3d(-50%, -4px, 0);
+    }
+
     .group:hover .spec-icon {
       transform: translateY(-2px);
       color: color-mix(in oklab, var(--color-ember) 82%, white);

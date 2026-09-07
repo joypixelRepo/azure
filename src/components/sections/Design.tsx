@@ -229,7 +229,7 @@ export function Design() {
             </p>
           </div>
 
-          <p className="eyebrow absolute bottom-10 z-10 flex items-center justify-center gap-3 text-mist/70">
+          <p className="eyebrow absolute bottom-[calc(34%+2rem)] z-10 flex items-center justify-center gap-3 text-mist/70">
             Desplaza <span className="inline-block h-px w-10 bg-mist/50" /> lateral
           </p>
 

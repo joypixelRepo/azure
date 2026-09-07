@@ -29,8 +29,8 @@ export function Specs() {
           {specs.map((spec, i) => (
             <Reveal key={spec.label} delay={Math.min(i * 55, 330)}>
               <div className="group flex h-full flex-col justify-between border-b border-white/10 py-10 pr-6 transition-colors duration-700 hover:bg-gold/[0.04] sm:min-h-[12rem]">
-                <dt className="eyebrow text-mist/70">{spec.label}</dt>
-                <dd className="mt-6 flex items-center gap-4">
+                <dt className="spec-line eyebrow text-mist/70">{spec.label}</dt>
+                <dd className="spec-line spec-line--value mt-6 flex items-center gap-4">
                   <span className="spec-icon">
                     <SpecIcon name={spec.icon} className="h-6 w-6" />
                   </span>
