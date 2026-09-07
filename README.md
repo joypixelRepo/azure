@@ -90,19 +90,23 @@ tren horizontal, la vista va a la diapositiva siguiente o anterior según la
 dirección del gesto. El anclaje se resuelve sobre Lenis —no con el `snap` de
 ScrollTrigger, que pelea con el scroll suave.
 
-Su primera diapositiva es negra con mar en movimiento (`SeaWaves`). No son
-bandas dibujadas: cada píxel de un búfer se proyecta en perspectiva —la
-distancia crece hacia el horizonte, así que el oleaje se comprime como en una
-fotografía—, sobre esa posición se evalúa un campo de ocho trenes de olas y de
-su pendiente sale el reflejo especular, que es lo que produce el reguero de luz
-y los destellos. El puntero perturba la pendiente: levanta la superficie a su
-alrededor y suelta anillos que se expanden y se apagan.
+Su primera diapositiva es negra con mar en movimiento (`SeaWaves`), en dos
+capas resueltas cada una con la técnica que le conviene:
 
-El coste está acotado: el campo se resuelve como mucho a 560 px de ancho y se
-escala al lienzo, los senos salen de una tabla precalculada, se dibuja a 45 fps
-en escritorio y 30 en táctil, y el bucle se detiene por completo cuando la
-sección no está en pantalla o la pestaña pasa a segundo plano. Al entrar en esa
-diapositiva bajando, el scroll se retiene un segundo para que dé tiempo a verla.
+- **El agua** son formas suaves, así que se pintan con degradados nativos:
+  nítidas a cualquier resolución y prácticamente gratis.
+- **Los destellos** salen de muestrear un campo de ocho trenes de olas
+  proyectado en perspectiva —la distancia crece hacia el horizonte, así que el
+  oleaje se comprime como en una fotografía— y calcular el reflejo especular de
+  su pendiente. Cada uno se dibuja como un trazo vectorial a resolución
+  completa, no como píxeles escalados.
+
+El puntero perturba la pendiente: levanta la superficie a su alrededor y suelta
+anillos que se expanden y se apagan. Los senos salen de una tabla precalculada,
+los trazos se agrupan en doce caminos para no encadenar miles de llamadas de
+dibujo, y el bucle se detiene por completo cuando la sección no está en pantalla
+o la pestaña pasa a segundo plano. Al entrar en esa diapositiva bajando, el
+scroll se retiene un segundo para que dé tiempo a verla.
 
 ### 4 · Reutilización
 
