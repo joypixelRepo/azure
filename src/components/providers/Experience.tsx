@@ -17,6 +17,7 @@ import { Preloader } from "@/components/Preloader";
 interface ExperienceState {
   progress: number;
   ready: boolean;
+  /** La cortina se ha retirado del todo. */
   revealed: boolean;
 }
 
@@ -32,6 +33,7 @@ export function ExperienceProvider({ children }: { children: ReactNode }) {
   const [progress, setProgress] = useState(0);
   const [ready, setReady] = useState(false);
   const [revealed, setRevealed] = useState(false);
+  const [curtain, setCurtain] = useState(true);
 
   useEffect(() => {
     const started = performance.now();
@@ -74,18 +76,30 @@ export function ExperienceProvider({ children }: { children: ReactNode }) {
     };
   }, []);
 
+  /* `data-intro` oculta por completo la web mientras la cortina está echada;
+     `data-loading` mantiene el scroll bloqueado hasta que desaparece. */
+  useEffect(() => {
+    document.body.dataset.intro = curtain ? "true" : "false";
+  }, [curtain]);
+
   useEffect(() => {
     document.body.dataset.loading = revealed ? "false" : "true";
   }, [revealed]);
 
-  const handleRevealed = useCallback(() => setRevealed(true), []);
+  const handleCurtainLift = useCallback(() => setCurtain(false), []);
+  const handleDone = useCallback(() => setRevealed(true), []);
 
   const value = useMemo(() => ({ progress, ready, revealed }), [progress, ready, revealed]);
 
   return (
     <ExperienceContext.Provider value={value}>
       <SmoothScroll enabled={revealed}>{children}</SmoothScroll>
-      <Preloader progress={progress} ready={ready} onRevealed={handleRevealed} />
+      <Preloader
+        progress={progress}
+        ready={ready}
+        onCurtainLift={handleCurtainLift}
+        onDone={handleDone}
+      />
     </ExperienceContext.Provider>
   );
 }

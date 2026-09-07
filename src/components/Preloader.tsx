@@ -4,21 +4,30 @@ import { useEffect, useRef, useState } from "react";
 import { brand } from "@/lib/content";
 
 const STAGES = [
-  "Estableciendo rumbo",
-  "Cargando la secuencia",
+  "Preparando la secuencia",
+  "Cargando los fotogramas",
   "Calibrando la cámara",
   "Ajustando la luz",
   "Listo para zarpar",
 ];
 
+/**
+ * Cortina de carga a pantalla completa.
+ * Nada de la web es visible hasta que termina: el resto del documento queda
+ * oculto con `data-intro` y sólo aparece cuando la cortina empieza a irse.
+ */
 export function Preloader({
   progress,
   ready,
-  onRevealed,
+  onCurtainLift,
+  onDone,
 }: {
   progress: number;
   ready: boolean;
-  onRevealed: () => void;
+  /** La cortina empieza a retirarse: ya se puede mostrar la web debajo. */
+  onCurtainLift: () => void;
+  /** La cortina ha desaparecido del todo. */
+  onDone: () => void;
 }) {
   const [display, setDisplay] = useState(0);
   const [hidden, setHidden] = useState(false);
@@ -34,7 +43,6 @@ export function Preloader({
     const tick = (now: number) => {
       const dt = Math.min(0.1, (now - last) / 1000);
       last = now;
-      // Suavizado exponencial: mismo resultado a 120 fps o a 5 fps.
       shown.current += (target - shown.current) * (1 - Math.exp(-dt * 5.5));
       if (Math.abs(target - shown.current) < 0.001) shown.current = target;
       setDisplay(shown.current);
@@ -45,25 +53,28 @@ export function Preloader({
     return () => cancelAnimationFrame(raf.current);
   }, [progress, ready]);
 
-  /* Salida: en cuanto todo está cargado, el contador tiene un margen corto
-     para llegar a 100 y la cortina se retira pase lo que pase. */
+  /* Salida: el contador tiene un margen corto para llegar a 100 y la cortina
+     se retira pase lo que pase. */
   useEffect(() => {
     if (!ready) return;
     const settle = window.setTimeout(() => {
       shown.current = 1;
       setDisplay(1);
     }, 700);
-    const out = window.setTimeout(() => setLeaving(true), 900);
+    const out = window.setTimeout(() => {
+      setLeaving(true);
+      onCurtainLift();
+    }, 1000);
     const done = window.setTimeout(() => {
       setHidden(true);
-      onRevealed();
-    }, 900 + 1150);
+      onDone();
+    }, 1000 + 1200);
     return () => {
       window.clearTimeout(settle);
       window.clearTimeout(out);
       window.clearTimeout(done);
     };
-  }, [ready, onRevealed]);
+  }, [ready, onCurtainLift, onDone]);
 
   if (hidden) return null;
 
@@ -72,53 +83,59 @@ export function Preloader({
 
   return (
     <div
+      data-curtain
       aria-hidden={leaving}
-      className="fixed inset-0 z-[999] flex flex-col justify-between overflow-hidden bg-abyss px-[var(--page-gutter)] py-10 transition-[opacity,transform] duration-[1100ms] ease-[cubic-bezier(0.16,1,0.3,1)]"
-      style={{
-        opacity: leaving ? 0 : 1,
-        transform: leaving ? "scale(1.045)" : "scale(1)",
-        pointerEvents: leaving ? "none" : "auto",
-      }}
       role="status"
       aria-live="polite"
-      aria-label={`Cargando la experiencia, ${pct} por ciento`}
+      aria-label={`Cargando tu viaje, ${pct} por ciento`}
+      className="fixed inset-0 z-[1000] flex h-[100dvh] w-screen flex-col overflow-hidden bg-abyss px-[var(--page-gutter)] py-8 transition-[opacity,transform] duration-[1200ms] ease-[cubic-bezier(0.16,1,0.3,1)]"
+      style={{
+        opacity: leaving ? 0 : 1,
+        transform: leaving ? "scale(1.03)" : "scale(1)",
+        pointerEvents: leaving ? "none" : "auto",
+      }}
     >
       <div className="grain pointer-events-none absolute inset-0" />
 
-      <div className="relative flex items-start justify-between">
-        <span className="eyebrow">{brand.name}</span>
-        <span className="eyebrow num tabular-nums">{String(pct).padStart(3, "0")}</span>
+      {/* Resplandor muy tenue, como una luz bajo el agua */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(60% 45% at 50% 62%, rgba(90,124,146,0.16), rgba(5,7,10,0) 70%)",
+        }}
+      />
+
+      <div className="relative flex items-center justify-between">
+        <span className="text-[0.8rem] font-medium tracking-[0.34em] text-ivory">
+          {brand.short} <span className="font-light text-sand">{brand.model}</span>
+        </span>
+        <span className="eyebrow num text-mist/70">{String(pct).padStart(3, "0")}</span>
       </div>
 
-      <div className="relative flex flex-col items-start gap-8">
-        <h1 className="display-lg text-ivory">
-          <span
-            className="inline-block transition-[opacity,transform] duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)]"
-            style={{ opacity: 1, transform: "none" }}
-          >
-            {brand.short}
-          </span>{" "}
-          <span className="text-sand">{brand.model}</span>
-        </h1>
-        <p className="body-sm max-w-xs text-mist">{brand.tagline}</p>
+      <div className="relative flex flex-1 flex-col items-center justify-center text-center">
+        <h1 className="display-lg text-ivory">Cargando tu viaje</h1>
+        <p className="body-sm mt-6 max-w-[36ch] text-mist">{brand.tagline}</p>
+
+        <div className="mt-14 w-full max-w-md">
+          <div className="h-px w-full overflow-hidden bg-white/12">
+            <div
+              className="h-full origin-left bg-gradient-to-r from-sand/50 via-ivory to-sand/50"
+              style={{ transform: `scaleX(${display})`, willChange: "transform" }}
+            />
+          </div>
+          <div className="mt-5 flex items-center justify-between">
+            <span className="eyebrow text-mist/60">{stage}</span>
+            <span className="eyebrow num text-sand/80">{pct}%</span>
+          </div>
+        </div>
       </div>
 
-      <div className="relative flex flex-col gap-4">
-        <div className="h-px w-full overflow-hidden bg-white/10">
-          <div
-            className="h-full origin-left bg-gradient-to-r from-sand/60 via-ivory to-sand/60"
-            style={{
-              transform: `scaleX(${display})`,
-              transformOrigin: "left",
-              willChange: "transform",
-            }}
-          />
-        </div>
-        <div className="flex items-center justify-between">
-          <span className="eyebrow text-mist/70">{stage}</span>
-          <span className="eyebrow text-mist/70">Secuencia · 480 fotogramas</span>
-        </div>
-      </div>
+      <p className="eyebrow relative text-center text-mist/45">
+        <span className="hidden xs:inline">Secuencia cinematográfica · </span>
+        480 fotogramas
+      </p>
     </div>
   );
 }

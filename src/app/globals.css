@@ -68,7 +68,12 @@
   /* Bloqueo de scroll mientras carga la experiencia */
   body[data-loading="true"] {
     overflow: hidden;
-    height: 100vh;
+    height: 100dvh;
+  }
+
+  /* Nada de la web se ve hasta que la cortina de carga empieza a retirarse */
+  body[data-intro="true"] > *:not([data-curtain]) {
+    visibility: hidden;
   }
 
   ::selection {

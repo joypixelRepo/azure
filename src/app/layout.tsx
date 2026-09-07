@@ -59,7 +59,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <meta name="googlebot" content="noindex, nofollow, noimageindex" />
         <link rel="preload" as="image" href="/stills/hero-1600.webp" />
       </head>
-      <body data-loading="true">{children}</body>
+      <body data-loading="true" data-intro="true">
+        {children}
+      </body>
     </html>
   );
 }

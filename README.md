@@ -126,9 +126,10 @@ import manifest from "../../public/sequences/mi-slug/manifest.json";
 - **`prefers-reduced-motion`**: se sustituye toda la secuencia por una
   presentación estática de fotografías a pantalla completa con los mismos
   textos, y se desactivan el scroll suave y los parallax.
-- **Precarga completa con pantalla de carga**: la web no se muestra hasta que
-  todos los recursos del tier activo están descargados; el scroll queda
-  bloqueado mientras tanto.
+- **Precarga completa con cortina a pantalla completa**: mientras carga, todo el
+  documento salvo la cortina queda en `visibility: hidden` (`data-intro`), así
+  que no se ve absolutamente nada de la web; el scroll sigue bloqueado
+  (`data-loading`) hasta que la cortina termina de retirarse.
 - El contador y el scrub usan **suavizado exponencial independiente de la tasa
   de refresco**: se comportan igual a 120 fps que a 30 fps y se ponen al día en
   un solo fotograma tras una pausa en segundo plano.
