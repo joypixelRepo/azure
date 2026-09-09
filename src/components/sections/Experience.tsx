@@ -132,21 +132,24 @@ export function Experience() {
                         {item.title}
                       </h3>
                       <p className="body-lg mt-3 max-w-[52ch]">{item.body}</p>
+                    </div>
 
-                      {/* Sin columna fija en pantallas pequeñas: cada
-                          experiencia lleva su propia fotografía. */}
-                      <div className="lux-frame mt-6 aspect-[4/5] w-full lg:hidden">
-                        <img
-                          src={photo(PREVIEWS[i]).src}
-                          srcSet={photo(PREVIEWS[i]).srcSet}
-                          sizes="92vw"
-                          alt=""
-                          aria-hidden
-                          loading="lazy"
-                          decoding="async"
-                          className="h-full w-full object-cover"
-                        />
-                      </div>
+                    {/* Sin columna fija en pantallas pequeñas: cada experiencia
+                        lleva su propia fotografía. Va como fila entera de la
+                        rejilla —no dentro de la columna del texto— para que
+                        ocupe el mismo ancho que las fotografías del resto de
+                        secciones, de margen a margen. */}
+                    <div className="lux-frame col-span-2 mt-6 aspect-[4/5] w-full lg:hidden">
+                      <img
+                        src={photo(PREVIEWS[i]).src}
+                        srcSet={photo(PREVIEWS[i]).srcSet}
+                        sizes="92vw"
+                        alt=""
+                        aria-hidden
+                        loading="lazy"
+                        decoding="async"
+                        className="h-full w-full object-cover"
+                      />
                     </div>
                   </div>
                 </Reveal>
