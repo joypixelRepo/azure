@@ -73,6 +73,8 @@ export class FrameSequence {
     typeof window !== "undefined" && typeof window.createImageBitmap === "function";
 
   private aborted = false;
+  /** Aparcada: fuera de pantalla, no se descodifica ni se guarda nada nuevo. */
+  private parked = false;
   private downloaded = 0;
 
   constructor(manifest: SequenceManifest, profile: DeviceProfile) {
@@ -152,7 +154,7 @@ export class FrameSequence {
   }
 
   private async decode(index: number): Promise<void> {
-    if (this.aborted || this.bitmaps.has(index) || this.decoding.has(index)) return;
+    if (this.aborted || this.parked || this.bitmaps.has(index) || this.decoding.has(index)) return;
     const blob = this.blobs[index];
     if (!blob) return;
     this.decoding.add(index);
@@ -170,7 +172,7 @@ export class FrameSequence {
           img.src = url;
         });
       }
-      if (this.aborted) {
+      if (this.aborted || this.parked) {
         if ("close" in source) (source as ImageBitmap).close();
         return;
       }
@@ -224,6 +226,42 @@ export class FrameSequence {
       const target = index - i * dir;
       if (target >= 0 && target < this.count) void this.decode(target);
     }
+  }
+
+  /**
+   * Suelta la ventana descodificada y deja sólo la rejilla de claves.
+   *
+   * Un fotograma descodificado son 1920 × 1080 × 4 bytes: ocho megas. La
+   * ventana entera anda por el medio giga, y sigue viva mucho después de que
+   * la secuencia haya salido de la pantalla, compitiendo por la memoria de
+   * texturas con lo que venga detrás —la sección Diseño, sin ir más lejos,
+   * que arrastra seis paneles a pantalla completa. Los blobs comprimidos se
+   * conservan, así que volver atrás sólo cuesta descodificar, no descargar.
+   */
+  trim() {
+    this.parked = true;
+    const last = this.count - 1;
+    for (const index of [...this.bitmaps.keys()]) {
+      // Además de la rejilla, se conservan el primero y el último: son los que
+      // quedan en pantalla en los extremos del recorrido, y ahí un vecino a
+      // veinte fotogramas de distancia sí se notaría.
+      if (this.isKeyframe(index) || index === 0 || index === last) continue;
+      const src = this.bitmaps.get(index);
+      if (src && "close" in src) (src as ImageBitmap).close();
+      const url = this.objectUrls.get(index);
+      if (url) {
+        URL.revokeObjectURL(url);
+        this.objectUrls.delete(index);
+      }
+      this.bitmaps.delete(index);
+    }
+    this.lru.length = 0;
+    for (const index of this.bitmaps.keys()) this.lru.push(index);
+  }
+
+  /** Vuelve a estar cerca: se admiten descodificaciones otra vez. */
+  resume() {
+    this.parked = false;
   }
 
   dispose() {

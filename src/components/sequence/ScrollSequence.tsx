@@ -83,6 +83,7 @@ export function ScrollSequence({
   const current = useRef(0);
   const lastFrame = useRef(-1);
   const lastPrime = useRef(-999);
+  const lastAmbient = useRef(-999);
   const dirty = useRef(true);
 
   /* ---------------------------------------------------------------- carga */
@@ -147,17 +148,31 @@ export function ScrollSequence({
       const rect = sticky.getBoundingClientRect();
       width = Math.max(1, Math.round(rect.width));
       height = Math.max(1, Math.round(rect.height));
-      const dpr = profile.dpr;
+
+      /* El lienzo no gana nada por encima de la resolución de la propia
+         secuencia: los fotogramas son de 1920 px y por encima de ahí sólo se
+         está agrandando una imagen que no tiene más detalle que dar. En una
+         pantalla de 1440 px con dpr 1,75 el lienzo medía 2520 px de ancho —dos
+         megapíxeles de más por fotograma, remuestreados en cada uno de ellos,
+         a cambio de nada. */
+      const sourceWidth = sequenceRef.current?.info.width ?? 0;
+      const dpr = sourceWidth
+        ? Math.min(profile.dpr, Math.max(1, sourceWidth / width))
+        : profile.dpr;
+
       canvas.width = Math.round(width * dpr);
       canvas.height = Math.round(height * dpr);
       canvas.style.width = `${width}px`;
       canvas.style.height = `${height}px`;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      ctx.imageSmoothingQuality = "high";
+      // «high» es, en WebKit, un filtro de remuestreo notablemente más caro, y
+      // dibujando ya casi a escala 1:1 no se distingue del intermedio.
+      ctx.imageSmoothingQuality = "medium";
       if (ambient && actx) {
         ambient.width = 96;
         ambient.height = 96;
       }
+      lastAmbient.current = -999;
       dirty.current = true;
     };
 
@@ -172,7 +187,33 @@ export function ScrollSequence({
       onUpdate: (self) => {
         target.current = self.progress;
       },
+      onEnterBack: () => {
+        sequenceRef.current?.resume();
+        lastPrime.current = -999;
+        dirty.current = true;
+      },
       onRefresh: resize,
+    });
+
+    /* Memoria: un fotograma descodificado son ocho megas, y la ventana entera
+       andaba por el medio giga —viva hasta el pie de página, compitiendo por
+       la memoria de texturas con todo lo que viene detrás. La sección Diseño,
+       que arrastra seis paneles a pantalla completa, era la que lo pagaba.
+
+       Se suelta media pantalla después de que la secuencia salga por arriba, y
+       se recupera en el disparador de arriba, que sólo se reactiva cuando la
+       secuencia vuelve a estar en pantalla de verdad. Esa distancia entre los
+       dos umbrales es intencionada: sin ella, ir y venir entre las dos
+       primeras diapositivas de Diseño dispararía treinta descodificaciones
+       cada vez. */
+    const release = ScrollTrigger.create({
+      trigger: wrap,
+      start: "top top",
+      end: "bottom top-=50%",
+      onLeave: () => {
+        sequenceRef.current?.trim();
+        lastPrime.current = -999;
+      },
     });
 
     const sequence = sequenceRef.current;
@@ -182,6 +223,16 @@ export function ScrollSequence({
     const render = () => {
       const seq = sequenceRef.current;
       if (!seq) return;
+
+      /* Fuera de su tramo de scroll no hay nada que recalcular: el lienzo ya
+         está en su último fotograma y los bloques de texto en su sitio. El
+         bucle vive en el ticker de GSAP durante toda la página, así que salir
+         pronto le devuelve esos milisegundos a la sección que sí se mueve
+         —Diseño, sin ir más lejos, que arrastra seis paneles a la vez. */
+      if (!trigger.isActive && current.current === target.current && !dirty.current) {
+        lastTick = performance.now();
+        return;
+      }
 
       const now = performance.now();
       const dt = Math.min(0.25, (now - lastTick) / 1000);
@@ -211,8 +262,14 @@ export function ScrollSequence({
           const minHeightRatio = portrait ? portraitFill : 0;
           const focusY = portrait ? 0.44 : 0.5;
 
-          if (actx && ambient) {
+          /* El fondo ambiental lleva encima un `blur(42px)` a pantalla
+             completa, y ese desenfoque se recalcula cada vez que cambia el
+             contenido del lienzo. Como es una mancha de color desenfocada,
+             refrescarla una de cada seis veces no se ve —y ahorra cinco
+             desenfoques a pantalla completa por fotograma dibujado. */
+          if (actx && ambient && Math.abs(frame - lastAmbient.current) >= 6) {
             actx.drawImage(source, 0, 0, ambient.width, ambient.height);
+            lastAmbient.current = frame;
           }
           // Se limpia (no se rellena) para que el fondo ambiental desenfocado
           // siga visible en las bandas cinematográficas.
@@ -260,6 +317,7 @@ export function ScrollSequence({
       gsap.ticker.remove(render);
       observer.disconnect();
       trigger.kill();
+      release.kill();
     };
   }, [reduced, profile, beats, introEnd, maxZoomLandscape, maxZoomPortrait, portraitFill]);
 

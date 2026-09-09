@@ -56,11 +56,15 @@ export function detectDevice(): DeviceProfile {
   // Un fotograma descodificado ocupa ancho × alto × 4 bytes.
   const frameBytes =
     tier === "desktop" ? 1920 * 1080 * 4 : tier === "tablet" ? 1440 * 810 * 4 : 1080 * 608 * 4;
-  const budgetBytes = (tier === "mobile" ? 110 : memory >= 8 ? 520 : 300) * 1024 * 1024;
+  // La ventana que se usa de verdad es `lookAhead` por delante y un tercio por
+  // detrás: unos treinta fotogramas. Reservar para ciento sesenta no compraba
+  // nada y dejaba medio giga de mapas de bits vivos compitiendo con el resto
+  // de la página por la memoria de texturas.
+  const budgetBytes = (tier === "mobile" ? 90 : memory >= 8 ? 340 : 240) * 1024 * 1024;
 
   return {
     tier,
-    decodedBudget: Math.max(28, Math.min(160, Math.floor(budgetBytes / frameBytes))),
+    decodedBudget: Math.max(28, Math.min(48, Math.floor(budgetBytes / frameBytes))),
     lookAhead: tier === "mobile" ? 10 : 22,
     concurrency: slowLink ? 4 : tier === "mobile" ? 6 : 10,
     dpr: tier === "mobile" ? Math.min(dpr, 2) : Math.min(dpr, 1.75),

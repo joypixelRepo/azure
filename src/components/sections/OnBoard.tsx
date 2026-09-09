@@ -3,6 +3,7 @@ import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { ParallaxImage } from "@/components/ui/ParallaxImage";
 import { Photo } from "@/components/ui/Photo";
+import { BookingCta } from "@/components/ui/BookingCta";
 
 export function OnBoard() {
   return (
@@ -81,6 +82,10 @@ export function OnBoard() {
           </Reveal>
         ))}
       </div>
+
+      <Reveal direction="fade" className="mt-20 flex justify-center px-[var(--page-gutter)]">
+        <BookingCta size="lg">Reservar una travesía</BookingCta>
+      </Reveal>
     </section>
   );
 }

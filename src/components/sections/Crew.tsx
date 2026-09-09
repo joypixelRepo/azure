@@ -1,5 +1,6 @@
 import { crew, photo } from "@/lib/content";
 import { Reveal } from "@/components/ui/Reveal";
+import { BookingCta } from "@/components/ui/BookingCta";
 
 export function Crew() {
   const img = photo("tripulacion");
@@ -57,6 +58,10 @@ export function Crew() {
               </li>
             ))}
           </ul>
+
+          <Reveal direction="fade" className="mt-12">
+            <BookingCta>Hablar con el equipo de charter</BookingCta>
+          </Reveal>
         </div>
       </div>
     </section>

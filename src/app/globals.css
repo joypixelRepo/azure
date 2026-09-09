@@ -24,7 +24,8 @@
   --color-mist: #d9e1de; /* Sea Mist    · fondo claro secundario */
   --color-pearl: #faf9f6; /* Pearl White · texto sobre oscuro */
   --color-graphite: #252b2d; /* Graphite   · texto sobre claro */
-  --color-ember: #b5442c; /* rojo lacado · iconografía técnica */
+  --color-ember: #b5442c; /* rojo lacado · reservado */
+  --color-marine: #1d6a86; /* azul de agua · iconografía técnica */
 
   /* --------------------------------------------------------------------------
      Tokens de sección
@@ -71,6 +72,12 @@
   --glass-shadow: color-mix(in oklab, #071a24 30%, transparent);
   --solid-bg: linear-gradient(140deg, #252b2d, #10181b);
   --solid-ink: #faf9f6;
+  /* El botón sólido es oscuro sobre marfil: el agua azul lo enciende bien. */
+  --solid-water-a: #1d6a86;
+  --solid-water-b: #0f3a4c;
+  --solid-water-c: #071a24;
+  --solid-ink-hover: #faf9f6;
+  --solid-shadow: color-mix(in oklab, #0f3a4c 55%, transparent);
 
   --water-rest: transparent;
   --water-rim: color-mix(in oklab, #252b2d 26%, transparent);
@@ -99,6 +106,11 @@
   --glass-shadow: color-mix(in oklab, #071a24 30%, transparent);
   --solid-bg: linear-gradient(140deg, #1d2325, #0c1214);
   --solid-ink: #faf9f6;
+  --solid-water-a: #1d6a86;
+  --solid-water-b: #0f3a4c;
+  --solid-water-c: #071a24;
+  --solid-ink-hover: #faf9f6;
+  --solid-shadow: color-mix(in oklab, #0f3a4c 55%, transparent);
 
   --water-rest: transparent;
   --water-rim: color-mix(in oklab, #1d2325 26%, transparent);
@@ -127,6 +139,13 @@
   --glass-shadow: rgb(0 0 0 / 0.8);
   --solid-bg: linear-gradient(140deg, #faf9f6, #e7e2d6);
   --solid-ink: #071a24;
+  /* Aquí el botón ya es claro: teñirlo de azul lo apagaba. El agua entra en
+     blanco y bruma, y la tinta sigue siendo el azul profundo. */
+  --solid-water-a: #ffffff;
+  --solid-water-b: #f1f4f2;
+  --solid-water-c: #d9e1de;
+  --solid-ink-hover: #071a24;
+  --solid-shadow: rgb(0 0 0 / 0.55);
 
   --water-rest: color-mix(in oklab, #faf9f6 9%, transparent);
   --water-rim: color-mix(in oklab, #faf9f6 30%, transparent);
@@ -323,7 +342,17 @@
       box-shadow 0.55s var(--ease-glass);
   }
 
-  /* La lámina de agua, que nace bajo el cursor */
+  /* La lámina de agua: el botón entero se llena de azul al pasar el ratón.
+   *
+   * Ocupa la caja exacta del botón, con su mismo radio, y lo único que cambia
+   * es la opacidad —no crece ni se desplaza—. El degradado se centra en el
+   * punto del cursor, así que el reflejo se coloca donde está la mano, pero el
+   * relleno es de lado a lado desde el primer momento.
+   *
+   * Que no haya transformación tiene un segundo efecto útil: Safari no aplica
+   * el recorte de `overflow: hidden` a un hijo transformado cuando el padre
+   * tiene su propia transformación —y este la tiene, la del `--lift`—. Sin
+   * transformación y a `inset: 0`, el agua no puede asomar por fuera. */
   .water-button::before {
     content: "";
     position: absolute;
@@ -331,26 +360,30 @@
     z-index: -2;
     border-radius: inherit;
     background: radial-gradient(
-      130% 130% at var(--mx, 50%) var(--my, 50%),
+      220% 220% at var(--mx, 50%) var(--my, 50%),
       var(--water-a),
       var(--water-b) 48%,
       var(--water-c)
     );
-    transform: scale(0.15);
     opacity: 0;
-    transition:
-      transform 0.85s var(--ease-luxe),
-      opacity 0.45s var(--ease-luxe);
+    transition: opacity 0.45s var(--ease-luxe);
   }
 
-  /* Cáusticas: dos manchas de luz que se cruzan y se desplazan */
+  /* Cáusticas: dos manchas de luz que se cruzan y se desplazan.
+   *
+   * Igual que la lámina, se quedan dentro de la caja. Antes el elemento se
+   * salía un 80 % por cada lado y el vaivén se hacía moviéndolo; ahora ocupa
+   * el botón exacto y lo que se mueve es el fondo, que no puede desbordar. El
+   * 260 % de `background-size` reproduce el mismo tamaño de mancha que daba
+   * aquel desbordamiento. */
   .water-button::after {
     content: "";
     position: absolute;
-    inset: -80%;
+    inset: 0;
     z-index: -1;
+    border-radius: inherit;
     opacity: 0;
-    background:
+    background-image:
       radial-gradient(
         42% 120% at 22% 18%,
         color-mix(in oklab, white 26%, transparent),
@@ -361,6 +394,9 @@
         color-mix(in oklab, white 20%, transparent),
         transparent 62%
       );
+    background-repeat: no-repeat;
+    background-size: 260% 260%;
+    background-position: 50% 50%;
     mix-blend-mode: soft-light;
     transition: opacity 0.7s var(--ease-luxe);
   }
@@ -375,7 +411,6 @@
         0 6px 18px -10px var(--water-shadow);
     }
     .water-button:hover::before {
-      transform: scale(1.7);
       opacity: 1;
     }
     .water-button:hover::after {
@@ -394,16 +429,30 @@
     outline-offset: 3px;
   }
 
-  /* Variante sólida: ya viene llena, y el agua la vuelve azul al pasar */
+  /* Variante sólida: ya viene llena, y el agua entra igualmente al pasar. Su
+     lámina es propia: sobre marfil el botón oscuro se vuelve azul, pero el
+     botón claro de las secciones oscuras se aclara todavía más —teñirlo de
+     azul lo apagaba. */
   .water-button[data-variant="solid"] {
     background: var(--solid-bg);
     color: var(--solid-ink);
     border-color: transparent;
   }
+  .water-button[data-variant="solid"]::before {
+    background: radial-gradient(
+      220% 220% at var(--mx, 50%) var(--my, 50%),
+      var(--solid-water-a),
+      var(--solid-water-b) 48%,
+      var(--solid-water-c)
+    );
+  }
   @media (hover: hover) {
     .water-button[data-variant="solid"]:hover {
-      color: var(--water-ink-hover);
+      color: var(--solid-ink-hover);
       border-color: transparent;
+      box-shadow:
+        0 18px 40px -20px var(--solid-shadow),
+        0 6px 18px -10px var(--solid-shadow);
     }
   }
 
@@ -506,11 +555,11 @@
     width: 3rem;
     height: 3rem;
     flex-shrink: 0;
-    color: var(--color-ember);
+    color: var(--color-marine);
     border: 1px solid var(--color-line);
     background: linear-gradient(
       150deg,
-      color-mix(in oklab, var(--color-ember) 9%, transparent),
+      color-mix(in oklab, var(--color-marine) 9%, transparent),
       transparent 65%
     );
     transition:
@@ -548,11 +597,11 @@
 
     .group:hover .spec-icon {
       transform: translateY(-2px);
-      color: color-mix(in oklab, var(--color-ember) 84%, var(--color-strong));
-      border-color: color-mix(in oklab, var(--color-gold) 45%, transparent);
+      color: color-mix(in oklab, var(--color-marine) 84%, var(--color-strong));
+      border-color: color-mix(in oklab, var(--color-marine) 45%, transparent);
       box-shadow:
-        inset 0 0 22px -8px color-mix(in oklab, var(--color-ember) 55%, transparent),
-        0 14px 34px -18px color-mix(in oklab, var(--color-gold) 55%, transparent);
+        inset 0 0 22px -8px color-mix(in oklab, var(--color-marine) 55%, transparent),
+        0 14px 34px -18px color-mix(in oklab, var(--color-marine) 55%, transparent);
     }
   }
 
@@ -682,9 +731,11 @@
 
 @keyframes waterDrift {
   from {
-    transform: translate3d(-6%, -4%, 0) scale(1);
+    background-size: 260% 260%;
+    background-position: 40% 43%;
   }
   to {
-    transform: translate3d(6%, 4%, 0) scale(1.12);
+    background-size: 291% 291%;
+    background-position: 60% 57%;
   }
 }

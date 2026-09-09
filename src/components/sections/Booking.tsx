@@ -59,8 +59,7 @@ export function Booking() {
             <p className="body-lg mt-8 max-w-[42ch]">{booking.body}</p>
           </Reveal>
           <Reveal direction="fade" delay={240}>
-            <p className="mt-10 flex max-w-[38ch] items-start gap-3 border-l border-gold/30 pl-4 text-[0.72rem] font-light leading-relaxed tracking-wide text-faint">
-              <span className="eyebrow shrink-0 text-gold/70">Demo</span>
+            <p className="mt-10 max-w-[38ch] border-l border-gold/30 pl-4 text-[0.72rem] font-light leading-relaxed tracking-wide text-faint">
               {booking.disclaimer}
             </p>
           </Reveal>

@@ -501,6 +501,11 @@ export const testimonials = [
     author: "R. Okonkwo",
     context: "Travesía atlántica · noviembre",
   },
+  {
+    quote: "Zarpamos sin plan y volvimos con la sensación de haber ganado tiempo.",
+    author: "C. Beaumont",
+    context: "Córcega · septiembre",
+  },
 ];
 
 /* -------------------------------------------------------------------------- */

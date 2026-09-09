@@ -10,6 +10,12 @@ interface ScrollToOptions {
   duration?: number;
   /** No marca la navegación como programática (lo usa el anclaje interno). */
   silent?: boolean;
+  /**
+   * Lenis ignora la rueda y el dedo mientras dura el viaje. Es lo que permite
+   * que el anclaje de diapositivas no pelee con el gesto que lo ha disparado:
+   * sin esto, el impulso residual del trackpad sigue empujando por debajo.
+   */
+  lock?: boolean;
 }
 
 interface SmoothScrollApi {
@@ -89,7 +95,7 @@ export function SmoothScroll({ children, enabled }: { children: ReactNode; enabl
 
      
     setApi({
-      scrollTo: (target, { offset = 0, duration = 1.5, silent = false } = {}) => {
+      scrollTo: (target, { offset = 0, duration = 1.5, silent = false, lock = false } = {}) => {
         if (!silent) {
           navigatingRef.current = true;
           window.clearTimeout(navTimerRef.current);
@@ -105,6 +111,7 @@ export function SmoothScroll({ children, enabled }: { children: ReactNode; enabl
         lenis.scrollTo(resolveTarget(target) as never, {
           offset,
           duration,
+          lock,
           easing: (t) => 1 - Math.pow(1 - t, 4),
           onComplete: () => {
             if (silent) return;

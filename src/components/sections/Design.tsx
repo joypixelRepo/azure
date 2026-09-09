@@ -1,36 +1,40 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { ScrollTrigger, gsap, type ScrollTrigger as ScrollTriggerType } from "@/lib/gsap";
+import { gsap, type ScrollTrigger as ScrollTriggerType } from "@/lib/gsap";
 import { designPanels, photo } from "@/lib/content";
 import { prefersReducedMotion } from "@/lib/device";
 import { VideoBackdrop } from "@/components/ui/VideoBackdrop";
 import { useSmoothScroll } from "@/components/providers/SmoothScroll";
 
 /**
- * Parallax horizontal: la sección se fija y el tren de paneles a pantalla
- * completa se desplaza lateralmente con el scroll, con anclaje (snap) para que
- * nunca quede una diapositiva a medias. Cada imagen se mueve a distinta
- * velocidad dentro de su panel.
+ * Scroll horizontal: la sección se fija y el tren de paneles a pantalla
+ * completa se desplaza lateralmente, con anclaje (snap) para que nunca quede
+ * una diapositiva a medias.
+ *
+ * Durante el desplazamiento lo único que se mueve es el tren —una sola
+ * transformación por fotograma— y los bloques de texto, que son pequeños. Las
+ * fotografías van quietas dentro de su panel: forman parte del tren y se
+ * rasterizan una vez.
+ *
+ * Antes cada imagen llevaba su propio parallax, y eso son seis capas a
+ * pantalla completa transformándose a la vez, cada una con su textura en la
+ * GPU. La profundidad no la da el fondo moviéndose: la da el texto moviéndose
+ * respecto al fondo, que es lo que se conserva y no cuesta nada.
  */
 export function Design() {
   const sectionRef = useRef<HTMLElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<ScrollTriggerType | null>(null);
-  const holdingRef = useRef(false);
-  const { scrollTo, stop, start, isNavigating } = useSmoothScroll();
+  const { scrollTo, isNavigating } = useSmoothScroll();
 
-  // Referencias vivas: el contexto de scroll se resuelve tras montar y no
+  // Referencia viva: el contexto de scroll se resuelve tras montar y no
   // queremos reconstruir las animaciones por eso.
-  const stopRef = useRef(stop);
-  const startRef = useRef(start);
   const navRef = useRef(isNavigating);
 
   useEffect(() => {
-    stopRef.current = stop;
-    startRef.current = start;
     navRef.current = isNavigating;
-  }, [stop, start, isNavigating]);
+  }, [isNavigating]);
 
   useEffect(() => {
     if (prefersReducedMotion()) return;
@@ -49,8 +53,7 @@ export function Design() {
           start: "top top",
           end: () => `+=${distance()}`,
           pin: true,
-          scrub: 0.7,
-          anticipatePin: 1,
+          scrub: true,
           invalidateOnRefresh: true,
           onRefresh: (self) => {
             triggerRef.current = self;
@@ -60,53 +63,17 @@ export function Design() {
 
       triggerRef.current = tween.scrollTrigger ?? null;
 
-      /* Al llegar a la primera diapositiva bajando, el scroll se detiene un
-         segundo: da tiempo a que el mar se lea antes de seguir. */
-      ScrollTrigger.create({
-        trigger: section,
-        start: "top top",
-        onEnter: () => {
-          // La retención es sólo para el scroll manual: un enlace del menú
-          // que pase por aquí no debe quedarse atrapado.
-          if (holdingRef.current || navRef.current()) return;
-          holdingRef.current = true;
-          stopRef.current();
-          window.setTimeout(() => {
-            startRef.current();
-            holdingRef.current = false;
-          }, 1100);
-        },
-      });
-
-      // El fondo avanza en un sentido y el texto en el contrario: el cruce es
-      // lo que hace visible la profundidad. La escala se mantiene alta para
-      // que el desplazamiento nunca destape el borde de la imagen.
-      track.querySelectorAll<HTMLElement>("[data-panel-image]").forEach((image) => {
-        gsap.fromTo(
-          image,
-          { xPercent: -9, scale: 1.34 },
-          {
-            xPercent: 9,
-            scale: 1.18,
-            ease: "none",
-            scrollTrigger: {
-              trigger: image.parentElement!,
-              containerAnimation: tween,
-              start: "left right",
-              end: "right left",
-              scrub: true,
-            },
-          },
-        );
-      });
-
+      /* Un solo disparador por bloque de texto, no dos.
+       *
+       * El recorrido completo de un panel va desde que su borde izquierdo toca
+       * el borde derecho de la pantalla hasta que su borde derecho toca el
+       * izquierdo: dos anchos de pantalla. Sobre ese recorrido, el texto entra
+       * entre el 88 % y el 42 % —o sea, entre el 6 % y el 29 % de la línea de
+       * tiempo—, y el desplazamiento lateral ocupa el recorrido entero. */
       track.querySelectorAll<HTMLElement>("[data-panel-copy]").forEach((copy) => {
-        gsap.fromTo(
-          copy,
-          { x: 150 },
-          {
-            x: -150,
-            ease: "none",
+        gsap
+          .timeline({
+            defaults: { ease: "none" },
             scrollTrigger: {
               trigger: copy.parentElement!,
               containerAnimation: tween,
@@ -114,25 +81,14 @@ export function Design() {
               end: "right left",
               scrub: true,
             },
-          },
-        );
-
-        gsap.fromTo(
-          copy,
-          { autoAlpha: 0, y: 40 },
-          {
-            autoAlpha: 1,
-            y: 0,
-            ease: "power2.out",
-            scrollTrigger: {
-              trigger: copy.parentElement!,
-              containerAnimation: tween,
-              start: "left 88%",
-              end: "left 42%",
-              scrub: true,
-            },
-          },
-        );
+          })
+          .fromTo(copy, { x: 150 }, { x: -150, duration: 1 }, 0)
+          .fromTo(
+            copy,
+            { autoAlpha: 0, y: 40 },
+            { autoAlpha: 1, y: 0, duration: 0.23, ease: "power2.out" },
+            0.06,
+          );
       });
     }, section);
 
@@ -145,22 +101,30 @@ export function Design() {
   /**
    * Anclaje de diapositivas, de una en una.
    *
-   * `restIndex` guarda la diapositiva en la que está posado el usuario. Al
-   * detenerse el scroll —o en cuanto se aleja más de una diapositiva— se va a
-   * `restIndex ± 1` según la dirección del gesto, nunca dos de golpe.
-   * ScrollTrigger trae su propio `snap`, pero pelea con el scroll suave de
-   * Lenis, así que se resuelve aquí.
+   * El modelo es de intención, no de reposo: en cuanto el usuario empuja más
+   * de un 12 % de diapositiva, la sección se compromete a la siguiente y viaja
+   * hasta ella. Por debajo de ese umbral se considera un roce y, al detenerse,
+   * vuelve a encajar donde estaba.
+   *
+   * El viaje va con `lock`, así que Lenis deja de escuchar la rueda mientras
+   * dura. Sin eso —y esto era el origen de los saltos— el impulso residual del
+   * trackpad seguía empujando por debajo del anclaje: dos velocidades sobre la
+   * misma página, cada una tirando hacia un sitio.
+   *
+   * ScrollTrigger trae su propio `snap`, pero pelea igualmente con Lenis, así
+   * que se resuelve aquí.
    */
   useEffect(() => {
     if (prefersReducedMotion()) return;
     const steps = designPanels.length; // 5 imágenes + apertura = steps + 1 paneles
 
-    let lastY = window.scrollY;
-    let direction = 1;
-    let settleTimer = 0;
-    let releaseTimer = 0;
-    let snapping = false;
+    /** Empuje mínimo, en diapositivas, para dar el gesto por intencionado. */
+    const COMMIT = 0.12;
+
     let restIndex = 0;
+    let travelling = false;
+    let idleTimer = 0;
+    let releaseTimer = 0;
 
     const bounds = () => {
       const trigger = triggerRef.current;
@@ -169,42 +133,40 @@ export function Design() {
       return span > 0 ? { start: trigger.start, span } : null;
     };
 
-    const goTo = (index: number, span: number, start: number) => {
+    /** Posición actual medida en diapositivas (0 = apertura). */
+    const position = (box: { start: number; span: number }) =>
+      ((window.scrollY - box.start) / box.span) * steps;
+
+    const glide = (index: number, box: { start: number; span: number }) => {
       const clamped = Math.min(steps, Math.max(0, index));
-      snapping = true;
+      const distance = Math.abs(position(box) - clamped);
+      if (distance < 0.005) {
+        restIndex = clamped;
+        return;
+      }
+
       restIndex = clamped;
-      scrollTo(start + (clamped / steps) * span, { duration: 0.7, silent: true });
+      travelling = true;
+      const duration = 0.36 + Math.min(distance, 1) * 0.2;
+      scrollTo(box.start + (clamped / steps) * box.span, { duration, silent: true, lock: true });
+
+      // Un respiro al final: la cola de inercia del trackpad llega después de
+      // que el viaje termine y, sin él, encadenaría otra diapositiva sola.
       window.clearTimeout(releaseTimer);
       releaseTimer = window.setTimeout(() => {
-        snapping = false;
-        lastY = window.scrollY;
-      }, 900);
-    };
-
-    const settle = () => {
-      const box = bounds();
-      if (!box || snapping || holdingRef.current || navRef.current()) return;
-
-      const y = window.scrollY;
-      if (y <= box.start + 2 || y >= box.start + box.span - 2) return;
-
-      const exact = ((y - box.start) / box.span) * steps;
-      if (Math.abs(exact - restIndex) < 0.03) return; // ya está encajada
-
-      goTo(restIndex + (direction > 0 ? 1 : -1), box.span, box.start);
+        travelling = false;
+      }, duration * 1000 + 90);
     };
 
     const onScroll = () => {
-      const y = window.scrollY;
-      if (y !== lastY) direction = y > lastY ? 1 : -1;
-      lastY = y;
-      // Igual que la retención, el anclaje sólo gobierna el scroll manual.
-      if (snapping || holdingRef.current || navRef.current()) return;
+      // El anclaje sólo gobierna el scroll manual.
+      if (travelling || navRef.current()) return;
 
       const box = bounds();
       if (!box) return;
 
       // Fuera de la sección fijada, la diapositiva de referencia son los extremos.
+      const y = window.scrollY;
       if (y <= box.start) {
         restIndex = 0;
         return;
@@ -214,23 +176,31 @@ export function Design() {
         return;
       }
 
-      const exact = ((y - box.start) / box.span) * steps;
+      const drift = position(box) - restIndex;
 
-      // Si el impulso se lleva al usuario más allá de una diapositiva, se
-      // ancla sin esperar a que el scroll se detenga.
-      if (Math.abs(exact - restIndex) > 1.02) {
-        goTo(restIndex + (direction > 0 ? 1 : -1), box.span, box.start);
+      if (Math.abs(drift) >= COMMIT) {
+        const next = restIndex + (drift > 0 ? 1 : -1);
+        // En los extremos no hay siguiente: el gesto es para salir de la
+        // sección y no se le pone nada delante.
+        if (next < 0 || next > steps) return;
+        window.clearTimeout(idleTimer);
+        glide(next, box);
         return;
       }
 
-      window.clearTimeout(settleTimer);
-      settleTimer = window.setTimeout(settle, 130);
+      // Roce: cuando el scroll se pare, se vuelve a encajar.
+      window.clearTimeout(idleTimer);
+      idleTimer = window.setTimeout(() => {
+        const settled = bounds();
+        if (!settled || travelling || navRef.current()) return;
+        glide(restIndex, settled);
+      }, 170);
     };
 
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => {
       window.removeEventListener("scroll", onScroll);
-      window.clearTimeout(settleTimer);
+      window.clearTimeout(idleTimer);
       window.clearTimeout(releaseTimer);
     };
   }, [scrollTo]);
@@ -245,7 +215,7 @@ export function Design() {
       <div ref={trackRef} className="flex h-[100svh] w-max flex-nowrap will-change-transform">
         {/* Panel de apertura: el mar de fondo, a sección completa */}
         <article className="relative flex h-[100svh] w-screen shrink-0 flex-col items-center justify-center overflow-hidden bg-deep px-[var(--page-gutter)] text-center">
-          <div data-panel-image className="absolute inset-0 will-change-transform">
+          <div className="absolute inset-0">
             <VideoBackdrop
               src="/video/fondo-marino.mp4"
               poster="/video/fondo-marino-poster.webp"
@@ -293,13 +263,12 @@ export function Design() {
               className="relative h-[100svh] w-screen shrink-0 overflow-hidden"
             >
               <img
-                data-panel-image
                 src={img.src}
                 srcSet={img.srcSet}
                 sizes="100vw"
                 alt=""
                 aria-hidden
-                className="absolute inset-0 h-full w-full scale-110 object-cover will-change-transform"
+                className="absolute inset-0 h-full w-full object-cover"
               />
               {/* Velo uniforme. Su opacidad se ajusta en globals.css,
                   variable --veil-panel. */}

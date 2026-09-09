@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { cabins, isPending, photo } from "@/lib/content";
 import { Reveal } from "@/components/ui/Reveal";
+import { BookingCta } from "@/components/ui/BookingCta";
 import { Photo } from "@/components/ui/Photo";
 
 /** Una fotografía por camarote. */
@@ -153,6 +154,12 @@ export function Cabins() {
             ))}
           </ul>
         </div>
+
+        {/* Fuera de la rejilla: así se centra sobre el ancho de la página y no
+            sobre la columna de la lista. */}
+        <Reveal direction="fade" className="mt-16 flex justify-center md:mt-20">
+          <BookingCta>Consultar disponibilidad</BookingCta>
+        </Reveal>
       </div>
     </section>
   );

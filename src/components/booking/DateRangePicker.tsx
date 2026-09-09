@@ -130,15 +130,21 @@ export function DateRangePicker({
                       aria-pressed={isFrom || isTo}
                       className={[
                         "relative h-9 text-[0.8rem] font-light tabular-nums outline-none transition-[color,background-color] duration-300",
+                        // Una sola clase de color: dos utilidades `text-*` en el
+                        // mismo elemento las resuelve el orden de la hoja, no el
+                        // del atributo, y ganaba la que no tocaba.
                         disabled
                           ? "cursor-not-allowed text-faint"
-                          : "text-soft hover:text-strong focus-visible:text-strong",
-                        middle ? "bg-gold/[0.12] text-strong" : "",
-                        isFrom || isTo ? "text-deep" : "",
+                          : isFrom || isTo
+                            ? "text-pearl"
+                            : middle
+                              ? "text-strong"
+                              : "text-soft hover:text-strong focus-visible:text-strong",
+                        middle ? "bg-navy/10" : "",
                       ].join(" ")}
                     >
                       {(isFrom || isTo) && (
-                        <span className="absolute inset-x-1 inset-y-0 -z-0 rounded-full bg-gradient-to-b from-champagne to-gold shadow-[0_6px_18px_-8px_var(--color-gold)]" />
+                        <span className="absolute inset-x-1 inset-y-0 -z-0 rounded-full bg-[linear-gradient(to_bottom,var(--water-a),var(--water-b))] shadow-[0_6px_18px_-8px_var(--water-shadow)]" />
                       )}
                       <span className="relative z-10">{day.getDate()}</span>
                     </button>
