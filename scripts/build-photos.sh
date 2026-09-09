@@ -52,6 +52,7 @@ NAMES=(
   tripulacion      # 25 · Tripulación
   navegando-espejo # 26 · descartada: es la nº 27 volteada horizontalmente
   navegando        # 27 · Cierre
+  pareja           # 28 · Diseño 05 — luz (sustituye a «sombra»)
 )
 
 

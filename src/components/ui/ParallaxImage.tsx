@@ -46,7 +46,9 @@ export function ParallaxImage({
             trigger: wrap,
             start: "top bottom",
             end: "bottom top",
-            scrub: true,
+            // Numérico, no `true`: sin amortiguar el scroll de la página,
+            // esto es lo que evita que el parallax vaya a escalones.
+            scrub: 0.8,
             invalidateOnRefresh: true,
           },
         },

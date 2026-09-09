@@ -316,7 +316,7 @@ export const designPanels = [
   },
   {
     id: "luz",
-    image: "sombra",
+    image: "pareja",
     index: "05",
     eyebrow: "Luz",
     title: "La sombra",
